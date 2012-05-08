@@ -1,11 +1,8 @@
 import datetime
 
 from django.db import models
-from django.contrib import auth 
-
-
-class User(auth.models.User):
-  pass
+from django.contrib.auth.models import User
+from django.forms import ModelForm
 
 class Itinerary(models.Model):
   users = models.ManyToManyField(User)
@@ -26,3 +23,13 @@ class Event(models.Model):
   
   def __unicode__(self):
     return self.name
+
+
+
+class ItineraryForm(ModelForm):
+  class Meta:
+    model = Itinerary
+
+class EventForm(ModelForm):
+  class Meta:
+    model = Event
