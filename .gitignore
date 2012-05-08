@@ -1,0 +1,9 @@
+*.pyc
+*.swp
+*.log
+local_settings.py
+tmp/*
+*mugshots/
+
+.*
+!.gitignore
