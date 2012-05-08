@@ -4,6 +4,7 @@
 local_settings.py
 tmp/*
 *mugshots/
+*migrations/
 
 .*
 !.gitignore
