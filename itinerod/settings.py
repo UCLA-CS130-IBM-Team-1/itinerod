@@ -14,14 +14,14 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        #'NAME': 'itinerod',                      # Or path to database file if using sqlite3.
-        #'USER': 'itinerod',                      # Not used with sqlite3.
-        #'PASSWORD': 'meEH!EsF',                  # Not used with sqlite3.
-        #'HOST': 'mysql.itinerod.dreamhosters.com',                      # Set to empty string for localhost. Not used with sqlite3
         'NAME': 'itinerod',                      # Or path to database file if using sqlite3.
-        'USER': 'root',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'USER': 'itinerod',                      # Not used with sqlite3.
+        'PASSWORD': 'meEH!EsF',                  # Not used with sqlite3.
+        'HOST': 'mysql.itinerod.dreamhosters.com',                      # Set to empty string for localhost. Not used with sqlite3
+        #'NAME': 'itinerod',                      # Or path to database file if using sqlite3.
+        #'USER': 'root',                      # Not used with sqlite3.
+        #'PASSWORD': '',                  # Not used with sqlite3.
+        #'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
