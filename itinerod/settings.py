@@ -99,7 +99,7 @@ INSTALLED_APPS = (
     'itinerod',
     # Openid stuff
     'django_openid_auth',
-    
+    'registration'
     # Database migrations
     'south',
 )
