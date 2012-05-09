@@ -13,6 +13,9 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+	
+    (r'^accounts/', include('registration.backends.default.urls')),
+
 
     url(r'^google/login/$', 'django_openid_auth.views.login_begin', name='openid-login'),
     url(r'^google/login-complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
