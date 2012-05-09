@@ -14,10 +14,14 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        #'NAME': 'itinerod',                      # Or path to database file if using sqlite3.
+        #'USER': 'itinerod',                      # Not used with sqlite3.
+        #'PASSWORD': 'meEH!EsF',                  # Not used with sqlite3.
+        #'HOST': 'mysql.itinerod.dreamhosters.com',                      # Set to empty string for localhost. Not used with sqlite3
         'NAME': 'itinerod',                      # Or path to database file if using sqlite3.
-        'USER': 'itinerod',                      # Not used with sqlite3.
-        'PASSWORD': 'meEH!EsF',                  # Not used with sqlite3.
-        'HOST': 'mysql.itinerod.dreamhosters.com',                      # Set to empty string for localhost. Not used with sqlite3.
+        'USER': 'root',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -91,7 +95,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',
+    #'django.contrib.sites',
     'django.contrib.messages',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
@@ -99,7 +103,7 @@ INSTALLED_APPS = (
     'itinerod',
     # Openid stuff
     'django_openid_auth',
-    'registration'
+    'registration',
     # Database migrations
     'south',
 )
@@ -115,7 +119,12 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_URL = '/google/logout/'
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 
-
+EMAIL_HOST = 'mail.ucla.edu'
+EMAIL_HOST_USER = 'stefanwoj89'
+EMAIL_USE_TLS = True
+EMAIL_HOST_PASSWORD = 'star10'
+DEFAULT_FROM_EMAIL = 'stefanwoj89@ucla.edu'
+ACCOUNT_ACTIVATION_DAYS = 2
 
 try:
   from local_settings import *

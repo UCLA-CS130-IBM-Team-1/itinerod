@@ -1,0 +1,7 @@
+Install Django-registration
+Ensure that the django_auth_openID models.py under claimID is changed to CharField with 255 max characters, leave the unique parameter alone
+
+
+registration can be reached via /accounts/register
+login can be reached via /accounts/login
+google login can be reached via /accounts/login or directly invoked via /google/login
