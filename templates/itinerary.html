@@ -105,11 +105,13 @@
 
         }).done(function(html) {
         var businesses = html.businesses;
-        $("#LA_event_details").html("Food Places" + "<br/>");
-        for(var i=0, len = business.length; i< len; ++i)
+
+        $("#LA_event_details").html("Food Places" + "<br />");
+
+        for(var i=0, len = businesses.length; i< len; ++i)
         {
-          var business = businesses[i];
-          $("#LA_event_details").append("<br/>"+business.name);
+                var business = businesses[i];
+                $("#LA_event_details").append("<br />"+business.name);
         }
       });
       
