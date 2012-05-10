@@ -2,7 +2,8 @@ import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
-from django.forms import ModelForm
+from django.forms import ModelForm, widgets, extras
+import django.forms
 
 class Itinerary(models.Model):
   users = models.ManyToManyField(User)
@@ -14,9 +15,17 @@ class Itinerary(models.Model):
   def __unicode__(self):
     return self.name
 
-class Event(models.Model):
+class Location(models.Model):
   itinerary = models.ForeignKey(Itinerary)
-  location = models.CharField(max_length=255)
+  name = models.CharField(max_length=255)
+  start_time = models.DateTimeField()
+  end_time = models.DateTimeField()
+
+  def __unicode__(self):
+    return self.name
+
+class Event(models.Model):
+  location = models.ForeignKey(Location)
   name = models.CharField(max_length=255)
   start_time = models.DateTimeField()
   end_time = models.DateTimeField()
@@ -29,7 +38,24 @@ class Event(models.Model):
 class ItineraryForm(ModelForm):
   class Meta:
     model = Itinerary
+    fields = ('name', 'start_date', 'end_date')
+  def __init__(self, *args, **kwargs):
+    super(ItineraryForm, self).__init__(*args, **kwargs)
+    self.fields['start_date'].widget = extras.widgets.SelectDateWidget()
+    self.fields['end_date'].widget = extras.widgets.SelectDateWidget()
+
+class LocationForm(ModelForm):
+  class Meta:
+    model = Location 
+  def __init__(self, *args, **kwargs):
+    super(LocationForm, self).__init__(*args, **kwargs)
+    self.fields['start_time'].widget = widgets.SplitDateTimeWidget()
+    self.fields['end_time'].widget = widgets.SplitDateTimeWidget()
 
 class EventForm(ModelForm):
   class Meta:
     model = Event
+  def __init__(self, *args, **kwargs):
+    super(EventForm, self).__init__(*args, **kwargs)
+    self.fields['start_time'].widget = widgets.SplitDateTimeWidget()
+    self.fields['end_time'].widget = widgets.SplitDateTimeWidget()

@@ -22,6 +22,9 @@ urlpatterns = patterns('',
     url(r'^google/$', 'django.contrib.auth.views.logout', {'next_page':'/'}, name='logout'),
 
     url(r'^$', 'itinerod.views.home', name='home'),
+    url(r'^profile/$', 'itinerod.views.profile', name='profile'),
+    url(r'^itinerary/(?P<itin_id>\d+)/$', 'itinerod.views.itinerary', name='itinerary'),
+
 
     # Media Files
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', 
