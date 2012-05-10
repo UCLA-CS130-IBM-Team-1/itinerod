@@ -1,22 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
       <script type="text/javascript"
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBsGA492uOZ1mHV4Xri6cDZSONnI8axroI&sensor=false">
     </script>
+	<link rel="stylesheet" type="text/css" href="/media/css/style.css" />
   <script>
 
 
   $(document).ready(function() {
-    $("#accordion").accordion({ autoHeight: false });
-  });
-  $(document).ready(function() {
-  
-
-
       $(".weather").click(function() {
        var weatherURL = "http://www.google.com/ig/api?hl=zh-cn&weather=Los+Angeles" ;
         var weatherRequest;    //holds Eventful api response
@@ -122,32 +115,28 @@
 
   </script>
 </head>
-<body style="font-size:62.5%;font-weight:bold;">
-<div id="page_background"
-  style="min-height:950px;background-image:url('/media/images/background_beach.jpg');z-index:-1;"/>
-<div id="accordion" style="width:75ex;margin:0 auto;z-index:1;">
-
+<body> 
+<div id="content" />
+<h1 class="pageTitle">View itinerary</h1>
+ 
 {% for location in itinerary.location_set.all %}
   
-	<h3><a href="#">{{ location.name }}</a></h3>
-	<div style="opacity:1.0;background-color:#ffffff;">
-
+	<h2>{{ location.name }}</h2>
 	  {% for event in location.event_set.all %}
-		<p style="height:10ex;font-weight:bold;padding:5px; border-style:solid;border-width:thin;box-shadow: 5px 5px 2px #888;">
-		<img src="/media/images/Events-icon.png" class="events" alt="events_1" align="right" width="50" height="50"/>
-		<img src="/media/images/Maps-icon.png" class="map" alt="Map" align="right" width="50" height="50"/>
-		<img src="/media/images/Food-icon.PNG" class="food" alt="Map" align="right" width="50" height="50"/>
-		<img src="/media/images/Weather-Icon.png" class="weather" alt="Map" align="right" width="50" height="50" href="#"/>
-		{{ event.name }}
-		<br />
-		{{ event.start_time }}
-                <br />
-	        {{ event.end_time }}
-               	</p>
-            <div id="{{ location.name }}_event_details"style="margin:10px auto; height: 50ex; width: 50ex; display: block; border-style: solid; border-width: thin;">
+	  <div class="event">
+	  <h3>{{ event.name }}</h3>
+	  <span class="date">{{ event.start_time}} &mdash; {{ event.end_time }}</span>
+	  <div class="icons">
+		<img src="/media/images/calendar.png" class="events" alt="events_1" />
+		<img src="/media/images/map.png" class="map" alt="Map" />
+		<img src="/media/images/food.png" class="food" alt="Food" />
+		<img src="/media/images/weather.png" class="weather" alt="Weather" href="#"/>
+		</div>
+		 <div id="{{ location.name }}_event_details"style="margin:10px auto; height: 50ex; width: 50ex; display: block; border-style: solid; border-width: thin;">
                	</div>
 	{% endfor %}
     </div>
+	</div>
 		
 {% endfor %}
 
