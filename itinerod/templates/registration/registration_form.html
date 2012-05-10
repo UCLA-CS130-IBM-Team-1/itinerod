@@ -1,8 +1,14 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>Register</title>
-    </head>
+<head>
+	<title>Registration :: Itinerod</title>
+	<link rel="stylesheet" type="text/css" href="/media/css/style.css" />
+</head>
+
     <body>
+		<div id="login-content">
+			<h1 id="login-title">Itinerod</h1>
+			<div id="login-methods" class="register-methods">
         <h2>Register</h2>
         <form action="/accounts/register/" method="POST">{% csrf_token %}
             <table>
@@ -12,5 +18,7 @@
             <input type="submit" value="Submit" />
         </p>
         </form>
+		</div><!-- end div login-methods -->
+		</div><!-- end div login-content -->
     </body>
 </html>
