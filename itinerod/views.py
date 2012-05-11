@@ -3,7 +3,7 @@ from settings import *
 from models import *
 from django.contrib import auth
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
@@ -14,15 +14,31 @@ from django.core.paginator import Paginator
 from django.core.context_processors import csrf
 from django.forms.models import inlineformset_factory
 
-
 from registration.forms import RegistrationForm
+
 def home(request):
-	t = get_template('index.html')
-	context = {
-	 'user' : user,
-	 'form': form1,
-	}
-	return render_to_respond('index.html',context)
+  '''
+  if request.method == 'POST':
+    print "post"
+    registration_form = RegistrationForm(request.POST)
+    if registration_form.is_valid():
+      new_user = registration_form.save()
+      return HttpResponseRedirect('/profile/') 
+  else:
+    print "not post"
+  '''
+  registration_form = RegistrationForm()
+
+  print "out"
+
+  t = get_template('index.html')
+  context = {
+      'user' : request.user,
+      'registration_form': registration_form,
+      'login_form': AuthenticationForm(),
+  }
+  context.update(csrf(request))
+  return render_to_response('index.html',context)
 
 
 @login_required
