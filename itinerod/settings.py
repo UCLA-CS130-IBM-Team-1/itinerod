@@ -111,7 +111,7 @@ AUTHENTICATION_BACKENDS = (
 
 LOGIN_URL = '/google/login/'
 #LOGIN_REDIRECT_URL = '/home/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = ''
 LOGOUT_URL = '/google/logout/'
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 

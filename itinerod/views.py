@@ -14,13 +14,16 @@ from django.core.paginator import Paginator
 from django.core.context_processors import csrf
 from django.forms.models import inlineformset_factory
 
+
+from registration.forms import RegistrationForm
 def home(request):
-  t = get_template('index.html')
-  context = { 
-      'page': 'home',
-      }
-  html = t.render(RequestContext(request, context))
-  return HttpResponse(html)
+	t = get_template('index.html')
+	context = {
+	 'user' : user,
+	 'form': form1,
+	}
+	return render_to_respond('index.html',context)
+
 
 @login_required
 def profile(request):
@@ -49,7 +52,7 @@ def profile(request):
       'user': request.user,
       }
   context.update(csrf(request))
-      
+
   return render_to_response('profile.html', context)
 
 
