@@ -1,0 +1,219 @@
+@import url('normalize.css');
+
+* {
+        font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
+html {
+        height:100%;
+}
+
+body {
+        background-color:#EEE;
+        height:100%;
+}
+
+#login-content {
+        text-align:center;
+        background-color: white;
+        margin: 0;
+        width: 100%;
+        padding:10px 0;
+        position:relative;
+        top:100px;
+}
+
+h1#login-title {
+        text-transform: lowercase;
+        font-size: 4em;
+        position: relative;
+        top: -69px;
+        margin: 0 auto;
+        margin-bottom: -69px;
+        font-weight:100;
+}
+
+h1 {
+        margin:0;
+        padding:0;
+}
+
+h2 {
+        margin: 0;
+        font-weight: 400;
+        font-size: 1.2em;
+        margin-top: 15px;
+        text-transform: lowercase;
+}
+
+label {
+        color:#999;
+}
+
+input {
+        height:30px;
+        width:200px;
+        margin: 10px auto;
+        padding:0 5px;
+    border-radius: 3px;
+    border: 1px solid #BBB;
+    box-shadow: inset rgba(0,0,0,.2) 0px 0px 5px;
+    outline:none;
+}
+input:focus {
+        border:1px solid #3D4C53;
+}
+
+label {
+        margin-right:10px;
+}
+
+input[type=submit] {
+        background-color: #F1433F;
+        box-shadow: none;
+        border: none;
+        text-transform: capitalize;
+        color: white;
+        width:200px;
+}
+
+input[type=submit]:hover, a:hover {
+}
+
+form {
+        width: 323px;
+        float: left;
+}
+
+span#or {
+        width: 93px;
+        float: left;
+        margin-top: 50px;
+        display:block;
+        font-size:1.3em;
+}
+
+a.google-button {
+        width: 187px;
+        background-color: #70B7BA;
+        display: block;
+        margin: 0 auto;
+        padding: 6px;
+        border-radius: 2px;
+        width: 200px;
+        float: left;
+        margin-top: 51px;        
+        color: white !important;
+        text-decoration: none;
+}
+
+div#login-methods {
+        width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 178px;
+        margin-top: 16px;
+}
+
+div.register-methods {
+	height:345px !important; 
+}
+
+table {
+        margin: 0 auto;
+}
+
+a {
+        color:#70B7BA;
+}
+a:visited {
+        color:#3D4C53;
+}
+
+h1.pageTitle {
+        font-size: 3em;
+        font-weight: 100;
+        color: #3D4C53;
+        text-transform: lowercase;
+        text-align: right;
+}
+
+ul.blockListing {
+list-style: none;
+padding: 0;
+margin: 0;
+}
+
+
+h2 {
+        width: 100%;
+        display: block;
+        background-color: #3D4C53;
+        color: white;
+        padding: 5px;
+        font-weight: 100;
+        letter-spacing: 2px;
+        font-size: 1.5em;
+}
+
+ul.blockListing li {
+/*         height:44px; */
+        padding: 15px 0;
+        font-size:1.2em;
+/*         background-color:#E7E1D4; */
+        margin:5px 0;
+        width:300px;
+        border-bottom:1px solid #DDD;
+        opacity:0.9;
+}
+
+ul.blockListing li:hover {
+        opacity:1;
+        border-bottom:1px solid black;
+}
+ul.blockListing li:first-child {
+        border-top:1px solid #DDD;
+}
+
+div#listItineraries {
+        width: 292px;
+        float: left;
+        height: 100%;
+        margin-right: 50px;
+        height:500px;
+}
+
+div#addItinerary, div#inviteFriends {
+        width: 550px;
+        float: right;
+}
+
+span.date {
+        font-size: 0.8em;
+        text-transform: uppercase;
+        padding-right: 29px;
+        color: #555;
+        clear:both;
+        margin-bottom:4px;
+}
+
+h3 {
+        border-top:1px solid #DDD;
+        padding-top:20px;
+        margin:0;
+}
+h3:first-child {
+        border:none;
+}
+
+div.icons {
+}
+
+div#content {
+        width:900px;
+        background-color:white;
+        margin:0 auto;
+        padding:0;
+        padding: 0 20px;
+}
+

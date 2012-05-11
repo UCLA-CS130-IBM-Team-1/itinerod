@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login :: Itinerod</title>
+	<link rel="stylesheet" type="text/css" href="/media/css/style.css" />
+</head>
+
+<body>
+	<div id="login-content">
+		<h1 id="login-title">Itinerod</h1>
+		<div id="login-methods">
+
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+<form method="post" action="{% url django.contrib.auth.views.login %}">
+{% csrf_token %}
+<table>
+<tr>
+	<td>{{ form.username.label_tag }}</td>
+	<td>{{ form.username }}</td>
+</tr>
+<tr>
+	<td>{{ form.password.label_tag }}</td>
+	<td>{{ form.password }}</td>
+</table>
+
+<input type="submit" value="login" />
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+	<span id="or">or</span>
+
+<a href="/google/login/" class="google-button">Login with Google</a>
+</div> <!-- end div login-content -->
+
+<!-- Insert the navbar element somewhere in the HTML page -->
+
+	</div><!-- end div content -->
+</body>
+</html>

@@ -17,7 +17,7 @@ DATABASES = {
         'NAME': 'itinerod',                      # Or path to database file if using sqlite3.
         'USER': 'itinerod',                      # Not used with sqlite3.
         'PASSWORD': 'meEH!EsF',                  # Not used with sqlite3.
-        'HOST': 'mysql.itinerod.dreamhosters.com',                      # Set to empty string for localhost. Not used with sqlite3.
+        'HOST': 'mysql.itinerod.dreamhosters.com',                      # Set to empty string for localhost. Not used with sqlite3
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -83,7 +83,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_DIR, 'templates'),
+    os.path.join(PROJECT_DIR, '../templates'),
 )
 
 INSTALLED_APPS = (
@@ -91,7 +91,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',
+    #'django.contrib.sites',
     'django.contrib.messages',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
@@ -99,7 +99,7 @@ INSTALLED_APPS = (
     'itinerod',
     # Openid stuff
     'django_openid_auth',
-    
+    'registration',
     # Database migrations
     'south',
 )
@@ -110,11 +110,16 @@ AUTHENTICATION_BACKENDS = (
 )
 
 LOGIN_URL = '/google/login/'
-LOGIN_REDIRECT_URL = '/home/'
+LOGIN_REDIRECT_URL = '/profile/'
 LOGOUT_URL = '/google/logout/'
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 
-
+EMAIL_HOST = 'mail.ucla.edu'
+EMAIL_HOST_USER = 'stefanwoj89'
+EMAIL_USE_TLS = True
+EMAIL_HOST_PASSWORD = 'star10'
+DEFAULT_FROM_EMAIL = 'stefanwoj89@ucla.edu'
+ACCOUNT_ACTIVATION_DAYS = 2
 
 try:
   from local_settings import *

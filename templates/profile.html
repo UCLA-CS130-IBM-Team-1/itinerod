@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Profile :: Itinerod</title>
+	<link rel="stylesheet" type="text/css" href="/media/css/style.css" />
+</head>
+
+<body>
+	<div id="content">
+
+<h1 class="pageTitle">{{ user.username }}'s Profile </h1>    
+<div id="listItineraries">
+<h2> Your Itineraries </h2>
+<ul class="blockListing">
+{% for itinerary in user.itinerary_set.all %}
+    <li>
+        <a href=/itinerary/{{ itinerary.id }}/>{{ itinerary.name }}</a>:
+        {% for location in itinerary.location_set.all %}
+            {% if forloop.last %}
+                {{ location.name }}
+            {% else %}
+                {{ location.name }},
+            {% endif %}
+        {% endfor % %}
+    </li>    
+{% endfor %}
+</ul>
+</div><!-- end div listItineraries -->
+
+<div id="addItinerary">
+<h2> Add New Itinerary </h2>
+    <form method="post" action="/profile/">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Submit" />
+    </form>
+</div> <!-- end div addItinerary -->
+
+<div id="inviteFriends">
+<h3> Invite up to 3 friends! </h3>
+Friends: <input type="text" name="friend1" /></br>
+Friends: <input type="text" name="friend2" /></br>
+Friends: <input type="text" name="friend3" /></br> 
+<input type="submit" value="Submit" />
+</form>
+</div><!-- end div inviteFriends -->
+<div style="clear:both"></div>
+</div><!-- end div content -->
+</body>
+</html>
+

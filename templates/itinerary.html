@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+      <script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBsGA492uOZ1mHV4Xri6cDZSONnI8axroI&sensor=false">
+    </script>
+	<link rel="stylesheet" type="text/css" href="/media/css/style.css" />
+  <script>
+
+
+  $(document).ready(function() {
+      $(".weather").click(function() {
+       var weatherURL = "http://www.google.com/ig/api?hl=zh-cn&weather=Los+Angeles" ;
+        var weatherRequest;    //holds Eventful api response
+        var weatherRequestURL = weatherURL;
+
+        if(window.ActiveXObject){weatherRequest=new ActiveXObject("Microsoft.XMLHTTP");}
+        else if(window.XMLHttpRequest){weatherRequest=new XMLHttpRequest();}
+        weatherRequest.onreadystatechange = showWeatherResult;
+        weatherRequest.open("GET",weatherRequestURL,true);
+        weatherRequest.send();
+        function showWeatherResult(){
+           if(weatherRequest.readyState==4){
+                     var response = weatherRequest.responseText;
+                     document.getElementById("LA_event_details").innerHTML = response+"Hello weather";
+                     }
+           }
+      });
+      $(".events").click(function() {
+        var eventsURL = "http://api.eventful.com/rest/events/rss?app_key=NsjwnNS4hKSqXP6J&keywords=concerts&location=Los+Angeles&sort_order=date";
+        var eventsRequest;    //holds Eventful api response
+        var eventsRequestURL = eventsURL;
+
+        if(window.ActiveXObject){eventsRequest=new ActiveXObject("Microsoft.XMLHTTP");}
+        else if(window.XMLHttpRequest){eventsRequest=new XMLHttpRequest();}
+        eventsRequest.onreadystatechange = showEventsResult;
+        eventsRequest.open("GET",eventsRequestURL,true);
+        eventsRequest.send();
+        function showEventsResult(){
+           if(eventsRequest.readyState==4){
+                     var response = eventsRequest.responseText;
+                     document.getElementById("LA_event_details").innerHTML = response+"Hello Events";
+                     }
+           }
+      });
+
+      $(".map").click(function() {
+         //$("#LA_event_details").slideToggle("slow");          //TODO FIX toggle 
+                      
+                    
+                 var myOptions = {
+                 center: new google.maps.LatLng(34.063361, -118.444419),  // TODO  change map locations
+                 zoom: 8,
+                 mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("LA_event_details"),  //TODO fix "LA" string (global problem)
+            myOptions);
+      });
+      $(".food").click(function() {
+         //$("#LA_event_details").slideToggle("slow");
+
+         var YWSID = "SrSxxs4TLunMcU3cQ8cp_A"; // common required parameter (api key)
+
+             /*
+         * Construct the URL to call for the API request
+         */
+        function constructYelpURL(){
+            var URL = "http://api.yelp.com/" +
+                "business_review_search?"+
+  //              "callback=" + "showYelpResults" +
+                "&term=food" +
+                "&num_biz_requested=10" +
+                "&ywsid=" + YWSID  +
+                "&location=Los+Angeles";
+            return encodeURI(URL);
+        }
+
+        var yelpRequest;    //holds yelp api response
+        var yelpRequestURL = constructYelpURL();
+
+        if(window.ActiveXObject){yelpRequest=new ActiveXObject("Microsoft.XMLHTTP");}
+        else if(window.XMLHttpRequest){yelpRequest=new XMLHttpRequest();}
+        yelpRequest.onreadystatechange = function(){
+           if(yelpRequest.readyState==4){
+                     var response = yelpRequest.responseText;
+                     document.getElementById("").innerHTML = response+"Hello";
+                     }
+           }
+        yelpRequest.open("GET",yelpRequestURL,true);
+        yelpRequest.send();
+        
+        $.ajax({
+        type:"GET",
+        dataType:"json",
+         url: yelpRequestURL+"&callback=?",
+         contextType: "application/json"
+
+        }).done(function(html) {
+        var businesses = html.businesses;
+
+        $("#LA_event_details").html("Food Places" + "<br />");
+
+        for(var i=0, len = businesses.length; i< len; ++i)
+        {
+                var business = businesses[i];
+                $("#LA_event_details").append("<br />"+business.name);
+        }
+      });
+      
+      });
+
+  });
+
+
+  </script>
+</head>
+<body> 
+<div id="content" />
+<h1 class="pageTitle">View itinerary</h1>
+ 
+{% for location in itinerary.location_set.all %}
+  
+	<h2>{{ location.name }}</h2>
+	  {% for event in location.event_set.all %}
+	  <div class="event">
+	  <h3>{{ event.name }}</h3>
+	  <span class="date">{{ event.start_time}} &mdash; {{ event.end_time }}</span>
+	  <div class="icons">
+		<img src="/media/images/calendar.png" class="events" alt="events_1" />
+		<img src="/media/images/map.png" class="map" alt="Map" />
+		<img src="/media/images/food.png" class="food" alt="Food" />
+		<img src="/media/images/weather.png" class="weather" alt="Weather" href="#"/>
+		</div>
+		 <div id="{{ location.name }}_event_details"style="margin:10px auto; height: 50ex; width: 50ex; display: block; border-style: solid; border-width: thin;">
+               	</div>
+	{% endfor %}
+    </div>
+	</div>
+		
+{% endfor %}
+
+</div>
+
+
+</body>
+</html>
