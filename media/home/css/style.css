@@ -93,6 +93,18 @@ ul#menu li a.active, ul#menu li a:hover {
 /* 
 	Block-Styles 
 */
+a.google-button {
+        width: 187px;
+        background-color: #70B7BA;
+        display: block;
+        margin: 0 auto;
+        padding: 6px;
+        border-radius: 2px;
+        width: 200px;
+        float: left;
+        color: white !important;
+        text-decoration: none;
+}
 
 .block {
 	border:1px solid #a3a09e;

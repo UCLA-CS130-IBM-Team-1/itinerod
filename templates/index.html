@@ -31,7 +31,6 @@
 			</div>
 			<div class="left">
 				<!-- Login Form -->
-				<form class="clearfix" action="#" method="post">
 					<h1>Member Login</h1>
 					<!--<label class="grey" for="log">Email:</label>
 					<input class="field" type="text" name="log" id="log" value="" size="23" />
@@ -45,12 +44,12 @@
 			{% if form.errors %}
 			<p>Your username and password didn't match. Please try again.</p>
 			{% endif %}
-			<form method="post" action="{% url django.contrib.auth.views.login %}">
+			<form method="post" action="/accounts/login/">
 			{% csrf_token %}
-				{{ form.username.label_tag }}
-				{{ form.username }}
-				{{ form.password.label_tag }}
-				{{ form.password }}
+				{{ login_form.username.label_tag }}
+				{{ login_form.username }}
+				{{ login_form.password.label_tag }}
+				{{ login_form.password }}
 				<label><input name="rememberme" id="rememberme" type="checkbox" checked="checked" value="forever" /> &nbsp;Remember me</label>
         			<div class="clear"></div>
 			<input type="submit" value="login" class="bt_login" />
@@ -58,14 +57,14 @@
 			<a class="lost-pwd" href="#">Lost your password?</a>
 			</form>
 
-			<a href="/google/login/">loginwithGoogle</a>
-
+      <br/>
+      <a href="/google/login/" class="google-button">Login with Google</a>
+      <br/>
 
 
 			</div>
 			<div class="left right">			
 				<!-- Register Form -->
-				<form action="#" method="post">
 					<h1>Not a member yet? Sign Up!</h1>				
 					<!--<label class="grey" for="email">Username:</label>
 					<input class="field" type="text" name="email" id="email" value="" size="23" />
@@ -76,11 +75,11 @@
 					<input type="submit" name="submit" value="Register" class="bt_register" />
 				</form>-->
 				<form action="/accounts/register/" method="POST">{% csrf_token %}
-					    <table>
-					    {{ form.as_table}}
-					    </table>
+          <table>
+					    {{ registration_form.as_table}}
+            </table>
 					<p>
-					    <input type="submit" value="Submit" />
+					    <input type="submit" value="submit" class="bt_login"/>
 					</p>
 					</form>
 			</div>
@@ -135,7 +134,7 @@
                     	<img src="/media/home/images/airplaneabstract.png" alt="TravelPic"/>
                     </div>
                     <div class="text_block">
-                        <h2>A Collaboritive Trip</h2>
+                        <h2>A Collaborative Trip</h2>
 			<h2>Planning Tool</h2>
 			<p></p>
                             
