@@ -2,7 +2,7 @@ import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
-from django.forms import ModelForm, widgets, extras
+from django.forms import ModelForm, widgets, extras, Textarea, CharField, ModelMultipleChoiceField
 import django.forms
 
 class Itinerary(models.Model):
@@ -36,9 +36,10 @@ class Event(models.Model):
 
 
 class ItineraryForm(ModelForm):
+  friends = CharField(label='Travel Buddies', help_text = "enter Travel Buddies' emails, separate by commas") # This is the friends field in the form
   class Meta:
     model = Itinerary
-    fields = ('name', 'start_date', 'end_date')
+    fields = ('friends','name', 'start_date', 'end_date') #Friends was added to appear
   def __init__(self, *args, **kwargs):
     super(ItineraryForm, self).__init__(*args, **kwargs)
     self.fields['start_date'].widget = extras.widgets.SelectDateWidget()
