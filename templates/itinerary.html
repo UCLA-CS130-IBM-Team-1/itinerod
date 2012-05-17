@@ -10,6 +10,19 @@
 
 
   $(document).ready(function() {
+  
+      //Insert the Expansion/contraction of div related code
+      $(".event_details").hide();
+
+      $(".event").click(function(){
+       //  $(this).next(".event_details").slideToggle('slow');
+           $(this).next().next().next().slideToggle('slow');
+      });
+
+
+      //
+      //Below are the API call related Jquery functions
+      //
       $(".weather").click(function() {
        var weatherURL = "http://www.google.com/ig/api?hl=zh-cn&weather=Los+Angeles" ;
         var weatherRequest;    //holds Eventful api response
@@ -121,10 +134,10 @@
  
 {% for location in itinerary.location_set.all %}
   
-	<h2>{{ location.name }}</h2>
+	<h2 class="location">{{ location.name }}</h2>
 	  {% for event in location.event_set.all %}
-	  <div class="event">
-	  <h3>{{ event.name }}</h3>
+	  <div>
+	  <h3 class="event">{{ event.name }}</h3>
 	  <span class="date">{{ event.start_time}} &mdash; {{ event.end_time }}</span>
 	  <div class="icons">
 		<img src="/media/images/calendar.png" class="events" alt="events_1" />
@@ -132,8 +145,8 @@
 		<img src="/media/images/food.png" class="food" alt="Food" />
 		<img src="/media/images/weather.png" class="weather" alt="Weather" href="#"/>
 		</div>
-		 <div id="{{ location.name }}_event_details"style="margin:10px auto; height: 50ex; width: 50ex; display: block; border-style: solid; border-width: thin;">
-               	</div>
+	   <div id="{{ location.name }}_event_details" class = "event_details" style="margin:10px auto; height: 50ex; width: 50ex; display: block; border-style: solid; border-width: thin;">
+           </div>
 	{% endfor %}
     </div>
 	</div>
