@@ -31,14 +31,14 @@ def home(request):
 
   print "out"
 
-  t = get_template('index.html')
+  t = get_template('index2.html')
   context = {
       'user' : request.user,
       'registration_form': registration_form,
       'login_form': AuthenticationForm(),
   }
   context.update(csrf(request))
-  return render_to_response('index.html',context)
+  return render_to_response('index2.html',context)
 
 
 @login_required
@@ -50,10 +50,17 @@ def profile(request):
     #location_set = LocationFormSet(request.POST, instance=new_itinerary)
     if form.is_valid(): #and event_set.is_valid(): # All validation rules pass # Process the data in form.cleaned_data
       new_itinerary = form.save()
-      new_itinerary.users.add(request.user)
+      friends = form.cleaned_data['friends']   # Clean friends data sent by post (these are not included in the 'form' object and thus not saved.
+      friendList = friends.split(',') # Parse the list of friends into tokens
+      for x in friendList:
+        try:
+          u = User.objects.get(email=x); # If a friend exists in the system, get the user object
+          new_itinerary.users.add(u.id)  # Create association between itinerary and friend
+        except User.DoesNotExist:
+          print("the user does not exist") # here we should consider the emailing ability to invite users.
+      new_itinerary.users.add(request.user) # add the creator of the itinerary
       #event_set.save()
       return HttpResponseRedirect('/profile/') # Redirect after POST
-    print "form not vaild"
   else:
     form = ItineraryForm() # An unbound form
     #location_set = LocationFormSet(instance=new_itinerary)
