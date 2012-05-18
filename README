@@ -5,3 +5,37 @@ Ensure that the django_auth_openID models.py under claimID is changed to CharFie
 registration can be reached via /accounts/register
 login can be reached via /accounts/login
 google login can be reached via /accounts/login or directly invoked via /google/login
+
+Now using TastyPie for our APIS
+
+eg:
+/api/itinerod/itinerary/?format=json
+
+response:
+{
+  meta: {
+    limit: 20,
+    next: null,
+    offset: 0,
+    previous: null,
+    total_count: 4
+  },
+  objects: [
+  {
+    created_on: "2012-05-17T23:42:04",
+    end_date: "2011-02-02",
+    events: [
+    "/api/itinerod/event/1/",
+    "/api/itinerod/event/2/",
+    "/api/itinerod/event/3/"
+    ],
+    id: "1",
+    name: "California",
+    resource_uri: "/api/itinerod/itinerary/1/",
+    start_date: "2011-01-01",
+    users: [
+    "/api/itinerod/user/1/"
+    ]
+  },
+  ]
+}
