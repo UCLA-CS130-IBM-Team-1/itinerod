@@ -50,7 +50,7 @@ def profile(request):
     #location_set = LocationFormSet(request.POST, instance=new_itinerary)
     if form.is_valid(): #and event_set.is_valid(): # All validation rules pass # Process the data in form.cleaned_data
       new_itinerary = form.save()
-      friends = form.cleaned_data['friends']   # Clean friends data sent by post (these are not included in the 'form' object and thus not saved.
+      friends = form.cleaned_data['friends']   # Clean friends data sent by post (these are not included in the 'form' object and thus not saved).
       friendList = friends.split(',') # Parse the list of friends into tokens
       for x in friendList:
         try:
