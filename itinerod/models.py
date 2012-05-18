@@ -15,28 +15,40 @@ class Itinerary(models.Model):
   def __unicode__(self):
     return self.name
 
-class Location(models.Model):
-  itinerary = models.ForeignKey(Itinerary)
-  name = models.CharField(max_length=255)
-  start_time = models.DateTimeField()
-  end_time = models.DateTimeField()
-
-  def __unicode__(self):
-    return self.name
+EVENT_STATUS_CHOICES = (
+    ('V', 'Vote in Progress'),
+    ('A', 'Approved'),
+    ('R', 'Rejected'),
+    ('D', 'Deleted'),
+)
 
 class Event(models.Model):
-  location = models.ForeignKey(Location)
   name = models.CharField(max_length=255)
+  itinerary = models.ForeignKey(Itinerary)
+  location = models.CharField(max_length=255)
   start_time = models.DateTimeField()
   end_time = models.DateTimeField()
+  status = models.CharField(max_length=1, choices=EVENT_STATUS_CHOICES)
   
   def __unicode__(self):
     return self.name
 
+VOTE_CHOICES = (
+    ('Y', 'Yes'),
+    ('N', 'No'),
+    ('A', 'Abstain'),
+)
 
+class Vote(models.Model):
+  user = models.ForeignKey(User)
+  event = models.ForeignKey(Event)
+  vote = models.CharField(max_length=1, choices=VOTE_CHOICES)
+
+  def __unicode__(self):
+    return 'Vote:%s, %s' % (self.user.username, self.event.name,)
 
 class ItineraryForm(ModelForm):
-  friends = CharField(label='Travel Buddies', help_text = "enter Travel Buddies' emails, separate by commas") # This is the friends field in the form
+  friends = CharField(label='Travel Buddies', required=False, help_text = "enter Travel Buddies' emails, separate by commas") # This is the friends field in the form
   class Meta:
     model = Itinerary
     fields = ('friends','name', 'start_date', 'end_date') #Friends was added to appear
@@ -45,14 +57,6 @@ class ItineraryForm(ModelForm):
     self.fields['start_date'].widget = extras.widgets.SelectDateWidget()
     self.fields['end_date'].widget = extras.widgets.SelectDateWidget()
 
-class LocationForm(ModelForm):
-  class Meta:
-    model = Location 
-  def __init__(self, *args, **kwargs):
-    super(LocationForm, self).__init__(*args, **kwargs)
-    self.fields['start_time'].widget = widgets.SplitDateTimeWidget()
-    self.fields['end_time'].widget = widgets.SplitDateTimeWidget()
-
 class EventForm(ModelForm):
   class Meta:
     model = Event
@@ -60,3 +64,5 @@ class EventForm(ModelForm):
     super(EventForm, self).__init__(*args, **kwargs)
     self.fields['start_time'].widget = widgets.SplitDateTimeWidget()
     self.fields['end_time'].widget = widgets.SplitDateTimeWidget()
+    #self.fields['approval_status'].widget.choices = ()
+    #self.fields['approval_status'].choices = (('V', 'Votable'))

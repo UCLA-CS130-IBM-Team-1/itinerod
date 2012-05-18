@@ -1,19 +1,19 @@
-from itinerod.models import Itinerary, Location
+from itinerod.models import Itinerary
 from django.contrib.auth.models import User
 
-u = User.objects.all()
-up = u[0]
 
-# fill itinerary table
-it1=up.itinerary_set.create(name="funtrip", start_date="2011-01-01", end_date="2011-02-02")
-it2=up.itinerary_set.create(name="secondtrip", start_date="2012-03-01", end_date="2012-04-02")
+for u in User.objects.all():
 
-# fill location table
-l1 = it1.location_set.create(name='LA', start_time='2011-01-01', end_time='2011-01-15')
-l2 = it1.location_set.create(name='SF', start_time='2011-01-15', end_time='2011-02-02')
-l3 = it2.location_set.create(name='NY', start_time='2012-03-01', end_time='2012-04-02')
+  # fill itinerary table
+  it1=u.itinerary_set.create(name="California", start_date="2011-01-01", end_date="2011-02-02")
+  it2=u.itinerary_set.create(name="New York", start_date="2012-03-01", end_date="2012-04-02")
 
-# fill activity table
-l1.event_set.create(name="hollywood blvd", start_time="2012-01-01", end_time="2012-01-02")
-l1.event_set.create(name="westwood LA", start_time="2012-01-02", end_time="2012-01-03")
-l2.event_set.create(name="sf bay", start_time="2012-01-15", end_time="2012-01-16")
+  # fill activity table
+  it1.event_set.create(name="Chinese Theater", start_time="2012-01-01", end_time="2012-01-02", location='Hollywood', status='V')
+  it1.event_set.create(name="UCLA", start_time="2012-01-02", end_time="2012-01-03", location='Westwood', status='A')
+  it1.event_set.create(name="Golden Gate Bridge", start_time="2012-01-15", end_time="2012-01-16", location='San Francisco', status='R')
+
+  # fill activity table
+  it2.event_set.create(name="Statue of Liberty", start_time="2012-01-01", end_time="2012-01-02", location='New York', status='V')
+  it2.event_set.create(name="Times Square", start_time="2012-01-02", end_time="2012-01-03", location='New York', status='V')
+  it2.event_set.create(name="Freedom Tower", start_time="2012-01-15", end_time="2012-01-16", location='New York', status='D')

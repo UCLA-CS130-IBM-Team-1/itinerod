@@ -44,10 +44,8 @@ def home(request):
 @login_required
 def profile(request):
   new_itinerary = Itinerary()
-  #LocationFormSet = inlineformset_factory(Itinerary, Location)
   if request.method == 'POST': # If the form has been submitted...
     form = ItineraryForm(request.POST, instance=new_itinerary) # A form bound to the POST data
-    #location_set = LocationFormSet(request.POST, instance=new_itinerary)
     if form.is_valid(): #and event_set.is_valid(): # All validation rules pass # Process the data in form.cleaned_data
       new_itinerary = form.save()
       friends = form.cleaned_data['friends']   # Clean friends data sent by post (these are not included in the 'form' object and thus not saved.
@@ -63,15 +61,10 @@ def profile(request):
       return HttpResponseRedirect('/profile/') # Redirect after POST
   else:
     form = ItineraryForm() # An unbound form
-    #location_set = LocationFormSet(instance=new_itinerary)
-
-  #t = get_template('index.html')
-
 
   context = { 
       'page': 'profile',
       'form': form,
-      #'location_set': location_set,
       'user': request.user,
       }
   context.update(csrf(request))

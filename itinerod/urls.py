@@ -1,8 +1,16 @@
 from django.conf.urls import patterns, include, url
+from tastypie.api import Api
 import settings
+from api import *
 
 from django.contrib import admin
 admin.autodiscover()
+
+itinerod_api = Api(api_name='itinerod')
+itinerod_api.register(UserResource())
+itinerod_api.register(ItineraryResource())
+itinerod_api.register(EventResource())
+itinerod_api.register(VoteResource())
 
 urlpatterns = patterns('',
     # Examples:
@@ -10,6 +18,7 @@ urlpatterns = patterns('',
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^api/', include(itinerod_api.urls)),
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
@@ -28,4 +37,5 @@ urlpatterns = patterns('',
     # Media Files
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', 
       {'document_root' : settings.MEDIA_ROOT}),
+
 )
