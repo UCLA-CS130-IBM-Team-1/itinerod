@@ -1,4 +1,40 @@
-@import url('normalize.css');
+/*
+* Skeleton V1.1
+* Copyright 2011, Dave Gamache
+* www.getskeleton.com
+* Free to use under the MIT license.
+* http://www.opensource.org/licenses/mit-license.php
+* 8/17/2011
+*/
+
+/* Table of Content
+==================================================
+	#Media Queries
+	#Site Styles 
+	#Page Styles */
+
+
+/* #Media Queries
+================================================== */
+
+	/* Smaller than standard 960 (devices and browsers) */
+	@media only screen and (max-width: 959px) {}
+
+	/* Tablet Portrait size to standard 960 (devices and browsers) */
+	@media only screen and (min-width: 768px) and (max-width: 959px) {}
+
+	/* All Mobile Sizes (devices and browser) */
+	@media only screen and (max-width: 767px) {}
+
+	/* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
+	@media only screen and (min-width: 480px) and (max-width: 767px) {}
+
+	/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
+	@media only screen and (max-width: 479px) {}
+
+
+/* #Site Styles
+================================================== */
 
 * {
         font-family: 'Helvetica', 'Arial', sans-serif;
@@ -11,19 +47,23 @@ html {
 body {
         background-color:#EEE;
         height:100%;
+		overflow-y:scroll;
 }
 
-#login-content {
+
+.content {
+		margin: 0 auto;
+		padding:0;
         text-align:center;
         background-color: white;
-        margin: 0;
         width: 100%;
-        padding:10px 0;
         position:relative;
         top:100px;
+		padding-bottom:23px;
+		padding-top:23px;
 }
 
-h1#login-title {
+h1.content-title {
         text-transform: lowercase;
         font-size: 4em;
         position: relative;
@@ -52,7 +92,6 @@ label {
 
 input {
         height:30px;
-        width:200px;
         margin: 10px auto;
         padding:0 5px;
     border-radius: 3px;
@@ -80,13 +119,13 @@ input[type=submit] {
 input[type=submit]:hover, a:hover {
 }
 
+
 form {
         width: 323px;
         float: left;
 }
 
 span#or {
-        width: 93px;
         float: left;
         margin-top: 50px;
         display:block;
@@ -94,23 +133,18 @@ span#or {
 }
 
 a.google-button {
-        width: 187px;
         background-color: #70B7BA;
         display: block;
         margin: 0 auto;
         padding: 6px;
         border-radius: 2px;
         width: 200px;
-        float: left;
         margin-top: 51px;        
         color: white !important;
         text-decoration: none;
 }
 
 div#login-methods {
-        width: 700px;
-        margin-left: auto;
-        margin-right: auto;
         height: 178px;
         margin-top: 16px;
 }
@@ -119,8 +153,12 @@ div.register-methods {
 	height:345px !important; 
 }
 
-table {
-        margin: 0 auto;
+form.login table {
+	width:95%;
+}
+
+form.login table tbody tr td input {
+	width:100%;
 }
 
 a {
@@ -209,11 +247,61 @@ h3:first-child {
 div.icons {
 }
 
-div#content {
-        width:900px;
-        background-color:white;
-        margin:0 auto;
-        padding:0;
-        padding: 0 20px;
+p.error {
+	margin-top: 10px;
+	color: #F1433F;
+	font-size: 1.1em;
+	font-weight: bold;	
 }
 
+img.home-image {
+	width: 100%;
+	box-shadow: 0px 0px 1px black;
+	margin-top: 10px;
+	border-radius: 5px;
+}
+
+p.intro-text {
+	text-align:left;
+	padding-top:100px;
+	font-style:italic;
+	font-size:1.3em;
+}
+
+a#newaccount {
+	background-color: #2E571F;
+	border: none;
+	color: white;
+	color: white;
+	text-shadow: 0px 0px 6px rgba(0, 0, 0, 0.4);
+	font-size: 1.2em;
+	padding: 19px 43px;
+	text-transform: uppercase;
+	font-weight: bold;
+	border-radius: 5px;
+	text-decoration:none;
+	margin:auto;
+	display:block;
+	width:30%
+}
+
+div#login-content {
+	margin-top:100px;
+	display:none;
+}
+div#registration-content {
+	display:none;
+	margin-top:100px;
+}
+
+a#login-button {
+	font-size: 1.4em;
+	line-height: 3em;
+}
+
+div#blankspace {
+	width:100%;
+	height:0;
+	display:block;
+	clear:both;
+}

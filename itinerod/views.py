@@ -31,14 +31,14 @@ def home(request):
 
   print "out"
 
-  t = get_template('index.html')
+  t = get_template('index2.html')
   context = {
       'user' : request.user,
       'registration_form': registration_form,
       'login_form': AuthenticationForm(),
   }
   context.update(csrf(request))
-  return render_to_response('index.html',context)
+  return render_to_response('index2.html',context)
 
 
 @login_required
