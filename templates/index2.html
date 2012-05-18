@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login :: Itinerod</title>
+	<link rel="stylesheet" type="text/css" href="/media/css/base.css" />
+	<link rel="stylesheet" type="text/css" href="/media/css/skeleton.css" />
+	<link rel="stylesheet" type="text/css" href="/media/css/style.css" />
+
+	<script type="text/javascript" src="/media/js/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('a#login-button').click(function(e) {
+				$('div#blankspace').css('height',$(window).height()/2);
+				e.preventDefault();
+				$('#login-content').show();
+				$('html, body').stop().animate({
+					scrollTop:$('#login-content').offset().top
+				}, 1500, function(){$('#id_username').focus();});	
+			});
+
+
+			$('a#newaccount').click(function(e) {
+				$('div#blankspace').css('height',$(window).height()/2);
+				e.preventDefault();
+				$('#registration-content').show();
+				$('html, body').stop().animate({
+					scrollTop:$('#registration-content').offset().top
+				}, 1500, function(){$('table.register tbody tr td input#id_username').focus();});	
+			});
+
+		});
+	</script>
+</head>
+
+<body>
+	<div class="content">
+	<div class="container">
+		<h1 class="content-title" class="sixteen columns">Itinerod</h1>
+		<div class="ten columns offset-by-one">
+			<img src="/media/images/ny.jpg" class="home-image">
+		</div> <!-- end image wrapper -->
+		<div class="three columns">
+			<p class="intro-text">
+			We help you get where you want to be.<br /><br />Invite your friends and build an itinerary to wherever you want.</p>
+		</div>
+		<div class="sixteen columns"><!-- div button 1 -->
+			<a id="newaccount" href="/accounts/login">Create New Account</a>
+			<a href="/accounts/login" id="login-button">Login</a>
+		</div><!-- end div button 1 -->
+
+	</div><!-- end div container -->
+	</div><!-- end div content -->
+
+	<div class="content" id="login-content">
+	<div id="form" class="container">
+		<h1 class="sixteen columns">Login</h1>
+
+{% if login_form.errors %}
+<p class="sixteen columns error">Your username and password didn't match. Please try again.</p>
+{% endif %}
+<form method="post" action="{% url django.contrib.auth.views.login %}" class="six columns offset-by-two login">
+{% csrf_token %}
+<table>
+<tr>
+	<td>{{ login_form.username.label_tag }}</td>
+	<td>{{ login_form.username }}</td>
+</tr>
+<tr>
+	<td>{{ login_form.password.label_tag }}</td>
+	<td>{{ login_form.password }}</td>
+</table>
+
+<input type="submit" value="login" />
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+	<span id="or" class="one column">or</span>
+<div class="four columns"> <!-- google login button div -->
+	<a href="/google/login/" class="google-button">Login with Google</a>
+</div> <!-- end google login button div -->
+</div> <!-- end div form -->
+</div> <!-- end div content -->
+
+<!-- Insert the navbar element somewhere in the HTML page -->
+
+	</div><!-- end div content -->
+
+<div class="content" id="registration-content">
+	<div id="form" class="container">
+		<h1 class="sixteen columns">Register</h1>
+
+<form method="POST" action="/accounts/register/" class="seven columns offset-by-five login">
+{% csrf_token %}
+<table class="register">
+	{{ registration_form.as_table }}
+</table>
+
+<input type="submit" value="submit" />
+</form>
+</div> <!-- end div form -->
+</div> <!-- end div content -->
+
+<!-- Insert the navbar element somewhere in the HTML page -->
+
+	</div><!-- end div content -->
+
+
+	<div id="blankspace"></div>
+</body>
+</html>
