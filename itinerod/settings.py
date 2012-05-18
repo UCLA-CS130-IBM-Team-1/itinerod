@@ -102,6 +102,8 @@ INSTALLED_APPS = (
     'registration',
     # Database migrations
     'south',
+    # API app
+    'tastypie',
 )
 
 AUTHENTICATION_BACKENDS = (
