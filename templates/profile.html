@@ -3,6 +3,55 @@
 <head>
 	<title>Profile :: Itinerod</title>
 	<link rel="stylesheet" type="text/css" href="/media/css/style.css" />
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+	<script>
+              $(document).ready(function() {
+                  
+                  $(".itenerary_edit_button").click(function(){
+                  
+                                 var currentId = $(this).attr('id');
+
+                        // var edit_html = "events should be edited here";
+                                 $.ajax({
+                                 type:"GET",
+                                 url: "http://localhost:8000/api/itinerod/itinerary/"+currentId+"/?format=json"+"&callback=?",
+                                 contextType: "application/json"
+                                      }).done(function(html) {
+
+                                          var div_html = "";
+                                          div_html += "<h2> Edit Itineraries </h2>" ;
+                                          
+                                          var events = html.events;
+
+                                          for(var i=0, len = events.length; i< len; ++i)
+                                          {
+                                          
+                                                  div_html += "<p>";
+                                                  div_html += events[i].name;
+                                                  div_html +=  "</br>";
+                                                  div_html += events[i].location;
+                                                  div_html +=  "</br>";
+                                                  div_html += events[i].start_time;
+                                                  div_html +=  "</br>";
+                                                  div_html += events[i].end_time;
+                                                  div_html +=  "</br>";
+                                                  div_html += events[i].status;
+                                                  div_html +=  "</br>";
+                                                  div_html += events[i].vote_deadline;
+                                                  div_html +=  "</br>";
+                                                  div_html += events[i].resource_uri;
+                                                  div_html +=  "</br>";
+                                                  div_html += events[i].id;
+                                                  div_html +=  "</br>";
+                                                  div_html += "</p>";
+                                          }
+                                          
+                                          $("#editItinerary").html(div_html);
+                                      });
+                         //$("#editItenerary").html(edit_html);
+                  });
+              });
+	</script>
 </head>
 
 <body>
@@ -15,14 +64,8 @@
 {% for itinerary in user.itinerary_set.all %}
     <li>
         <a href=/itinerary/{{ itinerary.id }}/>{{ itinerary.name }}</a>:
-        {% for location in itinerary.location_set.all %}
-            {% if forloop.last %}
-                {{ location.name }}
-            {% else %}
-                {{ location.name }},
-            {% endif %}
-        {% endfor % %}
-    </li>    
+        <a href="#" id= {{ itinerary.id }} class="itenerary_edit_button"> Edit </a>
+    </li>
 {% endfor %}
 </ul>
 </div><!-- end div listItineraries -->
@@ -35,7 +78,8 @@
       <input type="submit" value="Submit" />
     </form>
 </div> <!-- end div addItinerary -->
-
+<div id="editItinerary">
+</div>
 <!--<div id="inviteFriends">
 <form method="post" action="/profile/"> 
 Friends: <input type="text" name="friend1" /></br>
