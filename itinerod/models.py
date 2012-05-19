@@ -63,7 +63,7 @@ class EventForm(ModelForm):
     model = Event
   def __init__(self, *args, **kwargs):
     super(EventForm, self).__init__(*args, **kwargs)
-    self.fields['start_time'].widget = widgets.SplitDateTimeWidget()
-    self.fields['end_time'].widget = widgets.SplitDateTimeWidget()
+    #self.fields['start_time'].widget = widgets.SplitDateTimeWidget()
+    #self.fields['end_time'].widget = widgets.SplitDateTimeWidget()
     #self.fields['approval_status'].widget.choices = ()
     #self.fields['approval_status'].choices = (('V', 'Votable'))
