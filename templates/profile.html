@@ -4,9 +4,19 @@
 	<title>Profile :: Itinerod</title>
 	<link rel="stylesheet" type="text/css" href="/media/css/style.css" />
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
 	<script>
               $(document).ready(function() {
+
+                  $( ".datepicker" ).datepicker();
                   
+                   //Insert the Expansion/contraction of div related code
+//                   $(".event_details").hide();
+
+                   $(".event").click(function(){
+                           $(this).next().slideToggle('slow');
+                           });
+
                   $(".itenerary_edit_button").click(function(){
                   
                                  var currentId = $(this).attr('id');
@@ -20,29 +30,29 @@
 
                                           var div_html = "";
                                           div_html += "<h2> Edit Itineraries </h2>" ;
-                                          
+
                                           var events = html.events;
 
                                           for(var i=0, len = events.length; i< len; ++i)
                                           {
                                           
                                                   div_html += "<p>";
-                                                  div_html += events[i].name;
+                                                  div_html += "<h3 class='event'>"+ events[i].name +"</h3>" ;
+                                                  div_html += "<div class='event_details'>";
+                                                  div_html += "Location: <input type='text' value= '"+ events[i].location +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += events[i].location;
+                                                  div_html += "Start Time: <input type='text' value= '"+ events[i].start_time +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += events[i].start_time;
+                                                  div_html += "End Time: <input type='text' value= '"+ events[i].end_time +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += events[i].end_time;
+                                                  div_html += "Voting Status: <input type='text' value= '"+ events[i].status +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += events[i].status;
+                                                  div_html += "Voting Deadline: <input type='text' value= '"+ events[i].vote_deadline +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += events[i].vote_deadline;
-                                                  div_html +=  "</br>";
-                                                  div_html += events[i].resource_uri;
-                                                  div_html +=  "</br>";
-                                                  div_html += events[i].id;
-                                                  div_html +=  "</br>";
+                                                  div_html += "Resource URI: <input type='text' value= '"+ events[i].resource_uri +"'/>";
+                                                   div_html +=  "</br>";
+                                                  div_html += "Event ID: <input type='text' value= '"+ events[i].id +"'/>";
+                                                  div_html += "</div>";
                                                   div_html += "</p>";
                                           }
                                           
