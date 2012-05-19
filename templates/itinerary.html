@@ -15,7 +15,7 @@
       $(".event_details").hide();
 
       $(".event").click(function(){
-       //  $(this).next(".event_details").slideToggle('slow');
+           //TODO: is there a better way to do the following?
            $(this).next().next().next().slideToggle('slow');
       });
 
@@ -24,54 +24,49 @@
       //Below are the API call related Jquery functions
       //
       $(".weather").click(function() {
-       var weatherURL = "http://www.google.com/ig/api?hl=zh-cn&weather=Los+Angeles" ;
-        var weatherRequest;    //holds Eventful api response
+        var weather_location = "Los Angeles";
+        var weatherURL = "http://www.google.com/ig/api?hl=zh-cn&weather="+Location ;
+        var weatherRequest;    //holds weather API response
         var weatherRequestURL = weatherURL;
 
-        if(window.ActiveXObject){weatherRequest=new ActiveXObject("Microsoft.XMLHTTP");}
-        else if(window.XMLHttpRequest){weatherRequest=new XMLHttpRequest();}
-        weatherRequest.onreadystatechange = showWeatherResult;
-        weatherRequest.open("GET",weatherRequestURL,true);
-        weatherRequest.send();
-        function showWeatherResult(){
-           if(weatherRequest.readyState==4){
-                     var response = weatherRequest.responseText;
-                     document.getElementById("LA_event_details").innerHTML = response+"Hello weather";
-                     }
-           }
+
+        $.ajax({
+        type:"GET",
+         url: weatherURL
+        }).done(function(html) {
+        //   TODO: PUT IN WEATHER API RESULTS IN HTML
+        });
+
       });
       $(".events").click(function() {
-        var eventsURL = "http://api.eventful.com/rest/events/rss?app_key=NsjwnNS4hKSqXP6J&keywords=concerts&location=Los+Angeles&sort_order=date";
+        var events_location = "Los Angeles";
+        var eventsURL = "http://api.eventful.com/rest/events/rss?app_key=NsjwnNS4hKSqXP6J&keywords=concerts&location="+events_location+"&sort_order=date";
         var eventsRequest;    //holds Eventful api response
         var eventsRequestURL = eventsURL;
 
-        if(window.ActiveXObject){eventsRequest=new ActiveXObject("Microsoft.XMLHTTP");}
-        else if(window.XMLHttpRequest){eventsRequest=new XMLHttpRequest();}
-        eventsRequest.onreadystatechange = showEventsResult;
-        eventsRequest.open("GET",eventsRequestURL,true);
-        eventsRequest.send();
-        function showEventsResult(){
-           if(eventsRequest.readyState==4){
-                     var response = eventsRequest.responseText;
-                     document.getElementById("LA_event_details").innerHTML = response+"Hello Events";
-                     }
-           }
+        $.ajax({
+        type:"GET",
+         url: weatherURL
+        }).done(function(html) {
+        //   TODO: PUT IN EVENTFUL API RESULTS IN HTML
+        });
+
       });
 
       $(".map").click(function() {
-         //$("#LA_event_details").slideToggle("slow");          //TODO FIX toggle 
-                      
-                    
-                 var myOptions = {
-                 center: new google.maps.LatLng(34.063361, -118.444419),  // TODO  change map locations
-                 zoom: 8,
-                 mapTypeId: google.maps.MapTypeId.ROADMAP
+         var map_x_axis = 34.063361;
+         var map_y_axis = -118.444419;
+         var myOptions = {
+         center: new google.maps.LatLng( map_x_axis,map_y_axis ),
+         zoom: 8,
+         mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        var map = new google.maps.Map(document.getElementById("LA_event_details"),  //TODO fix "LA" string (global problem)
+        var map = new google.maps.Map(document.getElementByClass("event_details"),
             myOptions);
+//        $(".event_details").gMap();
       });
+
       $(".food").click(function() {
-         //$("#LA_event_details").slideToggle("slow");
 
          var YWSID = "SrSxxs4TLunMcU3cQ8cp_A"; // common required parameter (api key)
 
@@ -92,18 +87,7 @@
         var yelpRequest;    //holds yelp api response
         var yelpRequestURL = constructYelpURL();
 
-        if(window.ActiveXObject){yelpRequest=new ActiveXObject("Microsoft.XMLHTTP");}
-        else if(window.XMLHttpRequest){yelpRequest=new XMLHttpRequest();}
-        yelpRequest.onreadystatechange = function(){
-           if(yelpRequest.readyState==4){
-                     var response = yelpRequest.responseText;
-                     document.getElementById("").innerHTML = response+"Hello";
-                     }
-           }
-        yelpRequest.open("GET",yelpRequestURL,true);
-        yelpRequest.send();
-        
-        $.ajax({
+         $.ajax({
         type:"GET",
         dataType:"json",
          url: yelpRequestURL+"&callback=?",
@@ -112,7 +96,7 @@
         }).done(function(html) {
         var businesses = html.businesses;
 
-        $("#LA_event_details").html("Food Places" + "<br />");
+        $(".event_details").html("Food Places" + "<br />");
 
         for(var i=0, len = businesses.length; i< len; ++i)
         {
