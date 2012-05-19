@@ -2,7 +2,7 @@ import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
-from django.forms import ModelForm, widgets, extras, Textarea, CharField, ModelMultipleChoiceField
+from django.forms import ModelForm, widgets, extras, Textarea, CharField, ModelMultipleChoiceField, HiddenInput
 import django.forms
 
 class Itinerary(models.Model):
@@ -66,3 +66,15 @@ class EventForm(ModelForm):
     self.fields['end_time'].widget = widgets.SplitDateTimeWidget()
     #self.fields['approval_status'].widget.choices = ()
     #self.fields['approval_status'].choices = (('V', 'Votable'))
+
+class VoteForm(ModelForm):
+  class Meta:
+    model = Vote
+    fields = ('vote','user','event',)
+    exclude = ('event',)
+    widgets = {
+      'user' : HiddenInput,
+      'event' : HiddenInput,
+    }
+  def __init__(self, *args, **kwargs):
+    super(VoteForm,self).__init__(*args, **kwargs)

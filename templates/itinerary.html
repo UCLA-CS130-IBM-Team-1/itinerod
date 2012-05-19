@@ -131,13 +131,14 @@
 <body> 
 <div id="content" />
 <h1 class="pageTitle">View itinerary</h1>
- 
-{% for location in itinerary.location_set.all %}
+
   
-	<h2 class="location">{{ location.name }}</h2>
-	  {% for event in location.event_set.all %}
+	<h2 class="location">{{itinerary.name }}</h2>
+    <form method="post" action=/itinerary/{{itinerary.id}}/>	  
+	{% for event in event_set %}
 	  <div>
-	  <h3 class="event">{{ event.name }}</h3>
+		{% csrf_token %}
+	  <h3 class="event">{{ event.name }}{{vote_form_set}}</h3>
 	  <span class="date">{{ event.start_time}} &mdash; {{ event.end_time }}</span>
 	  <div class="icons">
 		<img src="/media/images/calendar.png" class="events" alt="events_1" />
@@ -148,10 +149,11 @@
 	   <div id="{{ location.name }}_event_details" class = "event_details" style="margin:10px auto; height: 50ex; width: 50ex; display: block; border-style: solid; border-width: thin;">
            </div>
 	{% endfor %}
+      <input type="submit" value="Submit" />
+    </form>
     </div>
 	</div>
 		
-{% endfor %}
 
 </div>
 

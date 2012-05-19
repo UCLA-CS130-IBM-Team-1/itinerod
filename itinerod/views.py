@@ -13,6 +13,8 @@ from django.template.loader import get_template
 from django.core.paginator import Paginator
 from django.core.context_processors import csrf
 from django.forms.models import inlineformset_factory
+from django.forms.formsets import formset_factory
+from django.forms.models import modelformset_factory
 
 from registration.forms import RegistrationForm
 
@@ -74,11 +76,41 @@ def profile(request):
 
 @login_required
 def itinerary(request, itin_id):
-
   # Primitively restricts access to itineraries to owners
   selected_itinerary = get_object_or_404(request.user.itinerary_set, pk=itin_id)
-
-  return render_to_response('itinerary.html', {'itinerary' : selected_itinerary })
+  #event_set = Event.objects.all()
+  itinEvents = Event.objects.filter(itinerary=itin_id)
+  event_set = itinEvents.order_by('start_time')
+  event_ids = []
+  for events in event_set:
+	event_ids.append(events)
+  VoteFormSet = formset_factory(VoteForm, extra=event_set.count()-1)
+  formSetInit = VoteFormSet(initial=[{'user':request.user,}])
+  if request.method == 'POST':
+    formset = VoteFormSet(request.POST)
+    count = 0
+    for form in formset:
+	savedVoteForm = form.save(commit=False)
+	savedVoteForm.id = count+1
+	eventProper = event_ids[count]
+      	savedVoteForm.event = eventProper
+	count+=1
+    if formset.is_valid():
+	print "in valid clause"
+	for form in formset:
+		savedVoteForm = form.save()
+      		#savedVoteFormSet.event.add(event_set.first.id)
+      		#savedVoteFormSet.user.add(request.user)
+    else:
+    	print "in else clause"
+    	formset = VoteFormSet() # An unbound form
+  context ={
+	'itinerary' : selected_itinerary,
+	'event_set' : event_set,
+	'vote_form_set' : formSetInit,
+  }
+  context.update(csrf(request))
+  return render_to_response('itinerary.html',context)
 
 '''
 def itinerary(request):
