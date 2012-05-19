@@ -28,14 +28,15 @@ class UserResource(ModelResource):
       return object_list.filter(pk=request.user.pk)
 
 class ItineraryResource(ModelResource):
-  users = fields.ToManyField(UserResource, 'users', related_name='itinerary')
-  events = fields.ToManyField('itinerod.api.EventResource', 'event_set', related_name='itinerary')
+  users = fields.ToManyField(UserResource, 'users', related_name='itinerary', full=True)
+  events = fields.ToManyField('itinerod.api.EventResource', 'event_set', related_name='itinerary', full=True)
   class Meta:
     queryset = Itinerary.objects.all()
     authentication = Authentication()
     authorization = DjangoAuthorization()
     filtering = {
         'name': ['exact'],
+        'id': ['exact'],
         'created_on': ['exact', 'range', 'gt', 'lt', 'lte'],
         'start_date': ['exact', 'range', 'gt', 'lt', 'lte'],
         'end_date': ['exact', 'range', 'gt', 'lt', 'lte'],
@@ -59,6 +60,8 @@ class EventResource(ModelResource):
     authorization = DjangoAuthorization()
     filtering = {
         'name': ['exact'],
+        'id': ['exact'],
+        'created_on': ['exact', 'range', 'gt', 'lt', 'lte'],
         'itinerary': ALL_WITH_RELATIONS,
         'location': ['exact', 'startswith'],
         'start_date': ['exact', 'range', 'gt', 'lt', 'lte'],
