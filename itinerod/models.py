@@ -37,7 +37,7 @@ class Event(models.Model):
 VOTE_CHOICES = (
     ('Y', 'Yes'),
     ('N', 'No'),
-    ('A', 'Abstain'),
+   # ('A', 'Abstain'),
 )
 
 class Vote(models.Model):
