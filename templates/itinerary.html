@@ -134,11 +134,12 @@
 
   
 	<h2 class="location">{{itinerary.name }}</h2>
-    <form method="post" action=/itinerary/{{itinerary.id}}/>	  
+    <form method="post" action=/itinerary/{{itinerary.id}}/>	
+	{% csrf_token %}	
+	{{vote_form_set}}  
 	{% for event in event_set %}
 	  <div>
-		{% csrf_token %}
-	  <h3 class="event">{{ event.name }}{{vote_form_set}}</h3>
+	  <h3 class="event">{{ event.name }}</h3>
 	  <span class="date">{{ event.start_time}} &mdash; {{ event.end_time }}</span>
 	  <div class="icons">
 		<img src="/media/images/calendar.png" class="events" alt="events_1" />

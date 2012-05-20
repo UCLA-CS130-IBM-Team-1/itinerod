@@ -81,16 +81,29 @@ def itinerary(request, itin_id):
   #event_set = Event.objects.all()
   itinEvents = Event.objects.filter(itinerary=itin_id)
   event_set = itinEvents.order_by('start_time')
+  for event in event_set:
+	voteDeadline= event.vote_deadline
+	today = datetime.datetime.now()
+	if voteDeadline < today:
+		voteY = Vote.objects.filter(event=event.id,vote='Y')
+		voteN = Vote.objects.filter(event=event.id,vote='N')
+		print voteY.count()
+		print voteN.count()
+		if(voteY.count() >= voteN.count()):
+			event.status = 'A'
+		else:
+			event.status = 'R'
+		event.save()
   event_ids = []
   for events in event_set:
 	event_ids.append(events)
-  VoteFormSet = formset_factory(VoteForm, extra=event_set.count()-1)
-  formSetInit = VoteFormSet(initial=[{'user':request.user,}])
+  VoteFormSet = formset_factory(VoteForm, extra=event_set.count())
   if request.method == 'POST':
     formset = VoteFormSet(request.POST)
     count = 0
     for form in formset:
 	savedVoteForm = form.save(commit=False)
+	savedVoteForm.user = request.user
 	savedVoteForm.id = count+1
 	eventProper = event_ids[count]
       	savedVoteForm.event = eventProper
@@ -107,7 +120,7 @@ def itinerary(request, itin_id):
   context ={
 	'itinerary' : selected_itinerary,
 	'event_set' : event_set,
-	'vote_form_set' : formSetInit,
+	'vote_form_set' : VoteFormSet,
   }
   context.update(csrf(request))
   return render_to_response('itinerary.html',context)

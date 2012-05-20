@@ -72,7 +72,7 @@ class VoteForm(ModelForm):
   class Meta:
     model = Vote
     fields = ('vote','user','event',)
-    exclude = ('event',)
+    exclude = ('event','user')
     widgets = {
       'user' : HiddenInput,
       'event' : HiddenInput,
