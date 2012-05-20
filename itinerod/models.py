@@ -29,7 +29,7 @@ class Event(models.Model):
   start_time = models.DateTimeField()
   end_time = models.DateTimeField()
   status = models.CharField(max_length=1, choices=EVENT_STATUS_CHOICES)
-  vote_deadline = models.DateTimeField(blank=True)
+  vote_deadline = models.DateTimeField(null=True, blank=True)
   
   def __unicode__(self):
     return self.name
@@ -63,8 +63,8 @@ class EventForm(ModelForm):
     model = Event
   def __init__(self, *args, **kwargs):
     super(EventForm, self).__init__(*args, **kwargs)
-    self.fields['start_time'].widget = widgets.SplitDateTimeWidget()
-    self.fields['end_time'].widget = widgets.SplitDateTimeWidget()
+    #self.fields['start_time'].widget = widgets.SplitDateTimeWidget()
+    #self.fields['end_time'].widget = widgets.SplitDateTimeWidget()
     #self.fields['approval_status'].widget.choices = ()
     #self.fields['approval_status'].choices = (('V', 'Votable'))
 
