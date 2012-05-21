@@ -16,6 +16,16 @@
                    $(".event").click(function(){
                            $(this).next().slideToggle('slow');
                            });
+	          var friendData; //TO DO: need to implement data to send of what users to delete from itinerary
+	          $(".itinerary_friend_edit_button").click(function(){
+	             $.ajax({
+	             type:"PUT",
+	             url:"http://localhost:8000/api/itinerod/itinerary/"+currentId+"/?format=jason"+"&callback=?",
+	             contextType: "application/json"
+	             data: friendData
+	             dataType: 'json'
+                     }
+	          }
 
                   $(".itenerary_edit_button").click(function(){
                   
@@ -25,14 +35,21 @@
                                  $.ajax({
                                  type:"GET",
                                  url: "http://localhost:8000/api/itinerod/itinerary/"+currentId+"/?format=json"+"&callback=?",
-                                 contextType: "application/json"
+                                 contextType: "application/json" //is this supposed to be content or context?
                                       }).done(function(html) {
 
                                           var div_html = "";
-                                          div_html += "<h2> Edit Itineraries </h2>" ;
 
                                           var events = html.events;
-
+					  var users = html.users;
+				          for(var i = 0, len = users.length; i < len; ++i)
+					  {
+						div_html += "<h2>Edit Friends</h2>";
+                                                  div_html += "<div class='event_details'>";
+						div_html += "<input type='checkbox' name='user1' value='"+ users[i].email +"'/> "+ users[i].email +"<br>";
+                                                  div_html += "</div>";
+					  }
+                                          div_html += "<h2> Edit Itineraries </h2>" ;
                                           for(var i=0, len = events.length; i< len; ++i)
                                           {
                                           
