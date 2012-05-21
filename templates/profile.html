@@ -21,11 +21,11 @@
 	             $.ajax({
 	             type:"PUT",
 	             url:"http://localhost:8000/api/itinerod/itinerary/"+currentId+"/?format=jason"+"&callback=?",
-	             contextType: "application/json"
-	             data: friendData
-	             dataType: 'json'
-                     }
-	          }
+	             contextType: "application/json",
+	             data: friendData,
+	             dataType: 'json',
+                     })
+	          })
 
                   $(".itenerary_edit_button").click(function(){
                   
