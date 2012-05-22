@@ -220,9 +220,16 @@ div#listItineraries {
         height:500px;
 }
 
-div#addItinerary, div#inviteFriends {
+div#addItinerary{
         width: 550px;
         float: right;
+}
+
+div#editItinerary, div#inviteFriends{
+        width: 550px;
+        display: block;
+        position: relative;
+        float: left;
 }
 
 span.date {

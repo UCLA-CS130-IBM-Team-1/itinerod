@@ -14,12 +14,24 @@
                   $(".event").live('click',function(){
                            $(this).next().slideToggle('slow');
                            });
-
+                  function hide_event_details()
+                  {
+                           $(".event_details").hide();
+                  }
                   //Save button clicks in edit event details tab
                   $(".event_edit_save").live('click',function(){
                              alert("hi");
                              alert($(this).parent().attr("id"));
-                            });
+                             
+                             $.ajax({
+                             type:"POST",
+                             url:"http://localhost:8000/api/itinerod/event/2/",
+                             data: "{\"end_time\": \"2012-01-03T00:00:00\",\"itinerary\": \"/api/itinerod/itinerary/2/\", \"location\": \"Westwood_LA\", \"name\": \"UCLA\", \"start_time\": \"2012-01-02T00:00:00\", \"status\": \"A\", \"vote_deadline\": null}",
+                             dataType: 'json',
+                             }).done(function(html){
+                                      alert("done");
+                             });
+                   });
 
 	          var friendData; //TO DO: need to implement data to send of what users to delete from itinerary
 	          $(".itinerary_friend_edit_button").click(function(){
@@ -81,7 +93,9 @@
                                           }
                                           
                                           $("#editItinerary").html(div_html);
+                                          hide_event_details();
                                       });
+
                   });
               });
 	</script>
