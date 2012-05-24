@@ -6,6 +6,8 @@
             src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBsGA492uOZ1mHV4Xri6cDZSONnI8axroI&sensor=false">
         </script>
         
+        <script type="text/javascript" src="http://api.eventful.com/js/api"></script>
+        
         <link rel="stylesheet" type="text/css" href="/media/css/style.css" />
         <script>
             
@@ -14,6 +16,18 @@
                               var map;
                               var geocoder;
                               var map_center_marker;
+                              var infowindow = new google.maps.InfoWindow();
+                              
+                              // images for marker on the map
+                              var yelpImage = new google.maps.MarkerImage('/media/images/yelp.png',
+                                                                           new google.maps.Size(32, 32),
+                                                                           new google.maps.Point(0,0));
+                              
+                              var eventfulImage = new google.maps.MarkerImage('/media/images/eventful.png',
+                                                                          new google.maps.Size(32, 32),
+                                                                          new google.maps.Point(0,0));
+                              
+                              
                               
                               
                               //Insert the Expansion/contraction of div related code
@@ -31,7 +45,7 @@
                                                 
                                                 var myOptions = {
                                                 center: new google.maps.LatLng(34.063361, -118.444419),
-                                                zoom: 14,
+                                                zoom: 12,
                                                 mapTypeId: google.maps.MapTypeId.ROADMAP
                                                 };
                                                 
@@ -84,14 +98,14 @@
                                                                  
                                                                  var forecast = json.forecast.simpleforecast.forecastday;
                                                                  
-                                                                 var html = "<b>Weather</b> for <b>" + eventlocation +"</b><br/><table width=400>";
+                                                                 var html = "<b>Weather</b> for <b>" + eventlocation +"</b><br/><table width=250>";
 
                                                                  var i;
                                                                  for (i = 0; i < forecast.length; i++) {
                                                                  
                                                                  html = html +
                                                                  "<tr>" +
-                                                                 "<td valign=\"middle\" align=\"center\">" + forecast[i].date.weekday_short + "</td>" +
+                                                                 "<td valign=\"middle\">" + forecast[i].date.weekday + "</td>" +
                                                                  "<td valign=\"middle\">" + forecast[i].high.fahrenheit + "</br>" + forecast[i].low.fahrenheit + "</td>" +
                                                                  "<td valign=\"middle\"><img src=\"" + forecast[i].icon_url + "\" /></td>" +
                                                                  "</tr>";
@@ -100,31 +114,85 @@
                                                                  
                                                                  html = html + "</table>"
                                                                  
-                                                                 var infowindow = new google.maps.InfoWindow();
                                                                  infowindow.setContent(html);
                                                                  infowindow.open(map, map_center_marker);
                                                                  
                                                                  });
-                                                  
                                                   });
                               
                               
                               
                               
-                              
-                              
                               $(".events").click(function() {
-                                                 var events_location = "Los Angeles";
-                                                 var eventsURL = "http://api.eventful.com/rest/events/rss?app_key=NsjwnNS4hKSqXP6J&keywords=concerts&location="+events_location+"&sort_order=date";
-                                                 var eventsRequest;    //holds Eventful api response
-                                                 var eventsRequestURL = eventsURL;
+
                                                  
-                                                 $.ajax({
-                                                        type:"GET",
-                                                        url: weatherURL
-                                                        }).done(function(html) {
-                                                                //   TODO: PUT IN EVENTFUL API RESULTS IN HTML
-                                                                });
+                                                 var eventname = $(this).attr('eventname');
+                                                 var eventlocation = $(this).attr('location');
+                                                 var id = eventname + "_" + eventlocation + "_event_details";
+                                                 
+                                                 var apikey = "NsjwnNS4hKSqXP6J";  // pralavs's key
+                                                 
+                                                 var lat = map.getCenter().lat();
+                                                 var long = map.getCenter().lng();
+                                                 
+                                                 // args for eventful API ... //TODO figure out dates of itinerary
+                                                 
+                                                 var oArgs = { app_key: "NsjwnNS4hKSqXP6J",
+                                                                category: "music",
+                                                                location: lat+","+long,
+                                                                within: 5,
+                                                                units: "mi",
+                                                                sort_order: "popularity",
+                                                                page_size: 10};
+                                                 
+                                                 EVDB.API.call("/events/search", oArgs, function(oData)
+                                                               {
+                                                               // Note: this relies on the custom toString() methods below
+                                                               
+                                                               var events = oData.events.event;
+                                                               
+                                                               var marker, i;
+                                                               
+                                                               for (i = 0; i < events.length; i++) {
+                                                               
+                                                               lat = events[i].latitude;
+                                                               long = events[i].longitude;
+                                                               
+                                                               var marker = new google.maps.Marker({
+                                                                                                   map: map, 
+                                                                                                   position: new google.maps.LatLng(lat, long), 
+                                                                                                   icon: eventfulImage,
+                                                                                                   animation: google.maps.Animation.DROP
+                                                                                                   });
+                                                               
+                                                               
+                                                               google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                                                                                                               return function() {
+                                                                                                               
+                                                                                                               var event = events[i];
+
+                                                                                                               var content = "<a href=\"" + event.url + "\" target=\"_blank\">" +
+                                                                                                               event.title + "</a></br>" + "Date: " + event.start_time + "</br></br>";
+                                                                                                               
+                                                                                                               if(event.venue_name)
+                                                                                                                content = content + event.venue_name + "</br>";
+                                                                                                               if(event.venue_address)
+                                                                                                                content = content + event.venue_address + "</br>";
+                                                                                                               content = content + event.region_name;
+  
+                                                                                                               infowindow.setContent(content);
+                                                                                                               infowindow.open(map, marker);
+                                                                                                               }
+                                                                                                               })(marker, i));
+                                                               
+                                                               
+                                                               
+                                                               }
+  
+                                                               });
+                                                
+                                                 
+
                                                  
                                                  });
                               
@@ -137,7 +205,7 @@
                                               
                                               var myOptions = {
                                               center: new google.maps.LatLng(34.063361, -118.444419),
-                                              zoom: 14,
+                                              zoom: 12,
                                               mapTypeId: google.maps.MapTypeId.ROADMAP
                                               };
                                               
@@ -169,8 +237,7 @@
                                                var eventlocation = $(this).attr('location');
                                                var id = eventname + "_" + eventlocation + "_event_details";
                                                
-                                               // pralav's
-                                               //var YWSID = "SrSxxs4TLunMcU3cQ8cp_A"; // common required parameter (api key)
+                                               //var YWSID = "SrSxxs4TLunMcU3cQ8cp_A"; // pralav's key
                                                
                                                var YWSID = "JhY46juaZYUVv4n7md3nig";  // raymond's key
                                                
@@ -207,9 +274,7 @@
                                                               var businesses = json.businesses;
                                                               
                                                               var marker, i;
-                                                              
-                                                              var infowindow = new google.maps.InfoWindow();
-                                                              
+
                                                               for(i=0; i < businesses.length; ++i)
                                                               {
                                                               
@@ -219,7 +284,8 @@
                                                               var marker = new google.maps.Marker({
                                                                                                   map: map, 
                                                                                                   position: new google.maps.LatLng(lat, long), 
-                                                                                                  icon: '/media/images/yelp.png'
+                                                                                                  icon: yelpImage,
+                                                                                                  animation: google.maps.Animation.DROP
                                                                                                   });
                                     
                                                               
@@ -268,9 +334,9 @@
             <span class="date">{{ event.start_time}} &mdash; {{ event.end_time }}</span>
             <div class="icons">
                 <img src="/media/images/weather.png" class="weather" eventname="{{ event.name }}" location="{{ event.location }}" alt="Weather" href="#"/>
-                <img src="/media/images/map.png" class="map" eventname="{{ event.name }}" location="{{ event.location }}" alt="Map" />
-                <img src="/media/images/food.png" class="food" eventname="{{ event.name }}" location="{{ event.location }}" alt="Food" />
-                <img src="/media/images/calendar.png" class="events" eventname="{{ event.name }}" location="{{ event.location }}" alt="events_1" />
+                <img src="/media/images/gmap.png" class="map" eventname="{{ event.name }}" location="{{ event.location }}" alt="Map" />
+                <img src="/media/images/yelp.png" class="food" eventname="{{ event.name }}" location="{{ event.location }}" alt="Food" />
+                <img src="/media/images/eventful.png" class="events" eventname="{{ event.name }}" location="{{ event.location }}" alt="events_1" />
             </div>
             <div id="{{ event.name }}_{{ event.location }}_event_details" class="event_details" style="margin:10px auto; height: 60ex; width: 80ex; display: block; border-style: solid; border-width: thin;">Click something!
             </div>
