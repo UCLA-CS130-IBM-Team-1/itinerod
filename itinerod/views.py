@@ -80,8 +80,6 @@ def voteCalc(event_set):
 	if voteDeadline < today:
 		voteY = Vote.objects.filter(event=event.id,vote='Y')
 		voteN = Vote.objects.filter(event=event.id,vote='N')
-		print voteY.count()
-		print voteN.count()
 		if(voteY.count() >= voteN.count()):
 			event.status = 'A'
 		else:
@@ -101,7 +99,7 @@ def itinerary(request, itin_id):
   selected_itinerary = get_object_or_404(request.user.itinerary_set, pk=itin_id)
   itinEvents = Event.objects.filter(itinerary=itin_id)
   event_set = itinEvents.order_by('start_time')
-
+  vote_set = Vote.objects;
   voteCalc(event_set)
   event_list = createEventList(event_set)
 
@@ -123,6 +121,7 @@ def itinerary(request, itin_id):
   context ={
 	'itinerary' : selected_itinerary,
 	'event_set' : event_set,
+        'vote_set'  : vote_set,
 	'vote_form_set' : VoteFormSet,
   }
   context.update(csrf(request))

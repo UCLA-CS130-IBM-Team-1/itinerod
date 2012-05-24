@@ -234,7 +234,7 @@
 	{{vote_form_set}}
         {% for event in itinerary.event_set.all %}
         <div>
-            <h3 class="event" eventname="{{ event.name }}" location="{{ event.location }}" >{{ event.name }} </h3>
+            <h3 class="event" eventname="{{ event.name }}" location="{{ event.location }}" >{{ event.name }} The Event was: {{event.status}} </h3>
             <span class="date">{{ event.start_time}} &mdash; {{ event.end_time }}</span>
             <div class="icons">
                 <img src="/media/images/calendar.png" class="events" eventname="{{ event.name }}" location="{{ event.location }}" alt="events_1" />
@@ -244,6 +244,11 @@
             </div>
             <div id="{{ event.name }}_{{ event.location }}_event_details" class="event_details" style="margin:10px auto; height: 50ex; width: 50ex; display: block; border-style: solid; border-width: thin;">Click something!
             </div>
+	    {% for vote in vote_set.all %}
+	       {% if vote.event == event %}
+	          {{vote.user}} voted: {{vote.vote}}
+	       {% endif %}
+	    {% endfor %}
             {% endfor %}
         </div>
         </div>
