@@ -3,6 +3,82 @@
 <head>
 	<title>Profile :: Itinerod</title>
 	<link rel="stylesheet" type="text/css" href="/media/css/style.css" />
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
+	<script>
+              $(document).ready(function() {
+
+                  $( ".datepicker" ).datepicker();
+                  
+                   //Insert the Expansion/contraction of div related code
+//                   $(".event_details").hide();
+
+                   $(".event").click(function(){
+                           $(this).next().slideToggle('slow');
+                           });
+	          var friendData; //TO DO: need to implement data to send of what users to delete from itinerary
+	          $(".itinerary_friend_edit_button").click(function(){
+	             $.ajax({
+	             type:"PUT",
+	             url:"http://localhost:8000/api/itinerod/itinerary/"+currentId+"/?format=jason"+"&callback=?",
+	             contextType: "application/json",
+	             data: friendData,
+	             dataType: 'json',
+                     })
+	          })
+
+                  $(".itenerary_edit_button").click(function(){
+                  
+                                 var currentId = $(this).attr('id');
+
+                        // var edit_html = "events should be edited here";
+                                 $.ajax({
+                                 type:"GET",
+                                 url: "http://localhost:8000/api/itinerod/itinerary/"+currentId+"/?format=json"+"&callback=?",
+                                 contextType: "application/json" //is this supposed to be content or context?
+                                      }).done(function(html) {
+
+                                          var div_html = "";
+
+                                          var events = html.events;
+					  var users = html.users;
+				          for(var i = 0, len = users.length; i < len; ++i)
+					  {
+						div_html += "<h2>Edit Friends</h2>";
+                                                  div_html += "<div class='event_details'>";
+						div_html += "<input type='checkbox' name='user1' value='"+ users[i].email +"'/> "+ users[i].email +"<br>";
+                                                  div_html += "</div>";
+					  }
+                                          div_html += "<h2> Edit Itineraries </h2>" ;
+                                          for(var i=0, len = events.length; i< len; ++i)
+                                          {
+                                          
+                                                  div_html += "<p>";
+                                                  div_html += "<h3 class='event'>"+ events[i].name +"</h3>" ;
+                                                  div_html += "<div class='event_details'>";
+                                                  div_html += "Location: <input type='text' value= '"+ events[i].location +"'/>";
+                                                  div_html +=  "</br>";
+                                                  div_html += "Start Time: <input type='text' value= '"+ events[i].start_time +"'/>";
+                                                  div_html +=  "</br>";
+                                                  div_html += "End Time: <input type='text' value= '"+ events[i].end_time +"'/>";
+                                                  div_html +=  "</br>";
+                                                  div_html += "Voting Status: <input type='text' value= '"+ events[i].status +"'/>";
+                                                  div_html +=  "</br>";
+                                                  div_html += "Voting Deadline: <input type='text' value= '"+ events[i].vote_deadline +"'/>";
+                                                  div_html +=  "</br>";
+                                                  div_html += "Resource URI: <input type='text' value= '"+ events[i].resource_uri +"'/>";
+                                                   div_html +=  "</br>";
+                                                  div_html += "Event ID: <input type='text' value= '"+ events[i].id +"'/>";
+                                                  div_html += "</div>";
+                                                  div_html += "</p>";
+                                          }
+                                          
+                                          $("#editItinerary").html(div_html);
+                                      });
+                         //$("#editItenerary").html(edit_html);
+                  });
+              });
+	</script>
 </head>
 
 <body>
@@ -15,14 +91,8 @@
 {% for itinerary in user.itinerary_set.all %}
     <li>
         <a href=/itinerary/{{ itinerary.id }}/>{{ itinerary.name }}</a>:
-        {% for location in itinerary.location_set.all %}
-            {% if forloop.last %}
-                {{ location.name }}
-            {% else %}
-                {{ location.name }},
-            {% endif %}
-        {% endfor % %}
-    </li>    
+        <a href="#" id= {{ itinerary.id }} class="itenerary_edit_button"> Edit </a>
+    </li>
 {% endfor %}
 </ul>
 </div><!-- end div listItineraries -->
@@ -35,15 +105,16 @@
       <input type="submit" value="Submit" />
     </form>
 </div> <!-- end div addItinerary -->
-
-<div id="inviteFriends">
-<h3> Invite up to 3 friends! </h3>
+<div id="editItinerary">
+</div>
+<!--<div id="inviteFriends">
+<form method="post" action="/profile/"> 
 Friends: <input type="text" name="friend1" /></br>
 Friends: <input type="text" name="friend2" /></br>
 Friends: <input type="text" name="friend3" /></br> 
 <input type="submit" value="Submit" />
 </form>
-</div><!-- end div inviteFriends -->
+</div>--><!-- end div inviteFriends -->
 <div style="clear:both"></div>
 </div><!-- end div content -->
 </body>

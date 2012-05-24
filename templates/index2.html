@@ -9,7 +9,7 @@
 	<script type="text/javascript" src="/media/js/jquery-1.7.2.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			$('a#newaccount').click(function(e) {
+			$('a#login-button').click(function(e) {
 				$('div#blankspace').css('height',$(window).height()/2);
 				e.preventDefault();
 				$('#login-content').show();
@@ -17,6 +17,17 @@
 					scrollTop:$('#login-content').offset().top
 				}, 1500, function(){$('#id_username').focus();});	
 			});
+
+
+			$('a#newaccount').click(function(e) {
+				$('div#blankspace').css('height',$(window).height()/2);
+				e.preventDefault();
+				$('#registration-content').show();
+				$('html, body').stop().animate({
+					scrollTop:$('#registration-content').offset().top
+				}, 1500, function(){$('table.register tbody tr td input#id_username').focus();});	
+			});
+
 		});
 	</script>
 </head>
@@ -44,19 +55,19 @@
 	<div id="form" class="container">
 		<h1 class="sixteen columns">Login</h1>
 
-{% if form.errors %}
+{% if login_form.errors %}
 <p class="sixteen columns error">Your username and password didn't match. Please try again.</p>
 {% endif %}
 <form method="post" action="{% url django.contrib.auth.views.login %}" class="six columns offset-by-two login">
 {% csrf_token %}
 <table>
 <tr>
-	<td>{{ form.username.label_tag }}</td>
-	<td>{{ form.username }}</td>
+	<td>{{ login_form.username.label_tag }}</td>
+	<td>{{ login_form.username }}</td>
 </tr>
 <tr>
-	<td>{{ form.password.label_tag }}</td>
-	<td>{{ form.password }}</td>
+	<td>{{ login_form.password.label_tag }}</td>
+	<td>{{ login_form.password }}</td>
 </table>
 
 <input type="submit" value="login" />
@@ -77,10 +88,10 @@
 	<div id="form" class="container">
 		<h1 class="sixteen columns">Register</h1>
 
-<form method="POST" action="/accounts/register" class="six columns offset-by-two login">
+<form method="POST" action="/accounts/register/" class="seven columns offset-by-five login">
 {% csrf_token %}
-<table>
-	{{ form.as_table }}
+<table class="register">
+	{{ registration_form.as_table }}
 </table>
 
 <input type="submit" value="submit" />
