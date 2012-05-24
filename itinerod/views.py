@@ -76,6 +76,9 @@ def profile(request):
 def voteCalc(event_set):
   for event in event_set:
 	voteDeadline= event.vote_deadline
+	# Take care of the case of null voteDeadlines
+	if voteDeadline is None:
+		voteDeadline = datetime.datetime.now()
 	today = datetime.datetime.now()
 	if voteDeadline < today:
 		voteY = Vote.objects.filter(event=event.id,vote='Y')
