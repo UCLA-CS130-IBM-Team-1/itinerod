@@ -58,7 +58,7 @@ class EventResource(ModelResource):
   class Meta:
     queryset = Event.objects.all()
     authentication = Authentication()
-    authorization = DjangoAuthorization()
+    authorization = Authorization()
     validator = FormValidation(form_class=EventForm)
     filtering = {
         'name': ['exact'],
