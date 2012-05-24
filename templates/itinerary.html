@@ -4,7 +4,8 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
         <script type="text/javascript"
             src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBsGA492uOZ1mHV4Xri6cDZSONnI8axroI&sensor=false">
-            </script>
+        </script>
+        
         <link rel="stylesheet" type="text/css" href="/media/css/style.css" />
         <script>
             
@@ -12,6 +13,7 @@
                               
                               var map;
                               var geocoder;
+                              var map_center_marker;
                               
                               
                               //Insert the Expansion/contraction of div related code
@@ -29,19 +31,18 @@
                                                 
                                                 var myOptions = {
                                                 center: new google.maps.LatLng(34.063361, -118.444419),
-                                                zoom: 12,
+                                                zoom: 14,
                                                 mapTypeId: google.maps.MapTypeId.ROADMAP
                                                 };
                                                 
                                                 map = new google.maps.Map(document.getElementById(id),
                                                                           myOptions);
-                                                
-                                                //TODO might need to fix address for geocoding.. using event name for now
+                                                //TODO might need to fix address for geocoding.. using event name for now (but it might not work)
                                                 geocoder = new google.maps.Geocoder();
                                                 geocoder.geocode( { 'address': eventname + " " + eventlocation}, function(results, status) {
                                                                  if (status == google.maps.GeocoderStatus.OK) {
                                                                  map.setCenter(results[0].geometry.location);
-                                                                 var marker = new google.maps.Marker({
+                                                                 map_center_marker = new google.maps.Marker({
                                                                                                      map: map, 
                                                                                                      position: results[0].geometry.location
                                                                                                      });
@@ -54,42 +55,57 @@
                                                 
                                                 });
                               
+                              
                               //
                               //Below are the API call related Jquery functions
                               //             
+                            
                               $(".weather").click(function() {
                                                   
                                                   
                                                   var eventname = $(this).attr('eventname');
                                                   var eventlocation = $(this).attr('location');
                                                   var id = eventname + "_" + eventlocation + "_event_details";
+
+                                                  var apikey = "a0a9c11f72d6cdc2";  // raymond's key
+                                            
+                                                  var lat = map.getCenter().lat();
+                                                  var long = map.getCenter().lng();
                                                   
-                                                  var weatherURL = "http://www.google.com/ig/api?hl=eng&weather="+eventlocation ;
-                                                  var weatherRequest;    //holds weather API response
-                                                  var weatherRequestURL = weatherURL;
+                                                  var weatherURL = "http://api.wunderground.com/api/"+ apikey + "/forecast/q/" + lat + "," + long + ".json"
+                                                  var weatherRequestURL = encodeURI(weatherURL);
                                                   
+                                                  $.ajax({
+                                                         type:"GET",
+                                                         dataType:"jsonp",
+                                                         url: weatherRequestURL
+                                                         
+                                                         }).done(function(json) {
+                                                                 
+                                                                 var forecast = json.forecast.simpleforecast.forecastday;
+                                                                 
+                                                                 var html = "<b>Weather</b> for <b>" + eventlocation +"</b><br/><table width=400>";
+
+                                                                 var i;
+                                                                 for (i = 0; i < forecast.length; i++) {
+                                                                 
+                                                                 html = html +
+                                                                 "<tr>" +
+                                                                 "<td valign=\"middle\" align=\"center\">" + forecast[i].date.weekday_short + "</td>" +
+                                                                 "<td valign=\"middle\">" + forecast[i].high.fahrenheit + "</br>" + forecast[i].low.fahrenheit + "</td>" +
+                                                                 "<td valign=\"middle\"><img src=\"" + forecast[i].icon_url + "\" /></td>" +
+                                                                 "</tr>";
+
+                                                                 }
+                                                                 
+                                                                 html = html + "</table>"
+                                                                 
+                                                                 var infowindow = new google.maps.InfoWindow();
+                                                                 infowindow.setContent(html);
+                                                                 infowindow.open(map, map_center_marker);
+                                                                 
+                                                                 });
                                                   
-                                                  
-                                                  
-                                                  /*
-                                                   
-                                                   Doesn't work
-                                                   
-                                                   $.ajax({
-                                                   type:"GET",
-                                                   dataType:"xml",
-                                                   url: weatherURL,
-                                                   contentType: "text/xml; charset=iso-8859-1"
-                                                   
-                                                   }).done(function() {
-                                                   
-                                                   
-                                                   alert("lalal");
-                                                   
-                                                   
-                                                   });
-                                                   
-                                                   */
                                                   });
                               
                               
@@ -113,41 +129,37 @@
                                                  });
                               
                               
-                              /*$(".map").click(function() {
-                               
-                               var eventname = $(this).attr('eventname');
-                               var eventlocation = $(this).attr('location');
-                               var id = eventname + "_" + eventlocation + "_event_details";
-                               
-                               var myOptions = {
-                               center: new google.maps.LatLng(34.063361, -118.444419),
-                               zoom: 12,
-                               mapTypeId: google.maps.MapTypeId.ROADMAP
-                               };
-                               
-                               var map = new google.maps.Map(document.getElementById(id),
-                               myOptions);
-                               
-                               //TODO might need to fix address for geocoding.. using event name for now
-                               geocoder = new google.maps.Geocoder();
-                               geocoder.geocode( { 'address': eventname + " " + eventlocation}, function(results, status) {
-                               if (status == google.maps.GeocoderStatus.OK) {
-                               map.setCenter(results[0].geometry.location);
-                               var marker = new google.maps.Marker({
-                               map: map, 
-                               position: results[0].geometry.location
-                               });
-                               } else {
-                               alert("Geocode was not successful for the following reason: " + status);
-                               }
-                               });
-                               
-                               
-                               
-                               
-                               
-                               
-                               }); */
+                              $(".map").click(function() {
+                                              
+                                              var eventname = $(this).attr('eventname');
+                                              var eventlocation = $(this).attr('location');
+                                              var id = eventname + "_" + eventlocation + "_event_details";
+                                              
+                                              var myOptions = {
+                                              center: new google.maps.LatLng(34.063361, -118.444419),
+                                              zoom: 14,
+                                              mapTypeId: google.maps.MapTypeId.ROADMAP
+                                              };
+                                              
+                                              // global variable
+                                              map = new google.maps.Map(document.getElementById(id),
+                                                                            myOptions);
+                                              
+                                              //TODO might need to fix address for geocoding.. using event name for now (but it might not work)
+                                              geocoder = new google.maps.Geocoder();
+                                              geocoder.geocode( { 'address': eventname + " " + eventlocation}, function(results, status) {
+                                                               if (status == google.maps.GeocoderStatus.OK) {
+                                                               map.setCenter(results[0].geometry.location);
+                                                               map_center_marker = new google.maps.Marker({
+                                                                                                   map: map, 
+                                                                                                   position: results[0].geometry.location
+                                                                                                   });
+                                                               } else {
+                                                               alert("Geocode was not successful for the following reason: " + status);
+                                                               }
+                                                               });
+
+                                              });
                               
                               
                               $(".food").click(function() {
@@ -165,22 +177,23 @@
                                                var lat = map.getCenter().lat();
                                                var long = map.getCenter().lng();
                                                
+                                               // number of restaurants to request
+                                               var request_num = 10;
+                                               
                                                /*
                                                 * Construct the URL to call for the API request
                                                 */
                                                function constructYelpURL(){
                                                var URL = "http://api.yelp.com/" +
-                                               "business_review_search?"+
-                                               //              "callback=" + "showYelpResults" +
+                                               "business_review_search?" +
                                                "&term=food" +
-                                               "&num_biz_requested=10" +
+                                               "&num_biz_requested=" + request_num +
                                                "&ywsid=" + YWSID  +
                                                "&location=" + eventname + " " + eventlocation;
                                                //"&cll=" + lat + "," + long;
                                                return encodeURI(URL);
                                                }
                                                
-                                               var yelpRequest;    //holds yelp api response
                                                var yelpRequestURL = constructYelpURL();
                                                
                                                $.ajax({
@@ -189,33 +202,50 @@
                                                       url: yelpRequestURL+"&callback=?",
                                                       contextType: "application/json"
                                                       
-                                                      }).done(function(html) {
+                                                      }).done(function(json) {
                                                               
-                                                              var businesses = html.businesses;
+                                                              var businesses = json.businesses;
                                                               
-                                                              //document.getElementById(id).innerHTML = "Food Places" + "<br />";
+                                                              var marker, i;
                                                               
-                                                              for(var i=0, len = businesses.length; i< len; ++i)
+                                                              var infowindow = new google.maps.InfoWindow();
+                                                              
+                                                              for(i=0; i < businesses.length; ++i)
                                                               {
-                                                              var business = businesses[i];
                                                               
-                                                              lat = business.latitude;
-                                                              long = business.longitude;
-                                                              
+                                                              lat = businesses[i].latitude;
+                                                              long = businesses[i].longitude;
                                                               
                                                               var marker = new google.maps.Marker({
                                                                                                   map: map, 
-                                                                                                  position: new google.maps.LatLng(lat, long)
+                                                                                                  position: new google.maps.LatLng(lat, long), 
+                                                                                                  icon: '/media/images/yelp.png'
                                                                                                   });
+                                    
                                                               
-                                                              
-                                                              
-                                                              
-                                                              //var html = document.getElementById(id).innerHTML;
-                                                              //document.getElementById(id).innerHTML = html + "<br/>"+business.name+" lat: "+lat;
-                                                              
-                                                              // don't know how to do append in javascript (couldn't get jquery to work) - raymond
-                                                              //$(".event_details").append("<br />"+business.name);
+                                                              google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                                                                                                              return function() {
+                                                                                                              
+                                                                                                              var business = businesses[i];
+                                                                                                              
+                                                                                                              
+                                                                                                              var content = "<a href=\"" + business.url + "\" target=\"_blank\">" +
+                                                                                                                            business.name + "</a></br>" +
+                                                                                                                            "<img src=\"" + business.rating_img_url + "\" /></br>" +
+                                                                                                                            "Category: " + business.categories[0].category_filter + "</br></br>";
+                                                                                                              
+                                                                                                              if (business.address1)
+                                                                                                                content = content + business.address1 + "</br>";
+                                                                                                              if (business.address2)
+                                                                                                                content = content + business.address2 + "</br>";
+                                                                                                    
+                                                                                                               content = content + business.city + ", " + business.state + " " +
+                                                                                                                            business.zip + "</br>" + business.phone;
+                                                                                                              
+                                                                                                              infowindow.setContent(content);
+                                                                                                              infowindow.open(map, marker);
+                                                                                                              }
+                                                                                                              })(marker, i));
                                                               }
                                                               });
                                                
@@ -231,18 +261,18 @@
         <div id="content" />
         <h1 class="pageTitle">View itinerary</h1>
         {% csrf_token %}
-	{{vote_form_set}}
+        {{vote_form_set}}
         {% for event in itinerary.event_set.all %}
         <div>
-            <h3 class="event" eventname="{{ event.name }}" location="{{ event.location }}" >{{ event.name }} The Event was: {{event.status}} </h3>
+            <h3 class="event" eventname="{{ event.name }}" location="{{ event.location }}" >{{ event.name }}</h3>
             <span class="date">{{ event.start_time}} &mdash; {{ event.end_time }}</span>
             <div class="icons">
-                <img src="/media/images/calendar.png" class="events" eventname="{{ event.name }}" location="{{ event.location }}" alt="events_1" />
-                <!--	<img src="/media/images/map.png" class="map" eventname="{{ event.name }}" location="{{ event.location }}" alt="Map" /> -->
+                <img src="/media/images/weather.png" class="weather" eventname="{{ event.name }}" location="{{ event.location }}" alt="Weather" href="#"/>
+                <img src="/media/images/map.png" class="map" eventname="{{ event.name }}" location="{{ event.location }}" alt="Map" />
                 <img src="/media/images/food.png" class="food" eventname="{{ event.name }}" location="{{ event.location }}" alt="Food" />
-                <img src="/media/images/weather.png" class="weather" name="{{ event.name }}" location="{{ event.location }}" alt="Weather" href="#"/>
+                <img src="/media/images/calendar.png" class="events" eventname="{{ event.name }}" location="{{ event.location }}" alt="events_1" />
             </div>
-            <div id="{{ event.name }}_{{ event.location }}_event_details" class="event_details" style="margin:10px auto; height: 50ex; width: 50ex; display: block; border-style: solid; border-width: thin;">Click something!
+            <div id="{{ event.name }}_{{ event.location }}_event_details" class="event_details" style="margin:10px auto; height: 60ex; width: 80ex; display: block; border-style: solid; border-width: thin;">Click something!
             </div>
 	    {% for vote in vote_set.all %}
 	       {% if vote.event == event %}
