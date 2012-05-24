@@ -25,12 +25,36 @@
                              
                              $.ajax({
                              type:"POST",
-                             url:"http://localhost:8000/api/itinerod/event/2/",
-                             data: "{\"end_time\": \"2012-01-03T00:00:00\",\"itinerary\": \"/api/itinerod/itinerary/2/\", \"location\": \"Westwood_LA\", \"name\": \"UCLA\", \"start_time\": \"2012-01-02T00:00:00\", \"status\": \"A\", \"vote_deadline\": null}",
-                             dataType: 'json',
+                             url:"http://localhost:8000/api/itinerod/event/",
+                             data: "{\"end_time\": \"2012-05-30T19:30:00\",\"itinerary\": \"/api/itinerod/itinerary/1/\", \"location\": \"Powell Library UCLA\", \"name\": \"IBM Team 1 Meeting\", \"start_time\": \"2012-05-30T17:30:00\", \"status\": \"A\", \"vote_deadline\": null}",
+                             dataType: 'application/json',
+                             contentType: 'application/json',
                              }).done(function(html){
                                       alert("done");
                              });
+
+                             /*
+                             $.ajax({
+                             type:"PATCH",
+                             url:"http://localhost:8000/api/itinerod/event/54/", // THIS ID IS SPECIFIC TO PRESTON's DB
+                             data: "{\"end_time\": \"2012-06-06T19:30:00\", \"start_time\": \"2012-06-06T17:30:00\"}",
+                             dataType: 'application/json',
+                             contentType: 'application/json',
+                             }).done(function(html){
+                                      alert("done");
+                             });
+                             */
+                             
+                             /*
+                             $.ajax({
+                             type:"DELETE",
+                             url:"http://localhost:8000/api/itinerod/event/54/",
+                             dataType: 'application/json',
+                             contentType: 'application/json',
+                             }).done(function(html){
+                                      alert("done");
+                             });
+                             */
                    });
 
 	          var friendData; //TO DO: need to implement data to send of what users to delete from itinerary
