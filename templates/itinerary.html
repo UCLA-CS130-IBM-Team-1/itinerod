@@ -7,9 +7,10 @@
         </script>
         
         <script type="text/javascript" src="http://api.eventful.com/js/api"></script>
-        
+        <script type="text/javascript" src="/media/js/cursor.js"></script>
         <link rel="stylesheet" type="text/css" href="/media/css/style.css" />
         <script>
+            
             
             $(document).ready(function() {
                               
@@ -27,8 +28,7 @@
                                                                           new google.maps.Size(32, 32),
                                                                           new google.maps.Point(0,0));
                               
-                              
-                              
+                              $.cursor("h3", "pointer");
                               
                               //Insert the Expansion/contraction of div related code
                               $(".event_details").hide();
@@ -37,7 +37,7 @@
                                                 
                                                 $(".event_details").hide();
                                                 
-                                                $(this).next().next().next().toggle();
+                                                $(this).next().next().next().toggle();  //TODO make this better
                                                 
                                                 var eventname = $(this).attr('eventname');
                                                 var eventlocation = $(this).attr('location');
