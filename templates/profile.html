@@ -56,7 +56,7 @@
 
                              $.ajax({
                              type:"POST",
-                             url:"http://localhost:8000/api/itinerod/event/",
+                             url:"/api/itinerod/event/",
                              data: "{\"end_time\": \"2012-05-30T19:30:00\",\"itinerary\": \"/api/itinerod/itinerary/1/\", \"location\": \"Powell Library UCLA\", \"name\": \"IBM Team1 Meeting\", \"start_time\": \"2012-05-30T17:30:00\", \"status\": \"A\", \"vote_deadline\": null}",
                              dataType: 'application/json',
                              contentType: 'application/json',
@@ -92,7 +92,7 @@
 	          $(".itinerary_friend_edit_button").click(function(){
 	             $.ajax({
 	             type:"PUT",
-	             url:"http://localhost:8000/api/itinerod/itinerary/"+currentId+"/?format=json"+"&callback=?",
+	             url:"/api/itinerod/itinerary/"+currentId+"/?format=json"+"&callback=?",
 	             contextType: "application/json",
 	             data: friendData,
 	             dataType: 'json',
@@ -105,7 +105,7 @@
                                  alert("Hi");
                                  $.ajax({
                                  type:"GET",
-                                 url: "http://localhost:8000/api/itinerod/itinerary/"+currentId+"/?format=json"+"&callback=?",
+                                 url: "/api/itinerod/itinerary/"+currentId+"/?format=json"+"&callback=?",
                                  contextType: "application/json"
                                       }).done(function(html) {
 
