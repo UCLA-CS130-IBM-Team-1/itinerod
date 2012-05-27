@@ -30,9 +30,30 @@
                   }
                   //Save button clicks in edit event details tab
                   $(".event_edit_save").live('click',function(){
-                             alert("hi");
-                             alert($(this).parent().attr("id"));
+                             var event_id = $(this).parent().attr("id");
+                             var event_name = $(this).parent().children(".event").html();
+                             var event_start_time = $(this).parent().children(".event_details").find(".event_start_time").val();
+                             var event_end_time = $(this).parent().children(".event_details").find(".event_end_time").val();
+                             var voting_status =  $(this).parent().children(".event_details").find(".event_voting_status").val();
+                             var voting_deadline = $(this).parent().children(".event_details").find(".event_voting_deadline").val();
+                             var resource_uri = $(this).parent().children(".event_details").find(".resource_uri").val();
+                             var itinerary = $(this).parent().children(".event_details").find(".itinerary").val();
+                             var event_location = $(this).parent().children(".event_details").find(".event_location").val();
                              
+                             //Create input for the AJAX call
+                             
+                             var json_data = "{" + ""
+                                             +"\"end_time\":" + event_end_time+","
+                                             +"\"itinerary\":" + itinerary +","
+                                             +"\"location\":" +  event_location +","
+                                             +"\"name\":"+ event_name +","
+                                             +"\"start_time\":"+ event_start_time +","
+                                             +"\"status\":"+ voting_status +","
+                                             +"\"vote_deadline\":"+ voting_deadline 
+                                             +"}" ;
+                             alert(json_data);
+
+
                              $.ajax({
                              type:"POST",
                              url:"http://localhost:8000/api/itinerod/event/",
@@ -107,19 +128,19 @@
                                                   div_html += "<h3 class='event'>"+ events[i].name +"</h3>" ;
                                                   div_html += "Click Event to expand/contract edit details";
                                                   div_html += "<div class='event_details'>";
-                                                  div_html += "Location: <input type='text' id="+events[i].location+" value= '"+ events[i].location +"'/>";
+                                                  div_html += "Location: <input type='text' class='event_location' id="+events[i].location+" value= '"+ events[i].location +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += "Start Time: <input type='text' value= '"+ events[i].start_time +"'/>";
+                                                  div_html += "Start Time: <input type='text' class='event_start_time' value= '"+ events[i].start_time +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += "End Time: <input type='text' value= '"+ events[i].end_time +"'/>";
+                                                  div_html += "End Time: <input type='text' class='event_end_time' value= '"+ events[i].end_time +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += "Voting Status: <input type='text' value= '"+ events[i].status +"'/>";
+                                                  div_html += "Voting Status: <input type='text' class='event_voting_status' value= '"+ events[i].status +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += "Voting Deadline: <input type='text' value= '"+ events[i].vote_deadline +"'/>";
+                                                  div_html += "Voting Deadline: <input type='text' class='event_voting_deadline' value= '"+ events[i].vote_deadline +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += "Resource URI: <input type='text' value= '"+ events[i].resource_uri +"'/>";
+                                                  div_html += "Resource URI: <input type='text' class='resource_uri' value= '"+ events[i].resource_uri +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += "Event ID: <input type='text' value= '"+ events[i].id +"'/>";
+                                                  div_html += "Resource URI: <input type='text' class='itinerary' value= '"+ events[i].itinerary +"'/>";
                                                   div_html += "</div>";
                                                   div_html += "<br />";
                                                   div_html += "<a class='event_edit_save' href='#'>SAVE</a>";
