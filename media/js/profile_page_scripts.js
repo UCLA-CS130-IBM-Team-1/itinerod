@@ -1,6 +1,11 @@
 $(document).ready(function() {
               
-                  $( ".datepicker" ).datepicker();    //from jquery ui for date selection.. check out at a later time
+                   //from jquery ui for date selection.. check out at a later time
+                  function set_datepicker(){
+                  $(function() {
+		  $( ".datepicker" ).datepicker();
+	          });
+	          }
                   
                   //Following code is for the auto-complete feature
                   var autocomplete = new google.maps.places.Autocomplete($("#address")[0], {});
@@ -33,21 +38,22 @@ $(document).ready(function() {
                              //Create input for the AJAX call
                              
                              var json_data = "{" + ""
-                                             +"\"end_time\":" + event_end_time+","
-                                             +"\"itinerary\":" + itinerary +","
-                                             +"\"location\":" +  event_location +","
-                                             +"\"name\":"+ event_name +","
-                                             +"\"start_time\":"+ event_start_time +","
-                                             +"\"status\":"+ voting_status +","
-                                             +"\"vote_deadline\":"+ voting_deadline 
+                                             +"\"end_time\":\"" + event_end_time+"\","
+                                             +"\"itinerary\":\"" + itinerary +"\","
+                                             +"\"location\":\"" +  event_location +"\","
+                                             +"\"name\":\""+ event_name +"\","
+                                             +"\"start_time\":\""+ event_start_time +"\","
+                                             +"\"status\":\""+ voting_status +"\","
+                                             +"\"vote_deadline\":\""+ voting_deadline+"\""
                                              +"}" ;
                              alert(json_data);
 
+                             var hard_coded_data="{\"end_time\": \"2012-05-30T19:30:00\",\"itinerary\": \"/api/itinerod/itinerary/1/\", \"location\": \"Powell Library UCLA\", \"name\": \"IBM Team1 Meeting\", \"start_time\": \"2012-05-30T17:30:00\", \"status\": \"A\", \"vote_deadline\": null}";
 
                              $.ajax({
                              type:"POST",
                              url:"/api/itinerod/event/",
-                             data: "{\"end_time\": \"2012-05-30T19:30:00\",\"itinerary\": \"/api/itinerod/itinerary/1/\", \"location\": \"Powell Library UCLA\", \"name\": \"IBM Team1 Meeting\", \"start_time\": \"2012-05-30T17:30:00\", \"status\": \"A\", \"vote_deadline\": null}",
+                             data: json_data,
                              dataType: 'application/json',
                              contentType: 'application/json',
                              }).done(function(html){
@@ -126,16 +132,17 @@ $(document).ready(function() {
                                                   div_html += "</div>";
 					  }
                                           div_html += "<h2> Edit Itineraries </h2>" ;
+                                          div_html += "Click Event to expand/contract edit details";
                                           for(var i=0, len = events.length; i< len; ++i)
                                           {
                                           
                                                   div_html += "<div id="+events[i].id+">";
                                                   div_html += "<h3 class='event'>"+ events[i].name +"</h3>" ;
-                                                  div_html += "Click Event to expand/contract edit details";
                                                   div_html += "<div class='event_details'>";
                                                   div_html += "Location: <input type='text' class='event_location' id="+events[i].location+" value= '"+ events[i].location +"'/>";
                                                   div_html +=  "</br>";
                                                   div_html += "Start Time: <input type='text' class='event_start_time' value= '"+ events[i].start_time +"'/>";
+                                                  div_html += "<input type='text' class='datepicker' size='30' />";
                                                   div_html +=  "</br>";
                                                   div_html += "End Time: <input type='text' class='event_end_time' value= '"+ events[i].end_time +"'/>";
                                                   div_html +=  "</br>";
@@ -143,9 +150,9 @@ $(document).ready(function() {
                                                   div_html +=  "</br>";
                                                   div_html += "Voting Deadline: <input type='text' class='event_voting_deadline' value= '"+ events[i].vote_deadline +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += "Resource URI: <input type='text' class='resource_uri' value= '"+ events[i].resource_uri +"'/>";
+                                                  div_html += "<input type='hidden' class='resource_uri' value= '"+ events[i].resource_uri +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += "Resource URI: <input type='text' class='itinerary' value= '"+ events[i].itinerary +"'/>";
+                                                  div_html += "<input type='hidden' class='itinerary' value= '"+ events[i].itinerary +"'/>";
                                                   div_html += "</div>";
                                                   div_html += "<br />";
                                                   div_html += "<a class='event_edit_save' href='#'>SAVE</a>";
@@ -153,10 +160,12 @@ $(document).ready(function() {
                                           }
                                           
                                           $("#editItinerary").html(div_html);
-										  $('.addItinerary').hide();
+					  $('.addItinerary').hide();
                                           $('#editItinerary').show();
 
+
                                           hide_event_details();
+                                          set_datepicker();
                                       });
 
                   });
