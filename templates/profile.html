@@ -30,13 +30,13 @@
                   }
                   //Save button clicks in edit event details tab
                   $(".event_edit_save").live('click',function(){
-                             alert("hi");
-                             alert($(this).parent().attr("id"));
+                            // alert("hi");
+                            // alert($(this).parent().attr("id"));
                              
                              $.ajax({
                              type:"POST",
-                             url:"http://localhost:8000/api/itinerod/event/",
-                             data: "{\"end_time\": \"2012-05-30T19:30:00\",\"itinerary\": \"/api/itinerod/itinerary/1/\", \"location\": \"Powell Library UCLA\", \"name\": \"IBM Team1 Meeting\", \"start_time\": \"2012-05-30T17:30:00\", \"status\": \"A\", \"vote_deadline\": null}",
+                             url:"http://localhost:8000/api/itinerod/event/1/",
+                             data: "{\"end_time\": \"2012-05-30T19:30:00\", \"id\" : \"1\", \"itinerary\": \"/api/itinerod/itinerary/1/\", \"location\": \"Powell Library UCLA\", \"name\": \"IBM Team1 Meeting\", \"resource_uri\" : \"/api/itinerod/event/1/\", \"start_time\": \"2012-05-30T17:30:00\", \"status\": \"A\", \"vote_deadline\": null}",
                              dataType: 'application/json',
                              contentType: 'application/json',
                              }).done(function(html){
@@ -66,9 +66,10 @@
                              });
                              */
                    });
-
+		  
 	          var friendData; //TO DO: need to implement data to send of what users to delete from itinerary
-	          $(".itinerary_friend_edit_button").click(function(){
+
+		$(".itinerary_friend_edit_button").click(function(){
 	             $.ajax({
 	             type:"PUT",
 	             url:"http://localhost:8000/api/itinerod/itinerary/"+currentId+"/?format=json"+"&callback=?",
@@ -95,8 +96,9 @@
 				          for(var i = 0, len = users.length; i < len; ++i)
 					  {
 						div_html += "<h2>Edit Friends</h2>";
-                                                  div_html += "<div class='event_details'>";
+                                                  div_html += "<div><form name='friendForm'>";
 						div_html += "<input type='checkbox' name='user1' value='"+ users[i].email +"'/> "+ users[i].email +"<br>";
+						  div_html += "</form>";
                                                   div_html += "</div>";
 					  }
                                           div_html += "<h2> Edit Itineraries </h2>" ;
@@ -125,9 +127,10 @@
                                                   div_html += "<a class='event_edit_save' href='#'>SAVE</a>";
                                                   div_html += "</div>";
                                           }
-                                          
+
                                           $("#editItinerary").html(div_html);
                                           hide_event_details();
+					friendData = document.friendForm.user1.value;
                                       });
 
                   });
