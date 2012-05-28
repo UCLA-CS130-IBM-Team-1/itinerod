@@ -1,7 +1,22 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+
+<head>
+	<meta charset="utf-8">
+	<title>Itinerary :: Itinerod</title>
+	<link rel="stylesheet" type="text/css" href="/media/css/base.css" />
+	<link rel="stylesheet" type="text/css" href="/media/css/skeleton.css" />
+	<link rel="stylesheet" type="text/css" href="/media/css/style.css" />
+	<script type="text/javascript" src="/media/js/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
+	
+	<!-- Mobile Settings -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+	<!-- Javascript -->
         <script type="text/javascript"
             src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBsGA492uOZ1mHV4Xri6cDZSONnI8axroI&sensor=false">
         </script>
@@ -130,7 +145,7 @@
                                                  var eventlocation = $(this).attr('location');
                                                  var id = eventname + "_" + eventlocation + "_event_details";
                                                  
-                                                 var apikey = "NsjwnNS4hKSqXP6J";  // pralavs's key
+                                                 var apikey = "NsjwnNS4hKSqXP6J";  // pralavs key
                                                  
                                                  var lat = map.getCenter().lat();
                                                  var long = map.getCenter().lng();
@@ -322,36 +337,53 @@
             
             
             </script>
-    </head>
-    <body> 
-        <div id="content" />
-        <h1 class="pageTitle">View itinerary</h1>
-        {% csrf_token %}
-        {{vote_form_set}}
-        {% for event in itinerary.event_set.all %}
-        <div>
-            <h3 class="event" eventname="{{ event.name }}" location="{{ event.location }}" >{{ event.name }}</h3>
-            <span class="date">{{ event.start_time}} &mdash; {{ event.end_time }}</span>
-            <div class="icons">
-                <img src="/media/images/weather.png" class="weather" eventname="{{ event.name }}" location="{{ event.location }}" alt="Weather" href="#"/>
-                <img src="/media/images/gmap.png" class="map" eventname="{{ event.name }}" location="{{ event.location }}" alt="Map" />
-                <img src="/media/images/yelp.png" class="food" eventname="{{ event.name }}" location="{{ event.location }}" alt="Food" />
-                <img src="/media/images/eventful.png" class="events" eventname="{{ event.name }}" location="{{ event.location }}" alt="events_1" />
-            </div>
-            <div id="{{ event.name }}_{{ event.location }}_event_details" class="event_details" style="margin:10px auto; height: 60ex; width: 80ex; display: block; border-style: solid; border-width: thin;">Click something!
-            </div>
+</head>
+<body> 
+	<div class="container">
+		<div id="loginOutButton">
+			<a href="/accounts/login">Log Out <span class="topUsername">({{user.username}})</span></a>
+		</div> <!-- end loginOutButton -->
+		<div id="logoInside">
+			<a href="/profile" class="nounderline" ><h1 id="headerLogoInside">itinerod</h1>
+			<h2 id="headerTaglineInside">collaborative trip planning</h2></a>
+		</div> <!-- end logo -->
+	</div><!-- end container -->
+	
+	
+	<div class="container insideHeader">
+		<a class="darkBlueButton" href="/profile">&larr; All Itineraries</a>
+		<h1 class="header">{{itinerary.name}}</h1>
+	</div><!-- end insideHeader -->
+	
+	<div class="container insideContent">
+	
+		
+	    {% csrf_token %}
+	    {{vote_form_set}}
+	    {% for event in itinerary.event_set.all %}
+	    <div class="sixteen columns">
+	        <h3 class="event" eventname="{{ event.name }}" location="{{ event.location }}" >{{ event.name }}</h3>
+	        <span class="date">{{ event.start_time}} &mdash; {{ event.end_time }}</span>
+	        <div class="icons">
+	            <img src="/media/images/weather.png" class="weather" eventname="{{ event.name }}" location="{{ event.location }}" alt="Weather" href="#"/>
+	            <img src="/media/images/gmap.png" class="map" eventname="{{ event.name }}" location="{{ event.location }}" alt="Map" />
+	            <img src="/media/images/yelp.png" class="food" eventname="{{ event.name }}" location="{{ event.location }}" alt="Food" />
+	            <img src="/media/images/eventful.png" class="events" eventname="{{ event.name }}" location="{{ event.location }}" alt="events_1" />
+	        </div>
+	        <div id="{{ event.name }}_{{ event.location }}_event_details" class="event_details" style="margin:10px auto; height: 60ex; width: 80ex; display: block; border-style: solid; border-width: thin;">Click something!
+	        </div>
 	    {% for vote in vote_set.all %}
 	       {% if vote.event == event %}
 	          {{vote.user}} voted: {{vote.vote}}
 	       {% endif %}
 	    {% endfor %}
-            {% endfor %}
-        </div>
-        </div>
-        
-        
-        </div>
-        
-        
-    </body>
+	    </div>
+	        {% endfor %}
+	    </div>
+	    
+	    
+	    </div>
+   </div><!-- end insideContent -->
+    
+</body>
 </html>

@@ -126,6 +126,7 @@ def itinerary(request, itin_id):
 	'event_set' : event_set,
         'vote_set'  : vote_set,
 	'vote_form_set' : VoteFormSet,
+      'user': request.user,
   }
   context.update(csrf(request))
   return render_to_response('itinerary.html',context)
