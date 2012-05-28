@@ -30,15 +30,24 @@ html {
 body {
 	background-color:#EEE;
 	height:100%;
-/* 	background:url('/media/images/subway.jpeg') no-repeat center center fixed; */
+	background:url('/media/images/subway.jpeg') no-repeat center center fixed;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
+	overflow-y: scroll;
 }
 
 a.nounderline {
 	text-decoration:none;
+}
+
+h3 {
+	color:#3d4c53;
+	text-transform:uppercase;
+	font-size:1.2rem;
+	font-weight:bold;
+	clear:both;
 }
 
 p.error {
@@ -54,7 +63,7 @@ div#loginOutButton {
 	color: white;
 	font-weight: bold;
 	background-color: #A23E00;
-	width: 80px;
+	float:left;
 	text-align: center;
 	border-radius: 0px 0px 2px 2px;
 }
@@ -64,6 +73,9 @@ div#loginOutButton a {
 	color:white;
 	padding:5px 10px;
 	display:block;
+}
+div#loginOutButton a:hover {
+	text-decoration:underline;
 }
 
 div#logo {
@@ -86,6 +98,27 @@ h2#headerTagline {
 	top: -45px;
 	right: -226px;
 }
+
+div#logoInside {
+	text-align:center;
+	color:white;
+	overflow:hidden;
+}
+h1#headerLogoInside {
+	color:white;
+	text-shadow: 0px 0px 10px black;
+	font-size:3em;
+}
+h2#headerTaglineInside {
+	color:white;
+	text-shadow: 0px 0px 10px black;
+	font-size:1.4em;
+	height: 0;
+	position: relative;
+	top: -53px;
+	right: -188px;
+}
+
 div.content {
 	background-color: rgba(255, 255, 255, .8);
 	width: 100%;
@@ -254,7 +287,7 @@ a.signUp {
 	margin-bottom: 20px;
 }
 
-input[type='text'], input[type='password'] {
+input[type='text'], input[type='password'], textarea {
     height: 44px;
     border: 1px solid #bababa;
     border-radius: 0px 3px 3px 0px;
@@ -266,14 +299,32 @@ input[type='text'], input[type='password'] {
     margin-left:0;
     width:80%;
 }
-input[type='text']:focus, input[type='password']:focus {
+input[type='text']:focus, input[type='password']:focus, textarea:focus {
 	outline:none;
 	border: 1px solid black;
 }
 
+textarea {
+    border-radius: 3px;
+    width:95%;
+    font-size:1rem;
+    padding: 10px;
+    height:100px;
+}
+
+
 label.labelIcon {
-	height:35px;
 	width:44px;
+}
+
+label.textLabel {
+	width:100px;
+	font-size:1.2em;
+	font-weight:bold;
+}
+
+label.labelIcon, label.fancyLabel {
+	height:35px;
 	background-color:red;
 	display:block;
 	float:left;
@@ -292,10 +343,6 @@ label.labelIcon {
 	background: -ms-linear-gradient(top, rgba(251,251,250,1) 0%,rgba(197,196,197,1) 100%); /* IE10+ */
 	background: linear-gradient(top, rgba(251,251,250,1) 0%,rgba(197,196,197,1) 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fbfbfa', endColorstr='#c5c4c5',GradientType=0 ); /* IE6-9 */
-}
-
-label.labelIcon:active {
-	background-color:red !important;
 }
 
 input.passwordInput {
@@ -322,6 +369,145 @@ input#registrationSubmit, input#loginSubmit {
     margin-left: auto;
     margin-right: auto;
 }
+
+span.topUsername {
+	font-weight:400;
+	text-transform:lowercase;
+}
+
+select {
+	margin:0;
+    height: 48px;
+    display: block;
+    float: left;
+    font-size: 1.2em;
+    outline: none;
+    border: none;
+    -webkit-appearance: button;
+    border-radius:0;
+    width:100px;
+    padding:0 10px;
+    border:1px solid #bababa;
+    border-right: none;
+    background-image:url('/media/images/icon-downarrow.png');
+    background-position:right center;
+    background-repeat:no-repeat;
+    padding-right:25px;
+    box-shadow: inset 0px 0px 20px rgba(0,0,0,0.2);
+    margin-bottom:25px;
+}
+select:focus {
+	border:1px solid black !important;
+}
+#id_start_date_year, #id_end_date_year {
+    border-right:1px solid #bababa;
+	border-radius: 0px 3px 3px 0px;
+}
+#id_start_date_month, #id_end_date_month {
+	width:200px;
+}
+#id_start_date_day, #id_end_date_day {
+	width:61px;
+}
+
+p.fieldInstructions {
+	margin: 0;
+	padding: 0;
+	font-style: italic;
+}
+
+#addItinerary {
+	width:100%;
+	font-size:1.3em;
+	margin-bottom:20px;
+}
+
+/* #Inside Styles
+================================================== */
+div.insideContent {
+	background-color:rgba(255, 255, 255, 0.8);
+	border:1px solid rgba(255, 255, 255, 0);
+}
+
+div.insideHeader {
+	background-color:#3d4c53;
+	border:1px solid #5c6d74;
+	border-bottom:none;
+}
+
+h1.header {
+	margin-bottom: 0;
+	padding: 10px;
+	color: white;
+	font-size: 2em;
+	font-weight: bold;
+	line-height: 1em;
+}
+
+ul.blockListing li {
+	height:44px;
+	border-bottom:1px solid #797979;
+}
+ul.blockListing li:hover {
+	height:44px;
+	border-bottom:1px solid black;
+}
+
+a.itineraryName {
+	text-decoration: none;
+	font-size: 1.5em;
+	color: #3C3C3C;
+	padding-top: 10px;
+
+}
+a.itineraryName:hover {
+	color:black;
+}
+a.itineraryName span.itineraryDate {
+	display:block;
+	font-size: 0.56em;
+	text-transform: uppercase;
+	font-weight: 800;
+	color: #707070;
+}
+
+a.itinerary_edit_button {
+	background-image:url('/media/images/icon-pencil.png');
+	width:24px;
+	height:25px;
+	display:block;
+	float: right;
+	position: relative;
+	top: -31px;
+	opacity: 0.3;
+}
+a.itinerary_edit_button:hover {
+	opacity:0.6;
+}
+
+button#newItinerary {
+	width: 100%;
+	font-size: 1.7em;
+	margin-bottom: 19px;
+	margin-top: 10px;
+}
+
+li.selected {
+	font-weight: bold;
+	border-bottom: 2px solid black !important;
+}
+li.selected a {
+	opacity:0.8;
+	color:black;
+}
+li.selected a:hover {
+	opacity:0.8;
+}
+li.selected a.itinerary_edit_button {
+	background-image:url('/media/images/icon-arrowright.png');
+	right: -10px;
+}
+
 
 
 /* #Media Queries
@@ -362,9 +548,18 @@ input#registrationSubmit, input#loginSubmit {
 		span.step {
 			line-height:normal;
 		}
-		h1#headerLogo, h2#headerTagline {
+		h1#headerLogo, h2#headerTagline, h1#headerLogoInside {
 			text-shadow: none;
 			color:#888;
+		}
+		h2#headerTaglineInside {
+			display:none;
+		}
+		h1#headerLogoInside {
+			margin-bottom: 16px;
+			margin-top: 0;
+			line-height: 1em;
+			font-size:2em;	
 		}
 		input[type='text'], input[type='password'] {
 			width:70%;
