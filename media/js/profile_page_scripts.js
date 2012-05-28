@@ -1,6 +1,11 @@
 $(document).ready(function() {
               
-                  $( ".datepicker" ).datepicker();    //from jquery ui for date selection.. check out at a later time
+                   //from jquery ui for date selection.. check out at a later time
+                  function set_datepicker(){
+                  $(function() {
+		  $( ".datepicker" ).datepicker();
+	          });
+	          }
                   
                   //Following code is for the auto-complete feature
                   var autocomplete = new google.maps.places.Autocomplete($("#address")[0], {});
@@ -33,21 +38,22 @@ $(document).ready(function() {
                              //Create input for the AJAX call
                              
                              var json_data = "{" + ""
-                                             +"\"end_time\":" + event_end_time+","
-                                             +"\"itinerary\":" + itinerary +","
-                                             +"\"location\":" +  event_location +","
-                                             +"\"name\":"+ event_name +","
-                                             +"\"start_time\":"+ event_start_time +","
-                                             +"\"status\":"+ voting_status +","
-                                             +"\"vote_deadline\":"+ voting_deadline 
+                                             +"\"end_time\":\"" + event_end_time+"\","
+                                             +"\"itinerary\":\"" + itinerary +"\","
+                                             +"\"location\":\"" +  event_location +"\","
+                                             +"\"name\":\""+ event_name +"\","
+                                             +"\"start_time\":\""+ event_start_time +"\","
+                                             +"\"status\":\""+ voting_status +"\","
+                                             +"\"vote_deadline\":\""+ voting_deadline+"\""
                                              +"}" ;
                              alert(json_data);
 
+                             var hard_coded_data="{\"end_time\": \"2012-05-30T19:30:00\",\"itinerary\": \"/api/itinerod/itinerary/1/\", \"location\": \"Powell Library UCLA\", \"name\": \"IBM Team1 Meeting\", \"start_time\": \"2012-05-30T17:30:00\", \"status\": \"A\", \"vote_deadline\": null}";
 
                              $.ajax({
                              type:"POST",
                              url:"/api/itinerod/event/",
-                             data: "{\"end_time\": \"2012-05-30T19:30:00\",\"itinerary\": \"/api/itinerod/itinerary/1/\", \"location\": \"Powell Library UCLA\", \"name\": \"IBM Team1 Meeting\", \"start_time\": \"2012-05-30T17:30:00\", \"status\": \"A\", \"vote_deadline\": null}",
+                             data: json_data,
                              dataType: 'application/json',
                              contentType: 'application/json',
                              }).done(function(html){
@@ -120,43 +126,71 @@ $(document).ready(function() {
 					  var users = html.users;
 				          for(var i = 0, len = users.length; i < len; ++i)
 					  {
-						div_html += "<h2>Edit Friends</h2>";
-                                                  div_html += "<div class='event_details'>";
+						div_html += "<h2>Add your Friends below</h2>";
+                                                  div_html += "<div class='event_friends'>";
 						div_html += "<input type='checkbox' name='user1' value='"+ users[i].email +"'/> "+ users[i].email +"<br>";
                                                   div_html += "</div>";
 					  }
-                                          div_html += "<h2> Edit Itineraries </h2>" ;
+                                          div_html += "<h2> Edit Your Events below </h2>" ;   
+                                          div_html += "Click Event to expand/contract edit details";
                                           for(var i=0, len = events.length; i< len; ++i)
                                           {
-                                          
-                                                  div_html += "<div id="+events[i].id+">";
+
+                                                  div_html += "<div id="+events[i].id+" style='border-bottom:solid;'>";
                                                   div_html += "<h3 class='event'>"+ events[i].name +"</h3>" ;
-                                                  div_html += "Click Event to expand/contract edit details";
-                                                  div_html += "<div class='event_details'>";
-                                                  div_html += "Location: <input type='text' class='event_location' id="+events[i].location+" value= '"+ events[i].location +"'/>";
+                                                  div_html += "<div class='event_details' style='display: block;'>";
+
+                                                  div_html += "<label class='fancyLabel textLabel' for='"+events[i].id+"_location'>Location: </label>";
+                                                  div_html += "<input type='text' class='event_location' id="+events[i].id+"_location' value= '"+ events[i].location +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += "Start Time: <input type='text' class='event_start_time' value= '"+ events[i].start_time +"'/>";
+
+                                                  div_html += "<label class='fancyLabel textLabel' for='"+events[i].id+"_start_time'>Start Time: </label>";
+                                                  div_html += "<input type='text' class='event_start_time' id="+events[i].id+"_start_time' value= '"+ events[i].start_time +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += "End Time: <input type='text' class='event_end_time' value= '"+ events[i].end_time +"'/>";
+
+                                                  div_html += "<label class='fancyLabel textLabel' for='"+events[i].id+"_end_time'>End Time: </label>";
+                                                  div_html += "<input type='text' class='event_end_time' id="+events[i].id+"_end_time' value= '"+ events[i].end_time +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += "Voting Status: <input type='text' class='event_voting_status' value= '"+ events[i].status +"'/>";
+
+                                                  div_html += "<label class='fancyLabel textLabel' for='"+events[i].id+"_voting_status'>Vote: </label>";
+                                                  div_html += "<input type='text' class='event_voting_status' id="+events[i].id+"_voting_status' value= '"+ events[i].status +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += "Voting Deadline: <input type='text' class='event_voting_deadline' value= '"+ events[i].vote_deadline +"'/>";
+
+                                                  div_html += "<label class='fancyLabel textLabel' for='"+events[i].id+"_voting_deadline'>Deadline: </label>";
+                                                  div_html += "<input type='text' class='event_voting_deadline' id="+events[i].id+"_voting_deadline' value= '"+ events[i].vote_deadline +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += "Resource URI: <input type='text' class='resource_uri' value= '"+ events[i].resource_uri +"'/>";
+
+                                                  div_html += "<input type='hidden' class='resource_uri' id="+events[i].id+"_resource_uri' value= '"+ events[i].resource_uri +"'/>";
                                                   div_html +=  "</br>";
-                                                  div_html += "Resource URI: <input type='text' class='itinerary' value= '"+ events[i].itinerary +"'/>";
+
+                                                  div_html += "<input type='hidden' class='itinerary' id="+events[i].id+"_itinerary' value= '"+ events[i].itinerary +"'/>";
                                                   div_html += "</div>";
                                                   div_html += "<br />";
-                                                  div_html += "<a class='event_edit_save' href='#'>SAVE</a>";
+                                                  div_html += "<a class='event_edit_save' href='#'>Save Changes</a>";
+                                                  div_html += "<input type='hidden' class='datepicker' size='30' />";
                                                   div_html += "</div>";
                                           }
+
+                                          //adding div to add itinerary
+                                          div_html += "<div class='add_event'>";
+                                          div_html += "<h2>Add an Event to the Itinerary</h2>";
+                                          div_html += "<input type='text' /> <br />";
+                                          div_html += "<input type='text' /> <br />";
+                                          div_html += "<input type='text' /> <br />";
+                                          div_html += "<input type='text' /> <br />";
+                                          div_html += "<input type='text' /> <br />";
+                                          div_html += "<input type='text' /> <br />";
+                                          div_html += "<input type='text' /> <br />";
+                                          div_html += "Add Event";
+                                          div_html += "</div>";
                                           
                                           $("#editItinerary").html(div_html);
-										  $('.addItinerary').hide();
+					  $('.addItinerary').hide();
                                           $('#editItinerary').show();
 
+
                                           hide_event_details();
+                                          set_datepicker();
                                       });
 
                   });
