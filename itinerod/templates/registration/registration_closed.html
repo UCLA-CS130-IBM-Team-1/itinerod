@@ -6,7 +6,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>Register :: Itinerod</title>
+	<title>Registration Complete :: Itinerod</title>
 	<link rel="stylesheet" type="text/css" href="/media/css/base.css" />
 	<link rel="stylesheet" type="text/css" href="/media/css/skeleton.css" />
 	<link rel="stylesheet" type="text/css" href="/media/css/style.css" />
@@ -14,22 +14,6 @@
 	
 	<!-- Mobile Settings -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	
-	<script type="text/javascript">
-	$(window).ready(function() {
-		// Set placeholder text
-		$('#id_username').attr('placeholder','username').focus();
-		$('#id_password1').attr('placeholder','password');
-		$('#id_password2').attr('placeholder','password (again)');
-		$('#id_email').attr('placeholder','email');
-		
-		// Set password input field class		
-		$('#id_password1').attr('class','passwordInput');
-		$('#id_password2').attr('class','passwordInput');
-
-	});
-	</script>
-
 
 </head>
 
@@ -48,25 +32,7 @@
 	<div class="content" id="indexContent">
 		<div class="container">
 			<div class="eight columns offset-by-four">
-			{% if form.errors %}
-			<p class="error">Please fill out all fields.</p>
-			{% endif %}
-
-		        <form action="/accounts/register/" method="POST">{% csrf_token %}
-		        	
-		        	<label class="labelIcon" for="id_username"><img src="/media/images/icon-person.png"></img></label>
-					{{ form.username }}
-					
-					<label class="labelIcon" for="id_email"><img src="/media/images/icon-at.png"></img></label>
-
-					{{ form.email }}
-					<label class="labelIcon passwordLabel" for="id_email"><img src="/media/images/icon-key.png"></img></label>
-
-					{{ form.password1 }}
-					{{ form.password2 }}
-
-	            <input class="orangeButton" type="submit" value="Sign Up" id="registrationSubmit" />
-		        </form>
+				<h3>Registration closed. <a href="/accounts/login">Login?</a></h3>
 			</div>
 		</div><!-- end container -->
 	</div> <!-- end content -->
