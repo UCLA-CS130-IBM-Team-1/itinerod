@@ -93,7 +93,7 @@ $(document).ready(function() {
                       var event_start_time = $("#add_event_start_time").val();
                       var event_end_time = $("#add_event_end_time").val();
                       var event_voting_deadline = $("#add_event_voting_deadline").val();
-                      var event_voting_status = "null";
+                      var event_voting_status = $("#add_event_voting_status").val();
                       
                       alert(event_name+event_itinerary+event_location+event_start_time+event_end_time+event_voting_deadline);
                       
@@ -227,10 +227,11 @@ $(document).ready(function() {
                                           div_html += "<input id = 'add_event_start_time' type='text' /> <br />";
                                           div_html += "<label class='fancyLabel textLabel' for='add_event_end_time'>End Time: </label>";
                                           div_html += "<input id = 'add_event_end_time' type='text' /> <br />";
-                                          div_html += "<label class='fancyLabel textLabel' for='add_event_voting_deadline'>End Time: </label>";
+                                          div_html += "<label class='fancyLabel textLabel' for='add_event_voting_deadline'>Voting Deadline: </label>";
                                           div_html += "<input id='add_event_voting_deadline' type='text' /> <br />";
                                           div_html += "<input type='text' /> <br />";
                                           div_html += "<input id='add_event_itinerary' type='hidden' value='"+ itinerary_identifier + "'/><br />";
+                                          div_html += "<input id='add_event_voting_status' type='hidden' value='A'/><br />";
                                           div_html += "<a class='event_add' href='#'> Add Event </a>";
                                           div_html += "</div>";
                                           
