@@ -93,7 +93,7 @@ def createEventList(event_set):
   event_list = []
   for event in event_set:
 	if event.status == 'V':
-		event_list.append(events)
+		event_list.append(event)
   return event_list
 
 @login_required

@@ -51,8 +51,8 @@ $(document).ready(function() {
                              var hard_coded_data="{\"end_time\": \"2012-05-30T19:30:00\",\"itinerary\": \"/api/itinerod/itinerary/1/\", \"location\": \"Powell Library UCLA\", \"name\": \"IBM Team1 Meeting\", \"start_time\": \"2012-05-30T17:30:00\", \"status\": \"A\", \"vote_deadline\": null}";
 
                              $.ajax({
-                             type:"POST",
-                             url:"/api/itinerod/event/",
+                             type:"PUT",
+                             url:"/api/itinerod/event/"+event_id+"/",
                              data: json_data,
                              dataType: 'application/json',
                              contentType: 'application/json',
@@ -106,11 +106,11 @@ $(document).ready(function() {
                                       +"\"status\":\""+ event_voting_status +"\","
                                       +"\"vote_deadline\":\""+ event_voting_deadline+"\""
                                       +"}" ;
-                      alert(json_data);
+                     alert(json_data);
 
                       $.ajax({
                              type:"POST",
-                             url:"/api/itinerod/event/",
+                             url:"/api/itinerod/event/?format=json",
                              data: json_data,
                              dataType: 'application/json',
                              contentType: 'application/json',
@@ -124,7 +124,7 @@ $(document).ready(function() {
 	             $.ajax({
 	             type:"PUT",
 	             url:"/api/itinerod/itinerary/"+currentId+"/?format=json"+"&callback=?",
-	             contextType: "application/json",
+	             contentType: "application/json",
 	             data: friendData,
 	             dataType: 'json',
                      })
@@ -152,7 +152,7 @@ $(document).ready(function() {
                                  $.ajax({
                                  type:"GET",
                                  url: "/api/itinerod/itinerary/"+currentId+"/?format=json"+"&callback=?",
-                                 contextType: "application/json"
+                                 contentType: "application/json"
                                       }).done(function(html) {
 
                                           var div_html = "";
@@ -169,12 +169,13 @@ $(document).ready(function() {
 					  
 					  //Before listing the events, get the itinerary to which the events belong
 					  //Used in the "add" event function
-					  var itinerary_identifier;
-					  if(events.length>0)
+					  var itinerary_identifier = "/api/itinerod/itinerary/"+currentId+"/";
+					  /*if(events.length>0)
                                           {
                                             itinerary_identifier = events[0].itinerary;
                                           }
-
+					  else*/
+						//itinerary_identifier = "/api/itinerod/itinerary/"+currentId+"/"; // this is a much better version. What if itinerary is empty of events?
                                           div_html += "<h2> Edit Your Events below </h2>" ;   
                                           div_html += "Click Event to expand/contract edit details";
                                           for(var i=0, len = events.length; i< len; ++i)
@@ -231,7 +232,7 @@ $(document).ready(function() {
                                           div_html += "<input id='add_event_voting_deadline' type='text' /> <br />";
                                           div_html += "<input type='text' /> <br />";
                                           div_html += "<input id='add_event_itinerary' type='hidden' value='"+ itinerary_identifier + "'/><br />";
-                                          div_html += "<input id='add_event_voting_status' type='hidden' value='A'/><br />";
+                                          div_html += "<input id='add_event_voting_status' type='hidden' value='V'/><br />";
                                           div_html += "<a class='event_add' href='#'> Add Event </a>";
                                           div_html += "</div>";
                                           
