@@ -84,6 +84,41 @@ $(document).ready(function() {
                              */
                    });
 
+                   //Code to handle add event clicks on edit/add events page
+                   $(".event_add").live('click',function(){
+
+                      var event_itinerary = $("#add_event_itinerary").val();
+                      var event_name = $("#add_event_name").val();
+                      var event_location = $("#add_event_location").val();
+                      var event_start_time = $("#add_event_start_time").val();
+                      var event_end_time = $("#add_event_end_time").val();
+                      var event_voting_deadline = $("#add_event_voting_deadline").val();
+                      var event_voting_status = $("#add_event_voting_status").val();
+                      
+                      alert(event_name+event_itinerary+event_location+event_start_time+event_end_time+event_voting_deadline);
+                      
+                      var json_data = "{" + ""
+                                      +"\"end_time\":\"" + event_end_time+"\","
+                                      +"\"itinerary\":\"" + event_itinerary +"\","
+                                      +"\"location\":\"" +  event_location +"\","
+                                      +"\"name\":\""+ event_name +"\","
+                                      +"\"start_time\":\""+ event_start_time +"\","
+                                      +"\"status\":\""+ event_voting_status +"\","
+                                      +"\"vote_deadline\":\""+ event_voting_deadline+"\""
+                                      +"}" ;
+                      alert(json_data);
+
+                      $.ajax({
+                             type:"POST",
+                             url:"/api/itinerod/event/",
+                             data: json_data,
+                             dataType: 'application/json',
+                             contentType: 'application/json',
+                             }).done(function(html){
+                                      alert("done");
+                      });
+
+                   });
 	          var friendData; //TO DO: need to implement data to send of what users to delete from itinerary
 	          $(".itinerary_friend_edit_button").click(function(){
 	             $.ajax({
@@ -131,10 +166,20 @@ $(document).ready(function() {
 						div_html += "<input type='checkbox' name='user1' value='"+ users[i].email +"'/> "+ users[i].email +"<br>";
                                                   div_html += "</div>";
 					  }
+					  
+					  //Before listing the events, get the itinerary to which the events belong
+					  //Used in the "add" event function
+					  var itinerary_identifier;
+					  if(events.length>0)
+                                          {
+                                            itinerary_identifier = events[0].itinerary;
+                                          }
+
                                           div_html += "<h2> Edit Your Events below </h2>" ;   
                                           div_html += "Click Event to expand/contract edit details";
                                           for(var i=0, len = events.length; i< len; ++i)
                                           {
+
 
                                                   div_html += "<div id="+events[i].id+" style='border-bottom:solid;'>";
                                                   div_html += "<h3 class='event'>"+ events[i].name +"</h3>" ;
@@ -174,14 +219,20 @@ $(document).ready(function() {
                                           //adding div to add itinerary
                                           div_html += "<div class='add_event'>";
                                           div_html += "<h2>Add an Event to the Itinerary</h2>";
+                                          div_html += "<label class='fancyLabel textLabel' for='add_event_name'>Event: </label>";
+                                          div_html += "<input id='add_event_name' type='text' /> <br />";
+                                          div_html += "<label class='fancyLabel textLabel' for='add_event_location'>Location: </label>";
+                                          div_html += "<input id = 'add_event_location' type='text' /> <br />";
+                                          div_html += "<label class='fancyLabel textLabel' for='add_event_start_time'>Start Time: </label>";
+                                          div_html += "<input id = 'add_event_start_time' type='text' /> <br />";
+                                          div_html += "<label class='fancyLabel textLabel' for='add_event_end_time'>End Time: </label>";
+                                          div_html += "<input id = 'add_event_end_time' type='text' /> <br />";
+                                          div_html += "<label class='fancyLabel textLabel' for='add_event_voting_deadline'>Voting Deadline: </label>";
+                                          div_html += "<input id='add_event_voting_deadline' type='text' /> <br />";
                                           div_html += "<input type='text' /> <br />";
-                                          div_html += "<input type='text' /> <br />";
-                                          div_html += "<input type='text' /> <br />";
-                                          div_html += "<input type='text' /> <br />";
-                                          div_html += "<input type='text' /> <br />";
-                                          div_html += "<input type='text' /> <br />";
-                                          div_html += "<input type='text' /> <br />";
-                                          div_html += "Add Event";
+                                          div_html += "<input id='add_event_itinerary' type='hidden' value='"+ itinerary_identifier + "'/><br />";
+                                          div_html += "<input id='add_event_voting_status' type='hidden' value='A'/><br />";
+                                          div_html += "<a class='event_add' href='#'> Add Event </a>";
                                           div_html += "</div>";
                                           
                                           $("#editItinerary").html(div_html);
