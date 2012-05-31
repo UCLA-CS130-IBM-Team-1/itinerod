@@ -29,6 +29,8 @@ def home(request):
   else:
     print "not post"
   '''
+  if request.user.is_authenticated():
+    return HttpResponseRedirect('/profile')
   registration_form = RegistrationForm()
 
   print "out"
