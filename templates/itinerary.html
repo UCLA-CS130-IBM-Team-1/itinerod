@@ -25,10 +25,11 @@
         <script type="text/javascript" src="/media/js/cursor.js"></script>
         <link rel="stylesheet" type="text/css" href="/media/css/style.css" />
         <script>
-            
+
             
             $(document).ready(function() {
                               
+                              var itinerary_id = {{ itinerary.id }};
                               var map;
                               var geocoder;
                               var map_center_marker;
@@ -84,6 +85,48 @@
                                                 
                                                 });
                               
+
+                              
+                              
+                              $(".add_event").live('click', function(){
+
+                                                   var event_itinerary = "/api/itinerod/itinerary/"+itinerary_id+"/";
+                                                   
+                                                   var event_name = $(this).attr('eventname');
+                                                   var event_location = $(this).attr('location');
+                                             
+                                                   // correctly reads the values from the text box
+                                                   var event_start_time = $(this).parent().children('#event_start_time').val();
+                                                   var event_end_time = $(this).parent().children('#event_end_time').val();
+
+                                                   // hard code values below for now
+                                                   event_start_time = "2012-06-06T17:30:00";
+                                                   event_end_time = "2012-06-06T19:30:00";
+                                                   var event_voting_deadline = "2012-06-06T19:30:00";
+                                                   var event_voting_status = "V";
+                                                   
+                                                   var json_data = "{" + ""
+                                                   +"\"end_time\":\"" + event_end_time+"\","
+                                                   +"\"itinerary\":\"" + event_itinerary +"\","
+                                                   +"\"location\":\"" +  event_location +"\","
+                                                   +"\"name\":\""+ event_name +"\","
+                                                   +"\"start_time\":\""+ event_start_time +"\","
+                                                   +"\"status\":\""+ event_voting_status +"\","
+                                                   +"\"vote_deadline\":\""+ event_voting_deadline+"\""
+                                                   +"}" ;
+
+                                                   $.ajax({
+                                                          type:"POST",
+                                                          url:"/api/itinerod/event/?format=json",
+                                                          data: json_data,
+                                                          dataType: 'application/json',
+                                                          contentType: 'application/json',
+                                                          }).success(function(html){
+                                                                  alert("Added new event!");
+                                                                  });
+                                             });
+                              
+                  
                               
                               //
                               //Below are the API call related Jquery functions
@@ -139,7 +182,6 @@
                               
                               
                               $(".events").click(function() {
-
                                                  
                                                  var eventname = $(this).attr('eventname');
                                                  var eventlocation = $(this).attr('location');
@@ -193,6 +235,7 @@
                                                                                                                 content = content + event.venue_name + "</br>";
                                                                                                                if(event.venue_address)
                                                                                                                 content = content + event.venue_address + "</br>";
+                                                                                                               
                                                                                                                content = content + event.region_name;
   
                                                                                                                infowindow.setContent(content);
@@ -315,16 +358,27 @@
                                                                                                               var content = "<a href=\"" + business.url + "\" target=\"_blank\">" +
                                                                                                                             business.name + "</a></br>" +
                                                                                                                             "<img src=\"" + business.rating_img_url + "\" /></br>" +
-                                                                                                                            "Category: " + business.categories[0].category_filter + "</br></br>";
+                                                                                                                            "Category: " + business.categories[0].category_filter +
+                                                                                                                            "</br></br>";
                                                                                                               
                                                                                                               if (business.address1)
-                                                                                                                content = content + business.address1 + "</br>";
+                                                                                                              content = content + business.address1 + "</br>";
                                                                                                               if (business.address2)
-                                                                                                                content = content + business.address2 + "</br>";
-                                                                                                    
-                                                                                                               content = content + business.city + ", " + business.state + " " +
-                                                                                                                            business.zip + "</br>" + business.phone;
+                                                                                                              content = content + business.address2 + "</br>";
                                                                                                               
+                                                                                                              var location = business.city + ", " + business.state + " " +
+                                                                                                              business.zip;
+                                                                                                              
+                                                                                                              content += location + "</br>" + business.phone + "</br>";
+                                                                                                              
+                                                                                                              content += "<div></br><label class='fancyLabel infowindowTextLabel'>Start: </label>";
+                                                                                                              content += "<input type='text' class='infowindowTextInput' id='event_start_time' value='start'/>";
+                                                                                                              content += "<label class='fancyLabel infowindowTextLabel'>End: </label>";
+                                                                                                              content += "<input type='text' class='infowindowTextInput' id='event_end_time' value='end'/>";
+                                                                                                              content +=  "</br>";
+                                                                                                              content += "<button class='orangeButton add_event' eventname='" +
+                                                                                                              business.name + "' location='" + location + "'>Add as a new event!</button></div>";
+
                                                                                                               infowindow.setContent(content);
                                                                                                               infowindow.open(map, marker);
                                                                                                               }

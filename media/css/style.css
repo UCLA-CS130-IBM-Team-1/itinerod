@@ -370,6 +370,23 @@ label.labelIcon, label.fancyLabel {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fbfbfa', endColorstr='#c5c4c5',GradientType=0 ); /* IE6-9 */
 }
 
+label.infowindowTextLabel {
+	width:45px;
+	height:25px;
+	padding-top:0px;
+	text-align:center;
+	font-size:0.75em;
+	font-weight:bold;
+}
+
+input.infowindowTextInput {
+    height:25px;
+    width:135px;
+    padding-top:0px;
+    font-size:0.75em;
+}
+
+
 input.passwordInput {
 	margin-bottom:-1px;
 }
