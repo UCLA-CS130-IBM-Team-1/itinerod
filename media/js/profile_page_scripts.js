@@ -213,6 +213,8 @@ $(document).ready(function() {
                                                   div_html += "</div>";
                                                   div_html += "<br />";
                                                   div_html += "<a class='event_edit_save' href='#'>Save Changes</a>";
+                                                  div_html += "<br />";
+                                                  div_html += "<a class='event_delete' href='#'>Delete</a>";
                                                   div_html += "<input type='hidden' class='datepicker' size='30' />";
                                                   div_html += "</div>";
                                           }
@@ -246,5 +248,11 @@ $(document).ready(function() {
                                       });
 
                   });
+                  
+                  //code to remove events from the page
+                  $(".event_delete").live('click', function(){
+                             $(this).parent().remove();
+                             //add an ajax call to remove the itinerary
+                    });
 
               });
