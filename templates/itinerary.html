@@ -155,10 +155,10 @@
                                                  var oArgs = { app_key: "NsjwnNS4hKSqXP6J",
                                                                 category: "music",
                                                                 location: lat+","+long,
-                                                                within: 5,
+                                                                within: 20,
                                                                 units: "mi",
                                                                 sort_order: "popularity",
-                                                                page_size: 10};
+                                                                page_size: 20};
                                                  
                                                  EVDB.API.call("/events/search", oArgs, function(oData)
                                                                {
@@ -260,7 +260,7 @@
                                                var long = map.getCenter().lng();
                                                
                                                // number of restaurants to request
-                                               var request_num = 10;
+                                               var request_num = 20;
                                                
                                                /*
                                                 * Construct the URL to call for the API request
