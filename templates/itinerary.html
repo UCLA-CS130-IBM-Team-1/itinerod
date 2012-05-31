@@ -45,6 +45,7 @@
                                                                           new google.maps.Point(0,0));
                               
                               $.cursor("h3", "pointer");
+                              $.cursor("img", "pointer");
                               
                               //Insert the Expansion/contraction of div related code
                               $(".event_details").hide();
@@ -125,6 +126,21 @@
                                                                   alert("Added new event!");
                                                                   });
                                              });
+                              
+                              
+                              $(".directionsButton").live('click', function(){
+                                                          
+                                                          var daddr = $(this).attr('destination');
+                                                          navigator.geolocation.getCurrentPosition(function(position) {
+                                                                                                   var lat = position.coords.latitude;
+                                                                                                   var lon = position.coords.longitude;
+                                                                                                   
+                                                                                                   var saddr = lat + ', ' + lon;
+                                                                                                   var dirURL = "https://maps.google.com/maps?saddr=" + saddr + "&daddr=" + daddr;
+                                                                                                   window.open(encodeURI(dirURL));
+                                                                                                   });
+                                                          
+                                                          });
                               
                   
                               
@@ -356,10 +372,13 @@
                                                                                                               
                                                                                                               
                                                                                                               var content = "<a href=\"" + business.url + "\" target=\"_blank\">" +
-                                                                                                                            business.name + "</a></br>" +
-                                                                                                                            "<img src=\"" + business.rating_img_url + "\" /></br>" +
-                                                                                                                            "Category: " + business.categories[0].category_filter +
-                                                                                                                            "</br></br>";
+                                                                                                                            business.name + "</a>";
+                                                                                                              
+
+                                                                                                              content += "</br>" +
+                                                                                                              "<img src=\"" + business.rating_img_url + "\" /></br>" +
+                                                                                                              "Category: " + business.categories[0].category_filter +
+                                                                                                              "</br></br>";
                                                                                                               
                                                                                                               if (business.address1)
                                                                                                               content = content + business.address1 + "</br>";
@@ -418,7 +437,9 @@
 	    {{vote_form_set}}
 	    {% for event in itinerary.event_set.all %}
 	    <div class="sixteen columns">
-	        <h3 class="event" eventname="{{ event.name }}" location="{{ event.location }}" >{{ event.name }}</h3>
+	        <h3 class="event" eventname="{{ event.name }}" location="{{ event.location }}" >{{ event.name }}
+            <button class="orangeButton directionsButton" destination="{{ event.name }},{{event.location}}">Directions</button>
+            </h3>
 	        <span class="date">{{ event.start_time}} &mdash; {{ event.end_time }}</span>
 	        <div class="icons">
 	            <img src="/media/images/weather.png" class="weather" eventname="{{ event.name }}" location="{{ event.location }}" alt="Weather" href="#"/>
@@ -426,7 +447,7 @@
 	            <img src="/media/images/yelp.png" class="food" eventname="{{ event.name }}" location="{{ event.location }}" alt="Food" />
 	            <img src="/media/images/eventful.png" class="events" eventname="{{ event.name }}" location="{{ event.location }}" alt="events_1" />
 	        </div>
-	        <div id="{{ event.name }}_{{ event.location }}_event_details" class="event_details" style="margin:10px auto; height: 60ex; width: 80ex; display: block; border-style: solid; border-width: thin;">Click something!
+	        <div id="{{ event.name }}_{{ event.location }}_event_details" class="event_details" style="margin:10px auto; height: 60ex; width: 100%; display: block; border-style: solid; border-width: thin;">Click something!
 	        </div>
 	    {% for vote in vote_set.all %}
 	       {% if vote.event == event %}
