@@ -251,8 +251,16 @@ $(document).ready(function() {
                   
                   //code to remove events from the page
                   $(".event_delete").live('click', function(){
+                             var resource_uri = $(this).parent().children(".event_details").find(".resource_uri").val();
+
                              $(this).parent().remove();
                              //add an ajax call to remove the itinerary
+                             $.ajax({
+                               type:'DELETE',
+                               url:resource_uri
+                             }).done(function(){
+                               alert("The event has been deleted");
+                             });
                     });
 
               });
