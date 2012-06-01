@@ -119,14 +119,31 @@ $(document).ready(function() {
                       });
 
                    });
-	          var friendData; //TO DO: need to implement data to send of what users to delete from itinerary
-	          $(".itinerary_friend_edit_button").click(function(){
+
+	          $(".itinerary_friend_edit_button").live('click',function(){
+                     var currentId = $(this).attr('id');
+		     var friend = "";
+		     var users = $("#users").val();
+		     var usersParsed = JSON.parse(users);
+		     if($('#friendCheck').attr('checked'))
+			friend = $("#friendCheck").val();
+			alert(friend);
+		     for(var i = 0; i < usersParsed.length; i++){
+			if(usersParsed[i].email == friend){
+				usersParsed[i] = null;
+			}
+		     }
+		     users = "{" + "\"users\":" + JSON.stringify(usersParsed) + "}";
+			  var hard_code = "{"+"\"users\": [{\"email\": \"stefanwoj89@ucla.edu\", \"first_name\": \"\", \"itineraries\": [\"/api/itinerod/itinerary/10/\"], \"last_name\": \"\", \"resource_uri\": \"/api/itinerod/user/2/\", \"username\": \"stefanwoj89\"}]}";
+
+var hard_code2 = "{"+"\"users\": [{\"email\": \"guiltyspark7750@gmail.com\", \"first_name\": \"\", \"itineraries\": [\"/api/itinerod/itinerary/1/\", \"/api/itinerod/itinerary/2/\", \"/api/itinerod/itinerary/3/\", \"/api/itinerod/itinerary/4/\", \"/api/itinerod/itinerary/5/\", \"/api/itinerod/itinerary/6/\", \"/api/itinerod/itinerary/7/\", \"/api/itinerod/itinerary/8/\", \"/api/itinerod/itinerary/9/\"], \"last_name\": \"\", \"resource_uri\": \"/api/itinerod/user/1/\", \"username\": \"guiltyspark7750@gmail.com\"}]}";
+		     alert(hard_code2);
 	             $.ajax({
-	             type:"PUT",
-	             url:"/api/itinerod/itinerary/"+currentId+"/?format=json"+"&callback=?",
+	             type:"PATCH",
+	             url:"/api/itinerod/itinerary/"+currentId+"/",
 	             contentType: "application/json",
-	             data: friendData,
-	             dataType: 'json',
+	             data: hard_code2,
+	             dataType: 'application/json',
                      })
 	          })
 
@@ -159,13 +176,17 @@ $(document).ready(function() {
 
                                           var events = html.events;
 					  var users = html.users;
+						div_html += "<h2>Remove your Friends below</h2>";
+                                                  div_html += "<div class='event_friends'>";
 				          for(var i = 0, len = users.length; i < len; ++i)
 					  {
-						div_html += "<h2>Add your Friends below</h2>";
-                                                  div_html += "<div class='event_friends'>";
-						div_html += "<input type='checkbox' name='user1' value='"+ users[i].email +"'/> "+ users[i].email +"<br>";
-                                                  div_html += "</div>";
+						var name = "user"+i;
+						div_html += "<input type='checkbox' id = 'friendCheck' name="+name+" value='"+ users[i].email +"'/> "+ users[i].email +"<br>";
+                                          	div_html += "<input type='hidden' id='users' value = '"+JSON.stringify(users)+"'/>";
+div_html += "<a class='' id ="+currentId+" href='/removeFriends'> Remove Friends </a>";
 					  }
+						
+                                                  div_html += "</div>";
 					  
 					  //Before listing the events, get the itinerary to which the events belong
 					  //Used in the "add" event function
