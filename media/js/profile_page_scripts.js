@@ -6,7 +6,7 @@ $(document).ready(function() {
 		  $( ".datepicker" ).datepicker();
 	          });
 	          }
-                  
+
                   //Following code is for the auto-complete feature
                   var autocomplete = new google.maps.places.Autocomplete($("#address")[0], {});
 
@@ -14,6 +14,14 @@ $(document).ready(function() {
                   var place = autocomplete.getPlace();
                   console.log(place.address_components);
                   });
+                  
+                  function set_autocomplete(){
+                      var address_autocomplete = new google.maps.places.Autocomplete($("#address_autocomplete")[0], {});
+                      google.maps.event.addListener(address_autocomplete, 'place_changed', function() {
+                      var place = autocomplete.getPlace();
+                      console.log(place.address_components);
+                  });
+                  }
                   
                    //Expansion/contraction of div related code
                   $(".event").live('click',function(){
@@ -232,7 +240,8 @@ $(document).ready(function() {
                                           div_html += "<input id = 'add_event_end_time' type='text' /> <br />";
                                           div_html += "<label class='fancyLabel textLabel' for='add_event_voting_deadline'>Voting Deadline: </label>";
                                           div_html += "<input id='add_event_voting_deadline' type='text' /> <br />";
-                                          div_html += "<input type='text' /> <br />";
+                                          div_html += "<input type='text' class='datepicker' /> <br />";
+                                          div_html += "<input type='text' id='address_autocomplete' /> <br />";
                                           div_html += "<input id='add_event_itinerary' type='hidden' value='"+ itinerary_identifier + "'/><br />";
                                           div_html += "<input id='add_event_voting_status' type='hidden' value='V'/><br />";
                                           div_html += "<a class='event_add' href='#'> Add Event </a>";
@@ -245,6 +254,7 @@ $(document).ready(function() {
 
                                           hide_event_details();
                                           set_datepicker();
+                                          set_autocomplete();
                                       });
 
                   });
