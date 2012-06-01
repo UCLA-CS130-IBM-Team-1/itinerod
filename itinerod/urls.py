@@ -18,6 +18,8 @@ urlpatterns = patterns('',
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^api/leave_itinerary/(?P<itin_id>\d+)/$', 'itinerod.views.leave_itinerary', name='leave_itinerary'),
+
     url(r'^api/', include(itinerod_api.urls)),
 
     # Uncomment the next line to enable the admin:
