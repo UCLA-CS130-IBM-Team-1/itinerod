@@ -111,6 +111,18 @@ def delete_friend(request,itin_id,friend_id):
     selected_itinerary.users.remove(selected_friend)
     return HttpResponseRedirect('/profile')
 @login_required
+def voted(request,event_id,itin_id,vote):
+    selected_event = get_object_or_404(Event.objects,pk=event_id)
+    selected_vote = Vote.objects.get_or_create(event=selected_event,user=request.user) #what if the vote doesn't exist, we must create it at some point
+    selected_vote = Vote.objects.get(event=event_id,user=request.user)
+    if(vote == '1'):
+    	selected_vote.vote = 'Y'
+    else:
+	selected_vote.vote = 'N'
+    selected_vote.save()
+    itin_path = "/itinerary/"+itin_id+"/"
+    return HttpResponseRedirect(itin_path)
+@login_required
 def itinerary(request, itin_id):
   # Primitively restricts access to itineraries to owners
   selected_itinerary = get_object_or_404(request.user.itinerary_set, pk=itin_id)
@@ -119,7 +131,7 @@ def itinerary(request, itin_id):
   vote_set = Vote.objects;
   voteCalc(event_set)
   event_list = createEventList(event_set)
-
+  '''
   VoteFormSet = formset_factory(VoteForm, extra=len(event_list))
   if request.method == 'POST':
     formset = VoteFormSet(request.POST)
@@ -134,12 +146,12 @@ def itinerary(request, itin_id):
 	for form in formset:
 		savedVoteForm = form.save()
     else:
-    	formset = VoteFormSet() # An unbound form
+    	formset = VoteFormSet() # An unbound form'''
   context ={
 	'itinerary' : selected_itinerary,
 	'event_set' : event_set,
         'vote_set'  : vote_set,
-	'vote_form_set' : VoteFormSet,
+	#'vote_form_set' : VoteFormSet,
       'user': request.user,
   }
   context.update(csrf(request))
