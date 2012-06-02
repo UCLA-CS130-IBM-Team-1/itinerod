@@ -15,7 +15,7 @@ class UserResource(ModelResource):
   itineraries = fields.ToManyField('itinerod.api.ItineraryResource', 'itinerary_set', related_name='user')
   class Meta:
     queryset = User.objects.all()
-    fields = ['username', 'first_name', 'last_name', 'email', 'date_jonined']
+    fields = ['username', 'first_name', 'last_name', 'email', 'date_joined','id']
     allowed_methods = ['get']
     authentication = Authentication()
     authorization = DjangoAuthorization()# insecure?
