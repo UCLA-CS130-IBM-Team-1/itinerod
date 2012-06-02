@@ -99,6 +99,12 @@ def createEventList(event_set):
   return event_list
 
 @login_required
+def leave_itinerary(request, itin_id):
+  selected_itinerary = get_object_or_404(request.user.itinerary_set, pk=itin_id)
+  request.user.itinerary_set.remove(selected_itinerary)
+  return HttpResponseRedirect('/profile')
+
+@login_required
 def itinerary(request, itin_id):
   # Primitively restricts access to itineraries to owners
   selected_itinerary = get_object_or_404(request.user.itinerary_set, pk=itin_id)
