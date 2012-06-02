@@ -416,7 +416,7 @@
 <body> 
 	<div class="container">
 		<div id="loginOutButton">
-			<a href="/accounts/login">Log Out <span class="topUsername">({{user.username}})</span></a>
+			<a href="/google">Log Out <span class="topUsername">({{user.username}})</span></a>
 		</div> <!-- end loginOutButton -->
 		<div id="logoInside">
 			<a href="/profile" class="nounderline" ><h1 id="headerLogoInside">itinerod</h1>
@@ -433,13 +433,13 @@
 	<div class="container insideContent">
 	
 		
-	    {% csrf_token %}
-	    {{vote_form_set}}
 	    {% for event in itinerary.event_set.all %}
 	    <div class="sixteen columns">
 	        <h3 class="event" eventname="{{ event.name }}" location="{{ event.location }}" >{{ event.name }}
             <button class="orangeButton directionsButton" destination="{{ event.name }},{{event.location}}">Directions</button>
             </h3>
+		<a href="/api/voted/{{itinerary.id}}/{{event.id}}/1">Yes</a>
+		<a href="/api/voted/{{itinerary.id}}/{{event.id}}/0">No</a>
 	        <span class="date">{{ event.start_time}} &mdash; {{ event.end_time }}</span>
 	        <div class="icons">
 	            <img src="/media/images/weather.png" class="weather" eventname="{{ event.name }}" location="{{ event.location }}" alt="Weather" href="#"/>

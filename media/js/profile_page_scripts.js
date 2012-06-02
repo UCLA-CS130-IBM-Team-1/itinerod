@@ -189,9 +189,8 @@ var hard_code2 = "{"+"\"users\": [{\"email\": \"guiltyspark7750@gmail.com\", \"f
 				          for(var i = 0, len = users.length; i < len; ++i)
 					  {
 						var name = "user"+i;
-						div_html += "<input type='checkbox' id = 'friendCheck' name="+name+" value='"+ users[i].email +"'/> "+ users[i].email +"<br>";
-                                          	div_html += "<input type='hidden' id='users' value = '"+JSON.stringify(users)+"'/>";
-div_html += "<a class='' id ="+currentId+" href='/removeFriends'> Remove Friends </a>";
+						div_html += users[i].email + "<br>";
+div_html += "<a class='' id ='' href='/api/delete_friend/"+currentId+"/"+users[i].id+"'> Remove Friend </a>";
 					  }
 						
                                                   div_html += "</div>";
