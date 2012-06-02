@@ -105,6 +105,12 @@ def leave_itinerary(request, itin_id):
   return HttpResponseRedirect('/profile')
 
 @login_required
+def delete_friend(request,itin_id,friend_id):
+    selected_friend = get_object_or_404(User.objects,pk=friend_id)
+    selected_itinerary = get_object_or_404(Itinerary.objects,pk=itin_id)
+    selected_itinerary.users.remove(selected_friend)
+    return HttpResponseRedirect('/profile')
+@login_required
 def itinerary(request, itin_id):
   # Primitively restricts access to itineraries to owners
   selected_itinerary = get_object_or_404(request.user.itinerary_set, pk=itin_id)

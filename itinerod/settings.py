@@ -116,12 +116,12 @@ LOGIN_REDIRECT_URL = '/profile/'
 LOGOUT_URL = '/google/logout/'
 OPENID_SSO_SERVER_URL = 'https://www.google.com/accounts/o8/id'
 
-EMAIL_HOST = 'mail.ucla.edu'
-EMAIL_HOST_USER = 'stefanwoj89'
-EMAIL_USE_TLS = True
-EMAIL_HOST_PASSWORD = 'star10'
-DEFAULT_FROM_EMAIL = 'stefanwoj89@ucla.edu'
-ACCOUNT_ACTIVATION_DAYS = 2
+#EMAIL_HOST = ''
+#EMAIL_HOST_USER = ''
+#EMAIL_USE_TLS = ''
+#EMAIL_HOST_PASSWORD = ''
+#DEFAULT_FROM_EMAIL = ''
+#ACCOUNT_ACTIVATION_DAYS = 
 
 try:
   from local_settings import *
