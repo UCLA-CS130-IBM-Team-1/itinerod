@@ -11,6 +11,7 @@ itinerod_api.register(UserResource())
 itinerod_api.register(ItineraryResource())
 itinerod_api.register(EventResource())
 itinerod_api.register(VoteResource())
+itinerod_api.register(EventCommentResource())
 
 urlpatterns = patterns('',
     # Examples:

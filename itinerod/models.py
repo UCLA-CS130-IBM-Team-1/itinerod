@@ -48,6 +48,15 @@ class Vote(models.Model):
   def __unicode__(self):
     return 'Vote:%s, %s' % (self.user.username, self.event.name,)
 
+class EventComment(models.Model):
+  event = models.ForeignKey(Event)
+  user = models.ForeignKey(User)
+  text = models.TextField() 
+  created_on = models.DateTimeField(default=datetime.datetime.now, editable=False)
+
+  def __unicode__(self):
+    return '%s:%s:%s' % (str(self.created_on), user.username, event.name,)
+
 class ItineraryForm(ModelForm):
   friends = CharField(label='Travel Buddies', required=False, help_text = "enter Travel Buddies' emails, separate by commas") # This is the friends field in the form
   class Meta:

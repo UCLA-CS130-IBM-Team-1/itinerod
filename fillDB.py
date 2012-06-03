@@ -16,5 +16,9 @@ for u in User.objects.all():
   # fill activity table
   it2.event_set.create(name="Staples Center", start_time="2012-01-01", end_time="2012-01-02", location='Los Angeles,CA', status='V', vote_deadline='2012-05-20T00:00:00')
   it2.event_set.create(name="UCLA", start_time="2012-01-02", end_time="2012-01-03", location='Westwood, CA', status='A')
-  it2.event_set.create(name="Golden Gate Bridge", start_time="2012-01-15", end_time="2012-01-16", location='San Francisco, CA', status='R')
+  ggb = it2.event_set.create(name="Golden Gate Bridge", start_time="2012-01-15", end_time="2012-01-16", location='San Francisco, CA', status='R')
+  ggb.eventcomment_set.create(text="Hello world", user=u)
+  ggb.eventcomment_set.create(text="HELLO AGAIN everyone we are doing very well. This is a test.", user=u)
+
+  
 
