@@ -51,11 +51,9 @@
                               $(".event_details").hide();
                               
                               $(".event").click(function(){
-                                                
-                                                $(".event_details").hide();
-                                                
-                                                $(this).next().next().next().toggle();  //TODO make this better
-                                                
+
+                                                $(this).parent().children(".event_details").toggle();
+
                                                 var eventname = $(this).attr('eventname');
                                                 var eventlocation = $(this).attr('location');
                                                 var id = eventname + "_" + eventlocation + "_event_details";
@@ -431,7 +429,7 @@
 	</div><!-- end insideHeader -->
 	
 	<div class="container insideContent">
-	
+
 		
 	    {% for event in itinerary.event_set.all %}
 	    <div class="sixteen columns">
@@ -449,18 +447,16 @@
 	        </div>
 	        <div id="{{ event.name }}_{{ event.location }}_event_details" class="event_details" style="margin:10px auto; height: 60ex; width: 100%; display: block; border-style: solid; border-width: thin;">Click something!
 	        </div>
-	    {% for vote in vote_set.all %}
-	       {% if vote.event == event %}
-	          {{vote.user}} voted: {{vote.vote}}
-	       {% endif %}
-	    {% endfor %}
-	    </div>
+	        <div>
+	             {% for vote in vote_set.all %}
+	             {% if vote.event == event %}
+	             {{vote.user}} voted: {{vote.vote}}
+	             {% endif %}
+	             {% endfor %}
+	        </div>
+	    </div> <!--- end sixteen columns-->
 	        {% endfor %}
-	    </div>
-	    
-	    
-	    </div>
-   </div><!-- end insideContent -->
+          </div><!-- end insideContent -->
     
 </body>
 </html>

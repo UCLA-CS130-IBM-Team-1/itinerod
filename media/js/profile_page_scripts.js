@@ -1,11 +1,16 @@
 $(document).ready(function() {
-              
-                   //from jquery ui for date selection.. check out at a later time
+
+                  function set_datepicker(){
+                  $(".datepicker").datepick();
+                  }
+                  $("#datepicker_example").datepick();
+                  /*
+                   //Pralav - from jquery ui for date selection.. check out at a later time
                   function set_datepicker(){
                   $(function() {
 		  $( ".datepicker" ).datepicker();
 	          });
-	          }
+	          }                     */
 
                   //Following code is for the auto-complete feature
                   var autocomplete = new google.maps.places.Autocomplete($("#address")[0], {});
@@ -16,7 +21,7 @@ $(document).ready(function() {
                   });
                   
                   function set_autocomplete(){
-                      var address_autocomplete = new google.maps.places.Autocomplete($("#address_autocomplete")[0], {});
+                      var address_autocomplete = new google.maps.places.Autocomplete($("#add_event_location")[0], {});
                       google.maps.event.addListener(address_autocomplete, 'place_changed', function() {
                       var place = autocomplete.getPlace();
                       console.log(place.address_components);
@@ -124,6 +129,7 @@ $(document).ready(function() {
                              contentType: 'application/json',
                              }).done(function(html){
                                       alert("done");
+                                      location.reload();
                       });
 
                    });
@@ -261,7 +267,6 @@ div_html += "<a class='' id ='' href='/api/delete_friend/"+currentId+"/"+users[i
                                           div_html += "<label class='fancyLabel textLabel' for='add_event_voting_deadline'>Voting Deadline: </label>";
                                           div_html += "<input id='add_event_voting_deadline' type='text' /> <br />";
                                           div_html += "<input type='text' class='datepicker' /> <br />";
-                                          div_html += "<input type='text' id='address_autocomplete' /> <br />";
                                           div_html += "<input id='add_event_itinerary' type='hidden' value='"+ itinerary_identifier + "'/><br />";
                                           div_html += "<input id='add_event_voting_status' type='hidden' value='V'/><br />";
                                           div_html += "<a class='event_add' href='#'> Add Event </a>";
