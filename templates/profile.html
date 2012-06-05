@@ -1,41 +1,116 @@
 <!DOCTYPE html>
-<html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+
 <head>
+	<meta charset="utf-8">
 	<title>Profile :: Itinerod</title>
+	<link rel="stylesheet" type="text/css" href="/media/css/base.css" />
+	<link rel="stylesheet" type="text/css" href="/media/css/skeleton.css" />
 	<link rel="stylesheet" type="text/css" href="/media/css/style.css" />
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
-	<script>
+	<script type="text/javascript" src="/media/js/jquery-1.7.2.min.js"></script>
+
+	<!-- This requires downloading the entire jqueryui package
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
+        -->
+	
+	<!-- Datepicker -->
+	<script type="text/javascript" src="/media/js/jquery.datepick.js"></script>
+	<style type="text/css">@import "/media/css/jquery.datepick.css";</style>
+	
+	<!-- Timepicker -->
+	<script type="text/javascript" src="/media/js/jquery.timePicker.js"></script>
+	<style type="text/css" media="all">@import "/media/css/timePicker.css";</style>
+	
+	<!-- Mobile Settings -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+	
+	<!--The following script tag is required for the auto-complete feature -->
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=places&language=en-AU"></script>
+
+<!--        <script>
               $(document).ready(function() {
 
-                  $( ".datepicker" ).datepicker();
+                  $( ".datepicker" ).datepicker();    //from jquery ui for date selection.. check out at a later time
                   
-                   //Insert the Expansion/contraction of div related code
-//                   $(".event_details").hide();
+                  //Following code is for the auto-complete feature
+                  var autocomplete = new google.maps.places.Autocomplete($("#address")[0], {});
 
-                   $(".event").click(function(){
+                  google.maps.event.addListener(autocomplete, 'place_changed', function() {
+                  var place = autocomplete.getPlace();
+                  console.log(place.address_components);
+                  });
+                  
+                   //Expansion/contraction of div related code
+                  $(".event").live('click',function(){
                            $(this).next().slideToggle('slow');
                            });
+                  function hide_event_details()
+                  {
+                           $(".event_details").hide();
+                  }
+                  //Save button clicks in edit event details tab
+                  $(".event_edit_save").live('click',function(){
+                            // alert("hi");
+                            // alert($(this).parent().attr("id"));
+                             
+                             $.ajax({
+                             type:"POST",
+                             url:"http://localhost:8000/api/itinerod/event/1/",
+                             data: "{\"end_time\": \"2012-05-30T19:30:00\", \"id\" : \"1\", \"itinerary\": \"/api/itinerod/itinerary/1/\", \"location\": \"Powell Library UCLA\", \"name\": \"IBM Team1 Meeting\", \"resource_uri\" : \"/api/itinerod/event/1/\", \"start_time\": \"2012-05-30T17:30:00\", \"status\": \"A\", \"vote_deadline\": null}",
+                             dataType: 'application/json',
+                             contentType: 'application/json',
+                             }).done(function(html){
+                                      alert("done");
+                             });
+
+                             /*
+                             $.ajax({
+                             type:"PATCH",
+                             url:"http://localhost:8000/api/itinerod/event/54/", // THIS ID IS SPECIFIC TO PRESTON's DB
+                             data: "{\"end_time\": \"2012-06-06T19:30:00\", \"start_time\": \"2012-06-06T17:30:00\"}",
+                             dataType: 'application/json',
+                             contentType: 'application/json',
+                             }).done(function(html){
+                                      alert("done");
+                             });
+                             */
+                             
+                             /*
+                             $.ajax({
+                             type:"DELETE",
+                             url:"http://localhost:8000/api/itinerod/event/54/",
+                             dataType: 'application/json',
+                             contentType: 'application/json',
+                             }).done(function(html){
+                                      alert("done");
+                             });
+                             */
+                   });
+		  
 	          var friendData; //TO DO: need to implement data to send of what users to delete from itinerary
-	          $(".itinerary_friend_edit_button").click(function(){
+
+		$(".itinerary_friend_edit_button").click(function(){
 	             $.ajax({
 	             type:"PUT",
-	             url:"http://localhost:8000/api/itinerod/itinerary/"+currentId+"/?format=jason"+"&callback=?",
+	             url:"http://localhost:8000/api/itinerod/itinerary/"+currentId+"/?format=json"+"&callback=?",
 	             contextType: "application/json",
 	             data: friendData,
 	             dataType: 'json',
                      })
 	          })
 
-                  $(".itenerary_edit_button").click(function(){
+                  $(".itinerary_edit_button").click(function(){
                   
                                  var currentId = $(this).attr('id');
-
-                        // var edit_html = "events should be edited here";
+                                 alert("Hi");
                                  $.ajax({
                                  type:"GET",
                                  url: "http://localhost:8000/api/itinerod/itinerary/"+currentId+"/?format=json"+"&callback=?",
-                                 contextType: "application/json" //is this supposed to be content or context?
+                                 contextType: "application/json"
                                       }).done(function(html) {
 
                                           var div_html = "";
@@ -45,18 +120,20 @@
 				          for(var i = 0, len = users.length; i < len; ++i)
 					  {
 						div_html += "<h2>Edit Friends</h2>";
-                                                  div_html += "<div class='event_details'>";
+                                                  div_html += "<div><form name='friendForm'>";
 						div_html += "<input type='checkbox' name='user1' value='"+ users[i].email +"'/> "+ users[i].email +"<br>";
+						  div_html += "</form>";
                                                   div_html += "</div>";
 					  }
                                           div_html += "<h2> Edit Itineraries </h2>" ;
                                           for(var i=0, len = events.length; i< len; ++i)
                                           {
                                           
-                                                  div_html += "<p>";
+                                                  div_html += "<div id="+events[i].id+">";
                                                   div_html += "<h3 class='event'>"+ events[i].name +"</h3>" ;
+                                                  div_html += "Click Event to expand/contract edit details";
                                                   div_html += "<div class='event_details'>";
-                                                  div_html += "Location: <input type='text' value= '"+ events[i].location +"'/>";
+                                                  div_html += "Location: <input type='text' id="+events[i].location+" value= '"+ events[i].location +"'/>";
                                                   div_html +=  "</br>";
                                                   div_html += "Start Time: <input type='text' value= '"+ events[i].start_time +"'/>";
                                                   div_html +=  "</br>";
@@ -67,45 +144,91 @@
                                                   div_html += "Voting Deadline: <input type='text' value= '"+ events[i].vote_deadline +"'/>";
                                                   div_html +=  "</br>";
                                                   div_html += "Resource URI: <input type='text' value= '"+ events[i].resource_uri +"'/>";
-                                                   div_html +=  "</br>";
+                                                  div_html +=  "</br>";
                                                   div_html += "Event ID: <input type='text' value= '"+ events[i].id +"'/>";
                                                   div_html += "</div>";
-                                                  div_html += "</p>";
+                                                  div_html += "<br />";
+                                                  div_html += "<a class='event_edit_save' href='#'>SAVE</a>";
+                                                  div_html += "</div>";
                                           }
-                                          
+
                                           $("#editItinerary").html(div_html);
+                                          hide_event_details();
+					friendData = document.friendForm.user1.value;
                                       });
-                         //$("#editItenerary").html(edit_html);
-                  });
-              });
-	</script>
+-->
+	
+	<!-- The following script tag is required for the profile page related scripts eg. adding/editing events-->
+	<script type="text/javascript" src="/media/js/profile_page_scripts.js"></script>
 </head>
 
 <body>
-	<div id="content">
+	<div class="container">
+		<div id="loginOutButton">
+			<a href="/google/">Log Out <span class="topUsername">({{user.username}})</span></a>
+		</div> <!-- end loginOutButton -->
+		<div id="logoInside">
+			<a href="/profile" class="nounderline" ><h1 id="headerLogoInside">itinerod</h1>
+			<h2 id="headerTaglineInside">collaborative trip planning</h2></a>
+		</div> <!-- end logo -->
+	</div><!-- end container -->
+	
+	
+	<div class="container insideHeader">
+		<h1 class="header">All Itineraries</h1>
+	</div><!-- end insideHeader -->
+	
+	<div class="container insideContent">
+		<div class="five columns">
+			<button class="orangeButton" id="newItinerary">New</button>
+			<ul class="blockListing">
+			{% for itinerary in user.itinerary_set.all %}
+			    <li>
+			        <a class="itineraryName" href=/itinerary/{{ itinerary.id }}/>
+			        	{{ itinerary.name }}
+			        	<span class="itineraryDate">{{itinerary.start_date}} &mdash; {{itinerary.end_date}}</span>
+			        </a>
+			        <a href="#" id= {{ itinerary.id }} class="itinerary_edit_button"></a>
+			    </li>
+			{% endfor %}
+			</ul>
+		</div>
+		<div id="editItinerary" class="eleven columns">
+		</div>
+		<div class="addItinerary eleven columns">
+			{% if form.errors %}
+			<p class="error">Please fill out all fields.</p>
+			{% endif %}
 
-<h1 class="pageTitle">{{ user.username }}'s Profile </h1>    
-<div id="listItineraries">
-<h2> Your Itineraries </h2>
-<ul class="blockListing">
-{% for itinerary in user.itinerary_set.all %}
-    <li>
-        <a href=/itinerary/{{ itinerary.id }}/>{{ itinerary.name }}</a>:
-        <a href="#" id= {{ itinerary.id }} class="itenerary_edit_button"> Edit </a>
-    </li>
-{% endfor %}
-</ul>
-</div><!-- end div listItineraries -->
 
-<div id="addItinerary">
-<h2> Add New Itinerary </h2>
-    <form method="post" action="/profile/">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <input type="submit" value="Submit" />
-    </form>
-</div> <!-- end div addItinerary -->
-<div id="editItinerary">
+			<form method="post" action="/profile/">
+			    {% csrf_token %}
+	
+				<h3>What?</h3>
+				<label class="fancyLabel textLabel" for="id_name">Trip Name</label>{{form.name}}
+				<h3>When?</h3>
+				<label class="fancyLabel textLabel" for="id_start_date">Start Day</label>
+				{{form.start_date}}
+				<label class="fancyLabel textLabel" for="id_end_date">End Day</label>
+				{{form.end_date}}
+				<h3>With whom?</h3>
+				<p class="fieldInstructions">Enter Travel Buddies' emails, separate by commas</p>
+
+				<textarea type="text" name="friends" id="id_friends"></textarea>
+			    
+			    
+			    <input type="submit" value="Create Itinerary" class="orangeButton" id="addItinerary" />
+		    </form>
+		</div>
+	</div><!-- end insideContent -->
+
+
+		
+
+
+<div id="addEvent" style="width: 200px;">
+Date Picker: <p>Date: <input type="text" id="datepicker_example" size="30"/></p>
+<p>Time Picker: <input type="text" id="time1" size="30"/> </p>
 </div>
 <!--<div id="inviteFriends">
 <form method="post" action="/profile/"> 

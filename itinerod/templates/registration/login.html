@@ -1,98 +1,72 @@
 <!DOCTYPE html>
-<html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+
 <head>
-	<title>Login :: Itinerod</title>
+	<meta charset="utf-8">
+	<title>Register :: Itinerod</title>
 	<link rel="stylesheet" type="text/css" href="/media/css/base.css" />
 	<link rel="stylesheet" type="text/css" href="/media/css/skeleton.css" />
 	<link rel="stylesheet" type="text/css" href="/media/css/style.css" />
-
 	<script type="text/javascript" src="/media/js/jquery-1.7.2.min.js"></script>
+	
+	<!-- Mobile Settings -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
 	<script type="text/javascript">
-		$(document).ready(function() {
-			$('a#newaccount').click(function(e) {
-				$('div#blankspace').css('height',$(window).height()/2);
-				e.preventDefault();
-				$('#login-content').show();
-				$('html, body').stop().animate({
-					scrollTop:$('#login-content').offset().top
-				}, 1500, function(){$('#id_username').focus();});	
-			});
-		});
+	$(window).ready(function() {
+		// Set placeholder text
+		$('#id_username').attr('placeholder','username').focus();
+		$('#id_password').attr('placeholder','password');
+		$('#id_email').attr('placeholder','email');
+		
+
+	});
 	</script>
+
+
 </head>
 
 <body>
-	<div class="content">
 	<div class="container">
-		<h1 class="content-title" class="sixteen columns">Itinerod</h1>
-		<div class="ten columns offset-by-one">
-			<img src="/media/images/ny.jpg" class="home-image">
-		</div> <!-- end image wrapper -->
-		<div class="three columns">
-			<p class="intro-text">
-			We help you get where you want to be.<br /><br />Invite your friends and build an itinerary to wherever you want.</p>
-		</div>
-		<div class="sixteen columns"><!-- div button 1 -->
-			<a id="newaccount" href="/accounts/login">Create New Account</a>
-			<a href="/accounts/login" id="login-button">Login</a>
-		</div><!-- end div button 1 -->
+		<div id="loginOutButton">
+			<a href="/accounts/login">Log In</a>
+		</div> <!-- end loginOutButton -->
+		<div id="logo">
+			<a href="/" class="nounderline"><h1 id="headerLogo">itinerod</h1></a>
+			<h2 id="headerTagline">collaborative trip planning</h2>
+		</div> <!-- end logo -->
+	</div><!-- end container -->
+	
+	
+	<div class="content" id="indexContent">
+		<div class="container">
+			<div class="eight columns offset-by-four">
+			{% if form.errors %}
+			<p class="error">Incorrect username or password.</p>
+			{% endif %}
 
-	</div><!-- end div container -->
-	</div><!-- end div content -->
+		        <form action="/accounts/login/" method="POST">{% csrf_token %}
+		        	
+		        	<label class="labelIcon" for="id_username"><img src="/media/images/icon-person.png"></img></label>
+					{{ form.username }}
+					
+					<label class="labelIcon" for="id_email"><img src="/media/images/icon-key.png"></img></label>
 
-	<div class="content" id="login-content">
-	<div id="form" class="container">
-		<h1 class="sixteen columns">Login</h1>
+					{{ form.password }}
 
-{% if form.errors %}
-<p class="sixteen columns error">Your username and password didn't match. Please try again.</p>
-{% endif %}
-<form method="post" action="{% url django.contrib.auth.views.login %}" class="six columns offset-by-two login">
-{% csrf_token %}
-<table>
-<tr>
-	<td>{{ form.username.label_tag }}</td>
-	<td>{{ form.username }}</td>
-</tr>
-<tr>
-	<td>{{ form.password.label_tag }}</td>
-	<td>{{ form.password }}</td>
-</table>
-
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
-	<span id="or" class="one column">or</span>
-<div class="four columns"> <!-- google login button div -->
-	<a href="/google/login/" class="google-button">Login with Google</a>
-</div> <!-- end google login button div -->
-</div> <!-- end div form -->
-</div> <!-- end div content -->
-
-<!-- Insert the navbar element somewhere in the HTML page -->
-
-	</div><!-- end div content -->
-
-<div class="content" id="registration-content">
-	<div id="form" class="container">
-		<h1 class="sixteen columns">Register</h1>
-
-<form method="POST" action="/accounts/register" class="six columns offset-by-two login">
-{% csrf_token %}
-<table>
-	{{ form.as_table }}
-</table>
-
-<input type="submit" value="submit" />
-</form>
-</div> <!-- end div form -->
-</div> <!-- end div content -->
-
-<!-- Insert the navbar element somewhere in the HTML page -->
-
-	</div><!-- end div content -->
+	            <input class="orangeButton" type="submit" value="Log In" id="loginSubmit" />
+		        </form>
+		        <a class="signUp" href="/accounts/register">No account yet? Sign up!</a>
+			</div>
+	        
+	        <a class="blueButton" id="googleLogin" href="/google/login">Log in with Google</a>
+			
+		</div><!-- end container -->
+	</div> <!-- end content -->
 
 
-	<div id="blankspace"></div>
 </body>
 </html>

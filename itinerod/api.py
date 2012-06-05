@@ -15,7 +15,7 @@ class UserResource(ModelResource):
   itineraries = fields.ToManyField('itinerod.api.ItineraryResource', 'itinerary_set', related_name='user')
   class Meta:
     queryset = User.objects.all()
-    fields = ['username', 'first_name', 'last_name', 'email', 'date_jonined']
+    fields = ['username', 'first_name', 'last_name', 'email', 'date_joined','id']
     allowed_methods = ['get']
     authentication = Authentication()
     authorization = DjangoAuthorization()# insecure?
@@ -55,10 +55,11 @@ class ItineraryResource(ModelResource):
 
 class EventResource(ModelResource):
   itinerary = fields.ToOneField(ItineraryResource, 'itinerary')
+  comments = fields.ToManyField('itinerod.api.EventCommentResource', 'eventcomment_set', full=True)
   class Meta:
     queryset = Event.objects.all()
     authentication = Authentication()
-    authorization = DjangoAuthorization()
+    authorization = Authorization()
     validator = FormValidation(form_class=EventForm)
     filtering = {
         'name': ['exact'],
@@ -90,3 +91,20 @@ class VoteResource(ModelResource):
 
   def apply_authorization_limits(self, request, object_list):
     return object_list.filter(user=request.user)
+
+class EventCommentResource(ModelResource):
+  class Meta:
+    queryset = EventComment.objects.all()
+    authentication = Authentication()
+    authorization = Authorization()
+    filtering = {
+        'event': ALL_WITH_RELATIONS,
+        'created_on': ['exact', 'range', 'gt', 'lt', 'gte', 'lte'],
+    }
+
+  def obj_create(self, bundle, request=None, **kwargs):
+    return super(VoteResource, self).obj_create(bundle, request, user=request.user)
+
+  def apply_authorization_limits(self, request, object_list):
+    return object_list.filter(user=request.user)
+    

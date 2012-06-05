@@ -1,28 +1,59 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+
+<head>
+	<meta charset="utf-8">
+	<title>Itinerary :: Itinerod</title>
+	<link rel="stylesheet" type="text/css" href="/media/css/base.css" />
+	<link rel="stylesheet" type="text/css" href="/media/css/skeleton.css" />
+	<link rel="stylesheet" type="text/css" href="/media/css/style.css" />
+	<script type="text/javascript" src="/media/js/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
+	
+	<!-- Mobile Settings -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+	<!-- Javascript -->
         <script type="text/javascript"
             src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBsGA492uOZ1mHV4Xri6cDZSONnI8axroI&sensor=false">
-            </script>
+        </script>
+        
+        <script type="text/javascript" src="http://api.eventful.com/js/api"></script>
+        <script type="text/javascript" src="/media/js/cursor.js"></script>
         <link rel="stylesheet" type="text/css" href="/media/css/style.css" />
         <script>
+
             
             $(document).ready(function() {
                               
+                              var itinerary_id = {{ itinerary.id }};
                               var map;
                               var geocoder;
+                              var map_center_marker;
+                              var infowindow = new google.maps.InfoWindow();
                               
+                              // images for marker on the map
+                              var yelpImage = new google.maps.MarkerImage('/media/images/yelp.png',
+                                                                           new google.maps.Size(32, 32),
+                                                                           new google.maps.Point(0,0));
+                              
+                              var eventfulImage = new google.maps.MarkerImage('/media/images/eventful.png',
+                                                                          new google.maps.Size(32, 32),
+                                                                          new google.maps.Point(0,0));
+                              
+                              $.cursor("h3", "pointer");
+                              $.cursor("img", "pointer");
                               
                               //Insert the Expansion/contraction of div related code
                               $(".event_details").hide();
                               
                               $(".event").click(function(){
-                                                
-                                                $(".event_details").hide();
-                                                
-                                                $(this).next().next().next().toggle();
-                                                
+
+                                                $(this).parent().children(".event_details").toggle();
+
                                                 var eventname = $(this).attr('eventname');
                                                 var eventlocation = $(this).attr('location');
                                                 var id = eventname + "_" + eventlocation + "_event_details";
@@ -35,13 +66,12 @@
                                                 
                                                 map = new google.maps.Map(document.getElementById(id),
                                                                           myOptions);
-                                                
-                                                //TODO might need to fix address for geocoding.. using event name for now
+                                                //TODO might need to fix address for geocoding.. using event name for now (but it might not work)
                                                 geocoder = new google.maps.Geocoder();
                                                 geocoder.geocode( { 'address': eventname + " " + eventlocation}, function(results, status) {
                                                                  if (status == google.maps.GeocoderStatus.OK) {
                                                                  map.setCenter(results[0].geometry.location);
-                                                                 var marker = new google.maps.Marker({
+                                                                 map_center_marker = new google.maps.Marker({
                                                                                                      map: map, 
                                                                                                      position: results[0].geometry.location
                                                                                                      });
@@ -54,100 +84,222 @@
                                                 
                                                 });
                               
+
+                              
+                              
+                              $(".add_event").live('click', function(){
+
+                                                   var event_itinerary = "/api/itinerod/itinerary/"+itinerary_id+"/";
+                                                   
+                                                   var event_name = $(this).attr('eventname');
+                                                   var event_location = $(this).attr('location');
+                                             
+                                                   // correctly reads the values from the text box
+                                                   var event_start_time = $(this).parent().children('#event_start_time').val();
+                                                   var event_end_time = $(this).parent().children('#event_end_time').val();
+
+                                                   // hard code values below for now
+                                                   event_start_time = "2012-06-06T17:30:00";
+                                                   event_end_time = "2012-06-06T19:30:00";
+                                                   var event_voting_deadline = "2012-06-06T19:30:00";
+                                                   var event_voting_status = "V";
+                                                   
+                                                   var json_data = "{" + ""
+                                                   +"\"end_time\":\"" + event_end_time+"\","
+                                                   +"\"itinerary\":\"" + event_itinerary +"\","
+                                                   +"\"location\":\"" +  event_location +"\","
+                                                   +"\"name\":\""+ event_name +"\","
+                                                   +"\"start_time\":\""+ event_start_time +"\","
+                                                   +"\"status\":\""+ event_voting_status +"\","
+                                                   +"\"vote_deadline\":\""+ event_voting_deadline+"\""
+                                                   +"}" ;
+
+                                                   $.ajax({
+                                                          type:"POST",
+                                                          url:"/api/itinerod/event/?format=json",
+                                                          data: json_data,
+                                                          dataType: 'application/json',
+                                                          contentType: 'application/json',
+                                                          }).success(function(html){
+                                                                  alert("Added new event!");
+                                                                  });
+                                             });
+                              
+                              
+                              $(".directionsButton").live('click', function(){
+                                                          
+                                                          var daddr = $(this).attr('destination');
+                                                          navigator.geolocation.getCurrentPosition(function(position) {
+                                                                                                   var lat = position.coords.latitude;
+                                                                                                   var lon = position.coords.longitude;
+                                                                                                   
+                                                                                                   var saddr = lat + ', ' + lon;
+                                                                                                   var dirURL = "https://maps.google.com/maps?saddr=" + saddr + "&daddr=" + daddr;
+                                                                                                   window.open(encodeURI(dirURL));
+                                                                                                   });
+                                                          
+                                                          });
+                              
+                  
+                              
                               //
                               //Below are the API call related Jquery functions
                               //             
+                            
                               $(".weather").click(function() {
                                                   
                                                   
                                                   var eventname = $(this).attr('eventname');
                                                   var eventlocation = $(this).attr('location');
                                                   var id = eventname + "_" + eventlocation + "_event_details";
+
+                                                  var apikey = "a0a9c11f72d6cdc2";  // raymond's key
+                                            
+                                                  var lat = map.getCenter().lat();
+                                                  var long = map.getCenter().lng();
                                                   
-                                                  var weatherURL = "http://www.google.com/ig/api?hl=eng&weather="+eventlocation ;
-                                                  var weatherRequest;    //holds weather API response
-                                                  var weatherRequestURL = weatherURL;
+                                                  var weatherURL = "http://api.wunderground.com/api/"+ apikey + "/forecast/q/" + lat + "," + long + ".json"
+                                                  var weatherRequestURL = encodeURI(weatherURL);
                                                   
-                                                  
-                                                  
-                                                  
-                                                  /*
-                                                   
-                                                   Doesn't work
-                                                   
-                                                   $.ajax({
-                                                   type:"GET",
-                                                   dataType:"xml",
-                                                   url: weatherURL,
-                                                   contentType: "text/xml; charset=iso-8859-1"
-                                                   
-                                                   }).done(function() {
-                                                   
-                                                   
-                                                   alert("lalal");
-                                                   
-                                                   
-                                                   });
-                                                   
-                                                   */
+                                                  $.ajax({
+                                                         type:"GET",
+                                                         dataType:"jsonp",
+                                                         url: weatherRequestURL
+                                                         
+                                                         }).done(function(json) {
+                                                                 
+                                                                 var forecast = json.forecast.simpleforecast.forecastday;
+                                                                 
+                                                                 var html = "<b>Weather</b> for <b>" + eventlocation +"</b><br/><table width=250>";
+
+                                                                 var i;
+                                                                 for (i = 0; i < forecast.length; i++) {
+                                                                 
+                                                                 html = html +
+                                                                 "<tr>" +
+                                                                 "<td valign=\"middle\">" + forecast[i].date.weekday + "</td>" +
+                                                                 "<td valign=\"middle\">" + forecast[i].high.fahrenheit + "</br>" + forecast[i].low.fahrenheit + "</td>" +
+                                                                 "<td valign=\"middle\"><img src=\"" + forecast[i].icon_url + "\" /></td>" +
+                                                                 "</tr>";
+
+                                                                 }
+                                                                 
+                                                                 html = html + "</table>"
+                                                                 
+                                                                 infowindow.setContent(html);
+                                                                 infowindow.open(map, map_center_marker);
+                                                                 
+                                                                 });
                                                   });
                               
                               
                               
                               
-                              
-                              
                               $(".events").click(function() {
-                                                 var events_location = "Los Angeles";
-                                                 var eventsURL = "http://api.eventful.com/rest/events/rss?app_key=NsjwnNS4hKSqXP6J&keywords=concerts&location="+events_location+"&sort_order=date";
-                                                 var eventsRequest;    //holds Eventful api response
-                                                 var eventsRequestURL = eventsURL;
                                                  
-                                                 $.ajax({
-                                                        type:"GET",
-                                                        url: weatherURL
-                                                        }).done(function(html) {
-                                                                //   TODO: PUT IN EVENTFUL API RESULTS IN HTML
-                                                                });
+                                                 var eventname = $(this).attr('eventname');
+                                                 var eventlocation = $(this).attr('location');
+                                                 var id = eventname + "_" + eventlocation + "_event_details";
+                                                 
+                                                 var apikey = "NsjwnNS4hKSqXP6J";  // pralavs key
+                                                 
+                                                 var lat = map.getCenter().lat();
+                                                 var long = map.getCenter().lng();
+                                                 
+                                                 // args for eventful API ... //TODO figure out dates of itinerary
+                                                 
+                                                 var oArgs = { app_key: "NsjwnNS4hKSqXP6J",
+                                                                category: "music",
+                                                                location: lat+","+long,
+                                                                within: 20,
+                                                                units: "mi",
+                                                                sort_order: "popularity",
+                                                                page_size: 20};
+                                                 
+                                                 EVDB.API.call("/events/search", oArgs, function(oData)
+                                                               {
+                                                               // Note: this relies on the custom toString() methods below
+                                                               
+                                                               var events = oData.events.event;
+                                                               
+                                                               var marker, i;
+                                                               
+                                                               for (i = 0; i < events.length; i++) {
+                                                               
+                                                               lat = events[i].latitude;
+                                                               long = events[i].longitude;
+                                                               
+                                                               var marker = new google.maps.Marker({
+                                                                                                   map: map, 
+                                                                                                   position: new google.maps.LatLng(lat, long), 
+                                                                                                   icon: eventfulImage,
+                                                                                                   animation: google.maps.Animation.DROP
+                                                                                                   });
+                                                               
+                                                               
+                                                               google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                                                                                                               return function() {
+                                                                                                               
+                                                                                                               var event = events[i];
+
+                                                                                                               var content = "<a href=\"" + event.url + "\" target=\"_blank\">" +
+                                                                                                               event.title + "</a></br>" + "Date: " + event.start_time + "</br></br>";
+                                                                                                               
+                                                                                                               if(event.venue_name)
+                                                                                                                content = content + event.venue_name + "</br>";
+                                                                                                               if(event.venue_address)
+                                                                                                                content = content + event.venue_address + "</br>";
+                                                                                                               
+                                                                                                               content = content + event.region_name;
+  
+                                                                                                               infowindow.setContent(content);
+                                                                                                               infowindow.open(map, marker);
+                                                                                                               }
+                                                                                                               })(marker, i));
+                                                               
+                                                               
+                                                               
+                                                               }
+  
+                                                               });
+                                                
+                                                 
+
                                                  
                                                  });
                               
                               
-                              /*$(".map").click(function() {
-                               
-                               var eventname = $(this).attr('eventname');
-                               var eventlocation = $(this).attr('location');
-                               var id = eventname + "_" + eventlocation + "_event_details";
-                               
-                               var myOptions = {
-                               center: new google.maps.LatLng(34.063361, -118.444419),
-                               zoom: 12,
-                               mapTypeId: google.maps.MapTypeId.ROADMAP
-                               };
-                               
-                               var map = new google.maps.Map(document.getElementById(id),
-                               myOptions);
-                               
-                               //TODO might need to fix address for geocoding.. using event name for now
-                               geocoder = new google.maps.Geocoder();
-                               geocoder.geocode( { 'address': eventname + " " + eventlocation}, function(results, status) {
-                               if (status == google.maps.GeocoderStatus.OK) {
-                               map.setCenter(results[0].geometry.location);
-                               var marker = new google.maps.Marker({
-                               map: map, 
-                               position: results[0].geometry.location
-                               });
-                               } else {
-                               alert("Geocode was not successful for the following reason: " + status);
-                               }
-                               });
-                               
-                               
-                               
-                               
-                               
-                               
-                               }); */
+                              $(".map").click(function() {
+                                              
+                                              var eventname = $(this).attr('eventname');
+                                              var eventlocation = $(this).attr('location');
+                                              var id = eventname + "_" + eventlocation + "_event_details";
+                                              
+                                              var myOptions = {
+                                              center: new google.maps.LatLng(34.063361, -118.444419),
+                                              zoom: 12,
+                                              mapTypeId: google.maps.MapTypeId.ROADMAP
+                                              };
+                                              
+                                              // global variable
+                                              map = new google.maps.Map(document.getElementById(id),
+                                                                            myOptions);
+                                              
+                                              //TODO might need to fix address for geocoding.. using event name for now (but it might not work)
+                                              geocoder = new google.maps.Geocoder();
+                                              geocoder.geocode( { 'address': eventname + " " + eventlocation}, function(results, status) {
+                                                               if (status == google.maps.GeocoderStatus.OK) {
+                                                               map.setCenter(results[0].geometry.location);
+                                                               map_center_marker = new google.maps.Marker({
+                                                                                                   map: map, 
+                                                                                                   position: results[0].geometry.location
+                                                                                                   });
+                                                               } else {
+                                                               alert("Geocode was not successful for the following reason: " + status);
+                                                               }
+                                                               });
+
+                                              });
                               
                               
                               $(".food").click(function() {
@@ -157,30 +309,32 @@
                                                var eventlocation = $(this).attr('location');
                                                var id = eventname + "_" + eventlocation + "_event_details";
                                                
-                                               // pralav's
-                                               //var YWSID = "SrSxxs4TLunMcU3cQ8cp_A"; // common required parameter (api key)
+                                               //var YWSID = "SrSxxs4TLunMcU3cQ8cp_A"; // pralav's key
                                                
                                                var YWSID = "JhY46juaZYUVv4n7md3nig";  // raymond's key
                                                
                                                var lat = map.getCenter().lat();
                                                var long = map.getCenter().lng();
                                                
+                                               // number of restaurants to request
+                                               var request_num = 20;
+                                               
                                                /*
                                                 * Construct the URL to call for the API request
                                                 */
                                                function constructYelpURL(){
                                                var URL = "http://api.yelp.com/" +
-                                               "business_review_search?"+
-                                               //              "callback=" + "showYelpResults" +
+                                               "business_review_search?" +
                                                "&term=food" +
-                                               "&num_biz_requested=10" +
+                                               "&num_biz_requested=" + request_num +
                                                "&ywsid=" + YWSID  +
-                                               "&location=" + eventname + " " + eventlocation;
+                                               "&lat=" + lat +
+                                               "&long=" + long;
+                                               //"&location=" + eventname + " " + eventlocation;
                                                //"&cll=" + lat + "," + long;
                                                return encodeURI(URL);
                                                }
                                                
-                                               var yelpRequest;    //holds yelp api response
                                                var yelpRequestURL = constructYelpURL();
                                                
                                                $.ajax({
@@ -189,33 +343,63 @@
                                                       url: yelpRequestURL+"&callback=?",
                                                       contextType: "application/json"
                                                       
-                                                      }).done(function(html) {
+                                                      }).done(function(json) {
                                                               
-                                                              var businesses = html.businesses;
+                                                              var businesses = json.businesses;
                                                               
-                                                              //document.getElementById(id).innerHTML = "Food Places" + "<br />";
-                                                              
-                                                              for(var i=0, len = businesses.length; i< len; ++i)
+                                                              var marker, i;
+
+                                                              for(i=0; i < businesses.length; ++i)
                                                               {
-                                                              var business = businesses[i];
                                                               
-                                                              lat = business.latitude;
-                                                              long = business.longitude;
-                                                              
+                                                              lat = businesses[i].latitude;
+                                                              long = businesses[i].longitude;
                                                               
                                                               var marker = new google.maps.Marker({
                                                                                                   map: map, 
-                                                                                                  position: new google.maps.LatLng(lat, long)
+                                                                                                  position: new google.maps.LatLng(lat, long), 
+                                                                                                  icon: yelpImage,
+                                                                                                  animation: google.maps.Animation.DROP
                                                                                                   });
+                                    
                                                               
-                                                              
-                                                              
-                                                              
-                                                              //var html = document.getElementById(id).innerHTML;
-                                                              //document.getElementById(id).innerHTML = html + "<br/>"+business.name+" lat: "+lat;
-                                                              
-                                                              // don't know how to do append in javascript (couldn't get jquery to work) - raymond
-                                                              //$(".event_details").append("<br />"+business.name);
+                                                              google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                                                                                                              return function() {
+                                                                                                              
+                                                                                                              var business = businesses[i];
+                                                                                                              
+                                                                                                              
+                                                                                                              var content = "<a href=\"" + business.url + "\" target=\"_blank\">" +
+                                                                                                                            business.name + "</a>";
+                                                                                                              
+
+                                                                                                              content += "</br>" +
+                                                                                                              "<img src=\"" + business.rating_img_url + "\" /></br>" +
+                                                                                                              "Category: " + business.categories[0].category_filter +
+                                                                                                              "</br></br>";
+                                                                                                              
+                                                                                                              if (business.address1)
+                                                                                                              content = content + business.address1 + "</br>";
+                                                                                                              if (business.address2)
+                                                                                                              content = content + business.address2 + "</br>";
+                                                                                                              
+                                                                                                              var location = business.city + ", " + business.state + " " +
+                                                                                                              business.zip;
+                                                                                                              
+                                                                                                              content += location + "</br>" + business.phone + "</br>";
+                                                                                                              
+                                                                                                              content += "<div></br><label class='fancyLabel infowindowTextLabel'>Start: </label>";
+                                                                                                              content += "<input type='text' class='infowindowTextInput' id='event_start_time' value='start'/>";
+                                                                                                              content += "<label class='fancyLabel infowindowTextLabel'>End: </label>";
+                                                                                                              content += "<input type='text' class='infowindowTextInput' id='event_end_time' value='end'/>";
+                                                                                                              content +=  "</br>";
+                                                                                                              content += "<button class='orangeButton add_event' eventname='" +
+                                                                                                              business.name + "' location='" + location + "'>Add as a new event!</button></div>";
+
+                                                                                                              infowindow.setContent(content);
+                                                                                                              infowindow.open(map, marker);
+                                                                                                              }
+                                                                                                              })(marker, i));
                                                               }
                                                               });
                                                
@@ -226,31 +410,53 @@
             
             
             </script>
-    </head>
-    <body> 
-        <div id="content" />
-        <h1 class="pageTitle">View itinerary</h1>
-        {% csrf_token %}
-	{{vote_form_set}}
-        {% for event in itinerary.event_set.all %}
-        <div>
-            <h3 class="event" eventname="{{ event.name }}" location="{{ event.location }}" >{{ event.name }} </h3>
-            <span class="date">{{ event.start_time}} &mdash; {{ event.end_time }}</span>
-            <div class="icons">
-                <img src="/media/images/calendar.png" class="events" eventname="{{ event.name }}" location="{{ event.location }}" alt="events_1" />
-                <!--	<img src="/media/images/map.png" class="map" eventname="{{ event.name }}" location="{{ event.location }}" alt="Map" /> -->
-                <img src="/media/images/food.png" class="food" eventname="{{ event.name }}" location="{{ event.location }}" alt="Food" />
-                <img src="/media/images/weather.png" class="weather" name="{{ event.name }}" location="{{ event.location }}" alt="Weather" href="#"/>
-            </div>
-            <div id="{{ event.name }}_{{ event.location }}_event_details" class="event_details" style="margin:10px auto; height: 50ex; width: 50ex; display: block; border-style: solid; border-width: thin;">Click something!
-            </div>
-            {% endfor %}
-        </div>
-        </div>
-        
-        
-        </div>
-        
-        
-    </body>
+</head>
+<body> 
+	<div class="container">
+		<div id="loginOutButton">
+			<a href="/google">Log Out <span class="topUsername">({{user.username}})</span></a>
+		</div> <!-- end loginOutButton -->
+		<div id="logoInside">
+			<a href="/profile" class="nounderline" ><h1 id="headerLogoInside">itinerod</h1>
+			<h2 id="headerTaglineInside">collaborative trip planning</h2></a>
+		</div> <!-- end logo -->
+	</div><!-- end container -->
+	
+	
+	<div class="container insideHeader">
+		<a class="darkBlueButton" href="/profile">&larr; All Itineraries</a>
+		<h1 class="header">{{itinerary.name}}</h1>
+	</div><!-- end insideHeader -->
+	
+	<div class="container insideContent">
+
+		
+	    {% for event in itinerary.event_set.all %}
+	    <div class="sixteen columns">
+	        <h3 class="event" eventname="{{ event.name }}" location="{{ event.location }}" >{{ event.name }}
+            <button class="orangeButton directionsButton" destination="{{ event.name }},{{event.location}}">Directions</button>
+            </h3>
+		<a href="/api/voted/{{itinerary.id}}/{{event.id}}/1">Yes</a>
+		<a href="/api/voted/{{itinerary.id}}/{{event.id}}/0">No</a>
+	        <span class="date">{{ event.start_time}} &mdash; {{ event.end_time }}</span>
+	        <div class="icons">
+	            <img src="/media/images/weather.png" class="weather" eventname="{{ event.name }}" location="{{ event.location }}" alt="Weather" href="#"/>
+	            <img src="/media/images/gmap.png" class="map" eventname="{{ event.name }}" location="{{ event.location }}" alt="Map" />
+	            <img src="/media/images/yelp.png" class="food" eventname="{{ event.name }}" location="{{ event.location }}" alt="Food" />
+	            <img src="/media/images/eventful.png" class="events" eventname="{{ event.name }}" location="{{ event.location }}" alt="events_1" />
+	        </div>
+	        <div id="{{ event.name }}_{{ event.location }}_event_details" class="event_details" style="margin:10px auto; height: 60ex; width: 100%; display: block; border-style: solid; border-width: thin;">Click something!
+	        </div>
+	        <div>
+	             {% for vote in vote_set.all %}
+	             {% if vote.event == event %}
+	             {{vote.user}} voted: {{vote.vote}}
+	             {% endif %}
+	             {% endfor %}
+	        </div>
+	    </div> <!--- end sixteen columns-->
+	        {% endfor %}
+          </div><!-- end insideContent -->
+    
+</body>
 </html>

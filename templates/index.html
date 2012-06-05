@@ -46,10 +46,15 @@
 			{% endif %}
 			<form method="post" action="/accounts/login/">
 			{% csrf_token %}
-				{{ login_form.username.label_tag }}
-				{{ login_form.username }}
-				{{ login_form.password.label_tag }}
-				{{ login_form.password }}
+				{{ form.username.label_tag }}
+				{{ form.username }}
+				{{ form.email.label_tag }}
+				{{ form.email }}
+				{{ form.password1.label_tag }}
+				{{ form.password1 }}
+				{{ form.password2.label_tag }}
+				{{ form.password2 }}
+
 				<label><input name="rememberme" id="rememberme" type="checkbox" checked="checked" value="forever" /> &nbsp;Remember me</label>
         			<div class="clear"></div>
 			<input type="submit" value="login" class="bt_login" />

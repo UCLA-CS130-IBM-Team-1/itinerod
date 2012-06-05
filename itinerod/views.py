@@ -29,6 +29,8 @@ def home(request):
   else:
     print "not post"
   '''
+  if request.user.is_authenticated():
+    return HttpResponseRedirect('/profile')
   registration_form = RegistrationForm()
 
   print "out"
@@ -36,8 +38,8 @@ def home(request):
   t = get_template('index2.html')
   context = {
       'user' : request.user,
-      'registration_form': registration_form,
-      'login_form': AuthenticationForm(),
+  #    'registration_form': registration_form,
+  #    'login_form': AuthenticationForm(),
   }
   context.update(csrf(request))
   return render_to_response('index2.html',context)
@@ -83,8 +85,6 @@ def voteCalc(event_set):
 	if voteDeadline < today:
 		voteY = Vote.objects.filter(event=event.id,vote='Y')
 		voteN = Vote.objects.filter(event=event.id,vote='N')
-		print voteY.count()
-		print voteN.count()
 		if(voteY.count() >= voteN.count()):
 			event.status = 'A'
 		else:
@@ -95,19 +95,43 @@ def createEventList(event_set):
   event_list = []
   for event in event_set:
 	if event.status == 'V':
-		event_list.append(events)
+		event_list.append(event)
   return event_list
 
+@login_required
+def leave_itinerary(request, itin_id):
+  selected_itinerary = get_object_or_404(request.user.itinerary_set, pk=itin_id)
+  request.user.itinerary_set.remove(selected_itinerary)
+  return HttpResponseRedirect('/profile')
+
+@login_required
+def delete_friend(request,itin_id,friend_id):
+    selected_friend = get_object_or_404(User.objects,pk=friend_id)
+    selected_itinerary = get_object_or_404(Itinerary.objects,pk=itin_id)
+    selected_itinerary.users.remove(selected_friend)
+    return HttpResponseRedirect('/profile')
+@login_required
+def voted(request,event_id,itin_id,vote):
+    selected_event = get_object_or_404(Event.objects,pk=event_id)
+    selected_vote = Vote.objects.get_or_create(event=selected_event,user=request.user) #what if the vote doesn't exist, we must create it at some point
+    selected_vote = Vote.objects.get(event=event_id,user=request.user)
+    if(vote == '1'):
+    	selected_vote.vote = 'Y'
+    else:
+	selected_vote.vote = 'N'
+    selected_vote.save()
+    itin_path = "/itinerary/"+itin_id+"/"
+    return HttpResponseRedirect(itin_path)
 @login_required
 def itinerary(request, itin_id):
   # Primitively restricts access to itineraries to owners
   selected_itinerary = get_object_or_404(request.user.itinerary_set, pk=itin_id)
   itinEvents = Event.objects.filter(itinerary=itin_id)
   event_set = itinEvents.order_by('start_time')
-
+  vote_set = Vote.objects;
   voteCalc(event_set)
   event_list = createEventList(event_set)
-
+  '''
   VoteFormSet = formset_factory(VoteForm, extra=len(event_list))
   if request.method == 'POST':
     formset = VoteFormSet(request.POST)
@@ -122,11 +146,13 @@ def itinerary(request, itin_id):
 	for form in formset:
 		savedVoteForm = form.save()
     else:
-    	formset = VoteFormSet() # An unbound form
+    	formset = VoteFormSet() # An unbound form'''
   context ={
 	'itinerary' : selected_itinerary,
 	'event_set' : event_set,
-	'vote_form_set' : VoteFormSet,
+        'vote_set'  : vote_set,
+	#'vote_form_set' : VoteFormSet,
+      'user': request.user,
   }
   context.update(csrf(request))
   return render_to_response('itinerary.html',context)
