@@ -1,7 +1,8 @@
 $(document).ready(function() {
 
                   function set_datepicker(){
-                  $(".event_start_time").datepick();
+                  $(".event_start_date").datepick();
+                  $(".event_end_date").datepick();
                   }
                   $("#datepicker_example").datepick();
                   /*
@@ -40,22 +41,34 @@ $(document).ready(function() {
                   $(".event_edit_save").live('click',function(){
                              var event_id = $(this).parent().attr("id");
                              var event_name = $(this).parent().children(".event").html();
+                             var event_start_date = $(this).parent().children(".event_details").find(".event_start_date").val();
                              var event_start_time = $(this).parent().children(".event_details").find(".event_start_time").val();
+                             var start_day = event_start_date.substring(3,5);
+                             var start_month = event_start_date.substring(0,2);
+                             var start_year = event_start_date.substring(6,10);
+                             var event_start_date_time = start_year+"-"+start_month+"-"+start_day+"T"+event_start_time;
+                             alert(event_start_date_time);
                              var event_end_time = $(this).parent().children(".event_details").find(".event_end_time").val();
+                             var event_end_date = $(this).parent().children(".event_details").find(".event_end_date").val();
+                             var end_day = event_end_date.substring(3,5);
+                             var end_month = event_end_date.substring(0,2);
+                             var end_year = event_end_date.substring(6,10);
+                             var event_end_date_time = end_year+"-"+end_month+"-"+end_day+"T"+event_end_time;
+                             alert(event_end_date_time);
                              var voting_status =  $(this).parent().children(".event_details").find(".event_voting_status").val();
                              var voting_deadline = $(this).parent().children(".event_details").find(".event_voting_deadline").val();
                              var resource_uri = $(this).parent().children(".event_details").find(".resource_uri").val();
                              var itinerary = $(this).parent().children(".event_details").find(".itinerary").val();
                              var event_location = $(this).parent().children(".event_details").find(".event_location").val();
-                             
+
                              //Create input for the AJAX call
                              
                              var json_data = "{" + ""
-                                             +"\"end_time\":\"" + event_end_time+"\","
+                                             +"\"end_time\":\"" + event_end_date_time+"\","
                                              +"\"itinerary\":\"" + itinerary +"\","
                                              +"\"location\":\"" +  event_location +"\","
                                              +"\"name\":\""+ event_name +"\","
-                                             +"\"start_time\":\""+ event_start_time +"\","
+                                             +"\"start_time\":\""+ event_start_date_time +"\","
                                              +"\"status\":\""+ voting_status +"\","
                                              +"\"vote_deadline\":\""+ voting_deadline+"\""
                                              +"}" ;
@@ -245,7 +258,7 @@ var hard_code2 = "{"+"\"users\": [{\"email\": \"guiltyspark7750@gmail.com\", \"f
                                                  "<option value='12'>December</option>"+
                                                  "</select>";
                               for(var i=0, len = events.length; i< len; ++i)
-                                          {
+                                          {        alert(start_date_time);
                                                    var start_date_time = events[i].start_time;
                                                    var start_month =  start_date_time.substring(5,7);
                                                    var start_day =   start_date_time.substring(8,10);
@@ -270,12 +283,20 @@ var hard_code2 = "{"+"\"users\": [{\"email\": \"guiltyspark7750@gmail.com\", \"f
                                                   div_html += "<input type='text' class='event_location' id="+events[i].id+"_location' value= '"+ events[i].location +"'/>";
                                                   div_html +=  "</br>";
 
+                                                  div_html += "<label class='fancyLabel textLabel' for='"+events[i].id+"_start_date'>Start Date: </label>";
+                                                  div_html += "<input type='text' class='event_start_date' id="+events[i].id+"_start_date' value= '"+ start_date +"'/>";
+                                                  div_html +=  "</br>";
+                                                  
                                                   div_html += "<label class='fancyLabel textLabel' for='"+events[i].id+"_start_time'>Start Time: </label>";
-                                                  div_html += "<input type='text' class='event_start_time' id="+events[i].id+"_start_time' value= '"+ start_date +"'/>";
+                                                  div_html += "<input type='text' class='event_start_time' id="+events[i].id+"_start_time' value= '"+ start_time +"'/>";
+                                                  div_html +=  "</br>";
+
+                                                  div_html += "<label class='fancyLabel textLabel' for='"+events[i].id+"_end_date'>End Date: </label>";
+                                                  div_html += "<input type='text' class='event_end_date' id="+events[i].id+"_end_date' value= '"+ end_date +"'/>";
                                                   div_html +=  "</br>";
 
                                                   div_html += "<label class='fancyLabel textLabel' for='"+events[i].id+"_end_time'>End Time: </label>";
-                                                  div_html += "<input type='text' class='event_end_time' id="+events[i].id+"_end_time' value= '"+ end_date +"'/>";
+                                                  div_html += "<input type='text' class='event_end_time' id="+events[i].id+"_end_time' value= '"+ end_time +"'/>";
                                                   div_html +=  "</br>";
 
                                                   div_html += "<label class='fancyLabel textLabel' for='"+events[i].id+"_voting_status'>Vote: </label>";
