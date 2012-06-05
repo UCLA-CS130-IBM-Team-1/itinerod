@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
                   function set_datepicker(){
-                  $(".datepicker").datepick();
+                  $(".event_start_time").datepick();
                   }
                   $("#datepicker_example").datepick();
                   /*
@@ -196,7 +196,7 @@ var hard_code2 = "{"+"\"users\": [{\"email\": \"guiltyspark7750@gmail.com\", \"f
 					  {
 						var name = "user"+i;
 						div_html += users[i].email + "<br>";
-div_html += "<a class='' id ='' href='/api/delete_friend/"+currentId+"/"+users[i].id+"'> Remove Friend </a>";
+                                                div_html += "<a class='' id ='' href='/api/delete_friend/"+currentId+"/"+users[i].id+"'> Remove Friend </a>";
 					  }
 						
                                                   div_html += "</div>";
@@ -212,9 +212,55 @@ div_html += "<a class='' id ='' href='/api/delete_friend/"+currentId+"/"+users[i
 						//itinerary_identifier = "/api/itinerod/itinerary/"+currentId+"/"; // this is a much better version. What if itinerary is empty of events?
                                           div_html += "<h2> Edit Your Events below </h2>" ;   
                                           div_html += "Click Event to expand/contract edit details";
-                                          for(var i=0, len = events.length; i< len; ++i)
-                                          {
 
+                                          div_html += getHTMLforEditButtonClick(events,itinerary_identifier)
+                                          
+                                          $("#editItinerary").html(div_html);
+					  $('.addItinerary').hide();
+                                          $('#editItinerary').show();
+
+
+                                          hide_event_details();
+                                          set_datepicker();
+                                          set_autocomplete();
+                                      });
+
+                  });
+                  
+                  function getHTMLforEditButtonClick(events,itinerary_identifier)
+                  {           var div_html = "";
+                              var month_select = "<select name='start_date_month' class='month_selector'>"+
+                                                 "<option value='0'>---</option>"+
+                                                 "<option value='1'>January</option>"+
+                                                 "<option value='2'>February</option>"+
+                                                 "<option value='3'>March</option>"+
+                                                 "<option value='4'>April</option>"+
+                                                 "<option value='5'>May</option>"+
+                                                 "<option value='6'>June</option>"+
+                                                 "<option value='7'>July</option>"+
+                                                 "<option value='8'>August</option>"+
+                                                 "<option value='9'>September</option>"+
+                                                 "<option value='10'>October</option>"+
+                                                 "<option value='11'>November</option>"+
+                                                 "<option value='12'>December</option>"+
+                                                 "</select>";
+                              for(var i=0, len = events.length; i< len; ++i)
+                                          {
+                                                   var start_date_time = events[i].start_time;
+                                                   var start_month =  start_date_time.substring(5,7);
+                                                   var start_day =   start_date_time.substring(8,10);
+                                                   var start_year =   start_date_time.substring(0,4);
+                                                   var start_time =   start_date_time.substring(11,19);
+                                                   
+                                                   var end_date_time = events[i].end_time;
+                                                   var end_month =  end_date_time.substring(5,7);
+                                                   var end_day =   end_date_time.substring(8,10);
+                                                   var end_year =   end_date_time.substring(0,4);
+                                                   var end_time =   end_date_time.substring(11,19);
+
+                                                   
+                                                   var start_date = start_month + "/" + start_day + "/" + start_year;
+                                                   var end_date = end_month + "/" + end_day + "/" + end_year;
 
                                                   div_html += "<div id="+events[i].id+" style='border-bottom:solid;'>";
                                                   div_html += "<h3 class='event'>"+ events[i].name +"</h3>" ;
@@ -225,11 +271,11 @@ div_html += "<a class='' id ='' href='/api/delete_friend/"+currentId+"/"+users[i
                                                   div_html +=  "</br>";
 
                                                   div_html += "<label class='fancyLabel textLabel' for='"+events[i].id+"_start_time'>Start Time: </label>";
-                                                  div_html += "<input type='text' class='event_start_time' id="+events[i].id+"_start_time' value= '"+ events[i].start_time +"'/>";
+                                                  div_html += "<input type='text' class='event_start_time' id="+events[i].id+"_start_time' value= '"+ start_date +"'/>";
                                                   div_html +=  "</br>";
 
                                                   div_html += "<label class='fancyLabel textLabel' for='"+events[i].id+"_end_time'>End Time: </label>";
-                                                  div_html += "<input type='text' class='event_end_time' id="+events[i].id+"_end_time' value= '"+ events[i].end_time +"'/>";
+                                                  div_html += "<input type='text' class='event_end_time' id="+events[i].id+"_end_time' value= '"+ end_date +"'/>";
                                                   div_html +=  "</br>";
 
                                                   div_html += "<label class='fancyLabel textLabel' for='"+events[i].id+"_voting_status'>Vote: </label>";
@@ -272,18 +318,10 @@ div_html += "<a class='' id ='' href='/api/delete_friend/"+currentId+"/"+users[i
                                           div_html += "<a class='event_add' href='#'> Add Event </a>";
                                           div_html += "</div>";
                                           
-                                          $("#editItinerary").html(div_html);
-					  $('.addItinerary').hide();
-                                          $('#editItinerary').show();
-
-
-                                          hide_event_details();
-                                          set_datepicker();
-                                          set_autocomplete();
-                                      });
-
-                  });
+                                          return div_html;
+                  }
                   
+
                   //code to remove events from the page
                   $(".event_delete").live('click', function(){
                              var resource_uri = $(this).parent().children(".event_details").find(".resource_uri").val();
