@@ -125,24 +125,49 @@ $(document).ready(function() {
 
                    //Code to handle add event clicks on edit/add events page
                    $(".event_add").live('click',function(){
+                //      var event_id = $(this).parent().attr("id");
+
+
 
                       var event_itinerary = $("#add_event_itinerary").val();
                       var event_name = $("#add_event_name").val();
                       var event_location = $("#add_event_location").val();
+
+                      var event_start_date = $("#add_event_start_date").val();
+                      var start_day = event_start_date.substring(3,5);
+                      var start_month = event_start_date.substring(0,2);
+                      var start_year = event_start_date.substring(6,10);
                       var event_start_time = $("#add_event_start_time").val();
+                      var event_start_date_time = start_year+"-"+start_month+"-"+start_day+"T"+event_start_time+":00";
+
+                      var event_end_date = $("#add_event_end_date").val();
+                      var end_day = event_end_date.substring(3,5);
+                      var end_month = event_end_date.substring(0,2);
+                      var end_year = event_end_date.substring(6,10);
                       var event_end_time = $("#add_event_end_time").val();
+                      var event_end_date_time = end_year+"-"+end_month+"-"+end_day+"T"+event_end_time+":00";
+
+
                       var event_voting_deadline = $("#add_event_voting_deadline").val();
+                      var deadline_day = event_voting_deadline.substring(3,5);
+                      var deadline_month = event_voting_deadline.substring(0,2);
+                      var deadline_year = event_voting_deadline.substring(6,10);
+                      var event_voting_deadline_time = $("#add_event_deadline_time").val();
+                      var voting_deadline_date_time = deadline_year+"-"+deadline_month+"-"+deadline_day+"T"+event_voting_deadline_time+":00";
+
+
                       var event_voting_status = $("#add_event_voting_status").val();
 
                       var json_data = "{" + ""
-                                      +"\"end_time\":\"" + event_end_time+"\","
+                                      +"\"end_time\":\"" + event_end_date_time+"\","
                                       +"\"itinerary\":\"" + event_itinerary +"\","
                                       +"\"location\":\"" +  event_location +"\","
                                       +"\"name\":\""+ event_name +"\","
-                                      +"\"start_time\":\""+ event_start_time +"\","
+                                      +"\"start_time\":\""+ event_start_date_time +"\","
                                       +"\"status\":\""+ event_voting_status +"\","
-                                      +"\"vote_deadline\":\""+ event_voting_deadline+"\""
+                                      +"\"vote_deadline\":\""+ voting_deadline_date_time+"\""
                                       +"}" ;
+                      alert(json_data);
 
                       $.ajax({
                              type:"POST",
@@ -373,13 +398,37 @@ var hard_code2 = "{"+"\"users\": [{\"email\": \"guiltyspark7750@gmail.com\", \"f
                                           div_html += "<input id='add_event_name' type='text' /> <br />";
                                           div_html += "<label class='fancyLabel textLabel' for='add_event_location'>Location: </label>";
                                           div_html += "<input id = 'add_event_location' type='text' /> <br />";
+ //                                         div_html += "<label class='fancyLabel textLabel' for='add_event_start_time'>Start Time: </label>";
+ //                                         div_html += "<input id = 'add_event_start_time' type='text' /> <br />";
+ //                                         div_html += "<label class='fancyLabel textLabel' for='add_event_end_time'>End Time: </label>";
+ //                                         div_html += "<input id = 'add_event_end_time' type='text' /> <br />";
+ //                                         div_html += "<label class='fancyLabel textLabel' for='add_event_voting_deadline'>Voting Deadline: </label>";
+ //                                         div_html += "<input id='add_event_voting_deadline' type='text' /> <br />";
+ //                                         div_html += "<input type='text' class='datepicker' /> <br />";
+                                          div_html += "<label class='fancyLabel textLabel' for='add_event_start_date'>Start Date: </label>";
+                                          div_html += "<input type='text' class='event_start_date' id='add_event_start_date'/>";
+                                          div_html +=  "</br>";
+
                                           div_html += "<label class='fancyLabel textLabel' for='add_event_start_time'>Start Time: </label>";
-                                          div_html += "<input id = 'add_event_start_time' type='text' /> <br />";
+                                          div_html += "<input type='text' class='event_start_time' id='add_event_start_time'/>";
+                                          div_html +=  "</br>";
+
+                                          div_html += "<label class='fancyLabel textLabel' for='add_event_end_date'>End Date: </label>";
+                                          div_html += "<input type='text' class='event_end_date' id='add_event_end_date'/>";
+                                          div_html +=  "</br>";
+
                                           div_html += "<label class='fancyLabel textLabel' for='add_event_end_time'>End Time: </label>";
-                                          div_html += "<input id = 'add_event_end_time' type='text' /> <br />";
-                                          div_html += "<label class='fancyLabel textLabel' for='add_event_voting_deadline'>Voting Deadline: </label>";
-                                          div_html += "<input id='add_event_voting_deadline' type='text' /> <br />";
-                                          div_html += "<input type='text' class='datepicker' /> <br />";
+                                          div_html += "<input type='text' class='event_end_time' id='add_event_end_time'/>";
+                                          div_html +=  "</br>";
+
+                                          div_html += "<label class='fancyLabel textLabel' for='add_event_voting_deadline'>Deadline: </label>";
+                                          div_html += "<input type='text' class='event_voting_deadline' id='add_event_voting_deadline' />";
+                                          div_html +=  "</br>";
+
+                                          div_html += "<label class='fancyLabel textLabel' for='add_event_deadline_time'>Deadline Time: </label>";
+                                          div_html += "<input type='text' class='event_voting_deadline_time' id='add_event_deadline_time' />";
+                                          div_html +=  "</br>";
+
                                           div_html += "<input id='add_event_itinerary' type='hidden' value='"+ itinerary_identifier + "'/><br />";
                                           div_html += "<input id='add_event_voting_status' type='hidden' value='V'/><br />";
                                           div_html += "<a class='event_add' href='#'> Add Event </a>";
