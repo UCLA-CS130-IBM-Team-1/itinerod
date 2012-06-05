@@ -3,8 +3,17 @@ $(document).ready(function() {
                   function set_datepicker(){
                   $(".event_start_date").datepick();
                   $(".event_end_date").datepick();
+                  
+                  $(".event_start_time").timePicker();
+                  $(".event_end_time").timePicker();
+                  
+                  $(".event_voting_deadline").datepick();
+                  $(".event_voting_deadline_time").timePicker();
+
                   }
                   $("#datepicker_example").datepick();
+                  $("#time1").timePicker();
+
                   /*
                    //Pralav - from jquery ui for date selection.. check out at a later time
                   function set_datepicker(){
@@ -46,17 +55,21 @@ $(document).ready(function() {
                              var start_day = event_start_date.substring(3,5);
                              var start_month = event_start_date.substring(0,2);
                              var start_year = event_start_date.substring(6,10);
-                             var event_start_date_time = start_year+"-"+start_month+"-"+start_day+"T"+event_start_time;
-                             alert(event_start_date_time);
+                             var event_start_date_time = start_year+"-"+start_month+"-"+start_day+"T"+event_start_time+":00";
                              var event_end_time = $(this).parent().children(".event_details").find(".event_end_time").val();
                              var event_end_date = $(this).parent().children(".event_details").find(".event_end_date").val();
                              var end_day = event_end_date.substring(3,5);
                              var end_month = event_end_date.substring(0,2);
                              var end_year = event_end_date.substring(6,10);
-                             var event_end_date_time = end_year+"-"+end_month+"-"+end_day+"T"+event_end_time;
-                             alert(event_end_date_time);
+                             var event_end_date_time = end_year+"-"+end_month+"-"+end_day+"T"+event_end_time+":00";
                              var voting_status =  $(this).parent().children(".event_details").find(".event_voting_status").val();
                              var voting_deadline = $(this).parent().children(".event_details").find(".event_voting_deadline").val();
+                             var voting_deadline_time = $(this).parent().children(".event_details").find(".event_voting_deadline_time").val();
+                             var deadline_day = voting_deadline.substring(3,5);
+                             var deadline_month = voting_deadline.substring(0,2);
+                             var deadline_year = voting_deadline.substring(6,10);
+                             var voting_deadline_date_time = deadline_year+"-"+deadline_month+"-"+deadline_day+"T"+voting_deadline_time+":00";
+
                              var resource_uri = $(this).parent().children(".event_details").find(".resource_uri").val();
                              var itinerary = $(this).parent().children(".event_details").find(".itinerary").val();
                              var event_location = $(this).parent().children(".event_details").find(".event_location").val();
@@ -70,7 +83,7 @@ $(document).ready(function() {
                                              +"\"name\":\""+ event_name +"\","
                                              +"\"start_time\":\""+ event_start_date_time +"\","
                                              +"\"status\":\""+ voting_status +"\","
-                                             +"\"vote_deadline\":\""+ voting_deadline+"\""
+                                             +"\"vote_deadline\":\""+ voting_deadline_date_time+"\""
                                              +"}" ;
                              alert(json_data);
 
@@ -120,9 +133,7 @@ $(document).ready(function() {
                       var event_end_time = $("#add_event_end_time").val();
                       var event_voting_deadline = $("#add_event_voting_deadline").val();
                       var event_voting_status = $("#add_event_voting_status").val();
-                      
-                      alert(event_name+event_itinerary+event_location+event_start_time+event_end_time+event_voting_deadline);
-                      
+
                       var json_data = "{" + ""
                                       +"\"end_time\":\"" + event_end_time+"\","
                                       +"\"itinerary\":\"" + event_itinerary +"\","
@@ -132,7 +143,6 @@ $(document).ready(function() {
                                       +"\"status\":\""+ event_voting_status +"\","
                                       +"\"vote_deadline\":\""+ event_voting_deadline+"\""
                                       +"}" ;
-                     alert(json_data);
 
                       $.ajax({
                              type:"POST",
@@ -257,23 +267,55 @@ var hard_code2 = "{"+"\"users\": [{\"email\": \"guiltyspark7750@gmail.com\", \"f
                                                  "<option value='11'>November</option>"+
                                                  "<option value='12'>December</option>"+
                                                  "</select>";
+                              var time_hour_select = "<select name='start_date_day' class='hour_select'>"+
+                                                     "<option value='0'>---</option>"+
+                                                     "<option value='1'>1</option>"+
+                                                     "<option value='2'>2</option>"+
+                                                     "<option value='3'>3</option>"+
+                                                     "<option value='4'>4</option>"+
+                                                     "<option value='5'>5</option>"+
+                                                     "<option value='6'>6</option>"+
+                                                     "<option value='7'>7</option>"+
+                                                     "<option value='8'>8</option>"+
+                                                     "<option value='9'>9</option>"+
+                                                     "<option value='10'>10</option>"+
+                                                     "<option value='11'>11</option>"+
+                                                     "<option value='12'>12</option>"+
+                                                     "<option value='13'>13</option>"+
+                                                     "<option value='14'>14</option>"+
+                                                     "<option value='15'>15</option>"+
+                                                     "<option value='16'>16</option>"+
+                                                     "<option value='17'>17</option>"+
+                                                     "<option value='18'>18</option>"+
+                                                     "<option value='19'>19</option>"+
+                                                     "<option value='20'>20</option>"+
+                                                     "<option value='21'>21</option>"+
+                                                     "<option value='22'>22</option>"+
+                                                     "<option value='23'>23</option>"+
+                                                     "</select>" ;
+
                               for(var i=0, len = events.length; i< len; ++i)
-                                          {        alert(start_date_time);
-                                                   var start_date_time = events[i].start_time;
+                                          {        var start_date_time = events[i].start_time;
                                                    var start_month =  start_date_time.substring(5,7);
                                                    var start_day =   start_date_time.substring(8,10);
                                                    var start_year =   start_date_time.substring(0,4);
-                                                   var start_time =   start_date_time.substring(11,19);
+                                                   var start_time =   start_date_time.substring(11,16);   //ignoring seconds
                                                    
                                                    var end_date_time = events[i].end_time;
                                                    var end_month =  end_date_time.substring(5,7);
                                                    var end_day =   end_date_time.substring(8,10);
                                                    var end_year =   end_date_time.substring(0,4);
-                                                   var end_time =   end_date_time.substring(11,19);
-
+                                                   var end_time =   end_date_time.substring(11,16); //ignoring seconds
                                                    
+                                                   var deadline_date_time = events[i].end_time;
+                                                   var deadline_month = deadline_date_time.substring(5,7);
+                                                   var deadline_day =   deadline_date_time.substring(8,10);
+                                                   var deadline_year =   deadline_date_time.substring(0,4);
+                                                   var deadline_time =   deadline_date_time.substring(11,16); //ignoring seconds
+
                                                    var start_date = start_month + "/" + start_day + "/" + start_year;
                                                    var end_date = end_month + "/" + end_day + "/" + end_year;
+                                                   var vote_deadline =  deadline_month + "/" + deadline_day + "/" + deadline_year;
 
                                                   div_html += "<div id="+events[i].id+" style='border-bottom:solid;'>";
                                                   div_html += "<h3 class='event'>"+ events[i].name +"</h3>" ;
@@ -304,7 +346,11 @@ var hard_code2 = "{"+"\"users\": [{\"email\": \"guiltyspark7750@gmail.com\", \"f
                                                   div_html +=  "</br>";
 
                                                   div_html += "<label class='fancyLabel textLabel' for='"+events[i].id+"_voting_deadline'>Deadline: </label>";
-                                                  div_html += "<input type='text' class='event_voting_deadline' id="+events[i].id+"_voting_deadline' value= '"+ events[i].vote_deadline +"'/>";
+                                                  div_html += "<input type='text' class='event_voting_deadline' id="+events[i].id+"_voting_deadline' value= '"+ vote_deadline +"'/>";
+                                                  div_html +=  "</br>";
+                                                  
+                                                  div_html += "<label class='fancyLabel textLabel' for='"+events[i].id+"_deadline_time'>Deadline Time: </label>";
+                                                  div_html += "<input type='text' class='event_voting_deadline_time' id="+events[i].id+"_deadline_time' value= '"+ deadline_time +"'/>";
                                                   div_html +=  "</br>";
 
                                                   div_html += "<input type='hidden' class='resource_uri' id="+events[i].id+"_resource_uri' value= '"+ events[i].resource_uri +"'/>";
