@@ -85,7 +85,7 @@ $(document).ready(function() {
                                              +"\"status\":\""+ voting_status +"\","
                                              +"\"vote_deadline\":\""+ voting_deadline_date_time+"\""
                                              +"}" ;
-                             alert(json_data);
+            //                 alert(json_data);
 
                              var hard_coded_data="{\"end_time\": \"2012-05-30T19:30:00\",\"itinerary\": \"/api/itinerod/itinerary/1/\", \"location\": \"Powell Library UCLA\", \"name\": \"IBM Team1 Meeting\", \"start_time\": \"2012-05-30T17:30:00\", \"status\": \"A\", \"vote_deadline\": null}";
 
@@ -96,7 +96,7 @@ $(document).ready(function() {
                              dataType: 'application/json',
                              contentType: 'application/json',
                              }).done(function(html){
-                                      alert("done");
+           //                           alert("done");
                              });
 
                              /*
@@ -167,7 +167,7 @@ $(document).ready(function() {
                                       +"\"status\":\""+ event_voting_status +"\","
                                       +"\"vote_deadline\":\""+ voting_deadline_date_time+"\""
                                       +"}" ;
-                      alert(json_data);
+         //             alert(json_data);
 
                       $.ajax({
                              type:"POST",
@@ -176,7 +176,7 @@ $(document).ready(function() {
                              dataType: 'application/json',
                              contentType: 'application/json',
                              }).done(function(html){
-                                      alert("done");
+         //                             alert("done");
                                       location.reload();
                       });
 
@@ -189,7 +189,7 @@ $(document).ready(function() {
 		     var usersParsed = JSON.parse(users);
 		     if($('#friendCheck').attr('checked'))
 			friend = $("#friendCheck").val();
-			alert(friend);
+	//		alert(friend);
 		     for(var i = 0; i < usersParsed.length; i++){
 			if(usersParsed[i].email == friend){
 				usersParsed[i] = null;
@@ -199,7 +199,7 @@ $(document).ready(function() {
 			  var hard_code = "{"+"\"users\": [{\"email\": \"stefanwoj89@ucla.edu\", \"first_name\": \"\", \"itineraries\": [\"/api/itinerod/itinerary/10/\"], \"last_name\": \"\", \"resource_uri\": \"/api/itinerod/user/2/\", \"username\": \"stefanwoj89\"}]}";
 
 var hard_code2 = "{"+"\"users\": [{\"email\": \"guiltyspark7750@gmail.com\", \"first_name\": \"\", \"itineraries\": [\"/api/itinerod/itinerary/1/\", \"/api/itinerod/itinerary/2/\", \"/api/itinerod/itinerary/3/\", \"/api/itinerod/itinerary/4/\", \"/api/itinerod/itinerary/5/\", \"/api/itinerod/itinerary/6/\", \"/api/itinerod/itinerary/7/\", \"/api/itinerod/itinerary/8/\", \"/api/itinerod/itinerary/9/\"], \"last_name\": \"\", \"resource_uri\": \"/api/itinerod/user/1/\", \"username\": \"guiltyspark7750@gmail.com\"}]}";
-		     alert(hard_code2);
+//		     alert(hard_code2);
 	             $.ajax({
 	             type:"PATCH",
 	             url:"/api/itinerod/itinerary/"+currentId+"/",
@@ -448,7 +448,7 @@ var hard_code2 = "{"+"\"users\": [{\"email\": \"guiltyspark7750@gmail.com\", \"f
                                type:'DELETE',
                                url:resource_uri
                              }).done(function(){
-                               alert("The event has been deleted");
+         //                      alert("The event has been deleted");
                              });
                     });
 
