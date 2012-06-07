@@ -184,29 +184,29 @@ $(document).ready(function() {
 
 	          $(".itinerary_friend_edit_button").live('click',function(){
                      var currentId = $(this).attr('id');
-		     var friend = "";
-		     var users = $("#users").val();
-		     var usersParsed = JSON.parse(users);
-		     if($('#friendCheck').attr('checked'))
-			friend = $("#friendCheck").val();
-	//		alert(friend);
-		     for(var i = 0; i < usersParsed.length; i++){
-			if(usersParsed[i].email == friend){
-				usersParsed[i] = null;
-			}
-		     }
-		     users = "{" + "\"users\":" + JSON.stringify(usersParsed) + "}";
-			  var hard_code = "{"+"\"users\": [{\"email\": \"stefanwoj89@ucla.edu\", \"first_name\": \"\", \"itineraries\": [\"/api/itinerod/itinerary/10/\"], \"last_name\": \"\", \"resource_uri\": \"/api/itinerod/user/2/\", \"username\": \"stefanwoj89\"}]}";
-
-var hard_code2 = "{"+"\"users\": [{\"email\": \"guiltyspark7750@gmail.com\", \"first_name\": \"\", \"itineraries\": [\"/api/itinerod/itinerary/1/\", \"/api/itinerod/itinerary/2/\", \"/api/itinerod/itinerary/3/\", \"/api/itinerod/itinerary/4/\", \"/api/itinerod/itinerary/5/\", \"/api/itinerod/itinerary/6/\", \"/api/itinerod/itinerary/7/\", \"/api/itinerod/itinerary/8/\", \"/api/itinerod/itinerary/9/\"], \"last_name\": \"\", \"resource_uri\": \"/api/itinerod/user/1/\", \"username\": \"guiltyspark7750@gmail.com\"}]}";
-//		     alert(hard_code2);
-	             $.ajax({
-	             type:"PATCH",
-	             url:"/api/itinerod/itinerary/"+currentId+"/",
-	             contentType: "application/json",
-	             data: hard_code2,
-	             dataType: 'application/json',
-                     })
+				     var friend = "";
+				     var users = $("#users").val();
+				     var usersParsed = JSON.parse(users);
+				     if($('#friendCheck').attr('checked'))
+				     	friend = $("#friendCheck").val();
+			//	 	alert(friend);
+				    for(var i = 0; i < usersParsed.length; i++){
+						if(usersParsed[i].email == friend){
+							usersParsed[i] = null;
+						}
+		  			   }
+				     users = "{" + "\"users\":" + JSON.stringify(usersParsed) + "}";
+					  var hard_code = "{"+"\"users\": [{\"email\": \"stefanwoj89@ucla.edu\", \"first_name\": \"\", \"itineraries\": [\"/api/itinerod/itinerary/10/\"], \"last_name\": \"\", \"resource_uri\": \"/api/itinerod/user/2/\", \"username\": \"stefanwoj89\"}]}";
+		
+		var hard_code2 = "{"+"\"users\": [{\"email\": \"guiltyspark7750@gmail.com\", \"first_name\": \"\", \"itineraries\": [\"/api/itinerod/itinerary/1/\", \"/api/itinerod/itinerary/2/\", \"/api/itinerod/itinerary/3/\", \"/api/itinerod/itinerary/4/\", \"/api/itinerod/itinerary/5/\", \"/api/itinerod/itinerary/6/\", \"/api/itinerod/itinerary/7/\", \"/api/itinerod/itinerary/8/\", \"/api/itinerod/itinerary/9/\"], \"last_name\": \"\", \"resource_uri\": \"/api/itinerod/user/1/\", \"username\": \"guiltyspark7750@gmail.com\"}]}";
+		//		     alert(hard_code2);
+			             $.ajax({
+			             type:"PATCH",
+			             url:"/api/itinerod/itinerary/"+currentId+"/",
+			             contentType: "application/json",
+			             data: hard_code2,
+			             dataType: 'application/json',
+		                     })
 	          })
 
 
@@ -266,7 +266,7 @@ var hard_code2 = "{"+"\"users\": [{\"email\": \"guiltyspark7750@gmail.com\", \"f
                                           $("#editItinerary").html(div_html);
 					  $('.addItinerary').hide();
                                           $('#editItinerary').show();
-
+                                          
 
                                           hide_event_details();
                                           set_datepicker();
@@ -431,7 +431,7 @@ var hard_code2 = "{"+"\"users\": [{\"email\": \"guiltyspark7750@gmail.com\", \"f
 
                                           div_html += "<input id='add_event_itinerary' type='hidden' value='"+ itinerary_identifier + "'/><br />";
                                           div_html += "<input id='add_event_voting_status' type='hidden' value='V'/><br />";
-                                          div_html += "<a class='event_add' href='#'> Add Event </a>";
+                                          div_html += "<a class='event_add orangeButton' style='margin-bottom:20px;clear:both' href='#'> Add Event </a>";
                                           div_html += "</div>";
                                           
                                           return div_html;
