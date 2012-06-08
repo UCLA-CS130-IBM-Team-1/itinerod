@@ -176,7 +176,7 @@ $(document).ready(function() {
                              dataType: 'application/json',
                              contentType: 'application/json',
                              }).done(function(html){
-         //                             alert("done");
+                                      alert("Event Added.");
                                       location.reload();
                       });
 
@@ -243,8 +243,8 @@ $(document).ready(function() {
 				          for(var i = 0, len = users.length; i < len; ++i)
 					  {
 						var name = "user"+i;
-						div_html += users[i].email + "<br>";
-                                                div_html += "<a class='' id ='' href='/api/delete_friend/"+currentId+"/"+users[i].id+"'> Remove Friend </a>";
+						div_html += users[i].email + "<br><br>";
+                                                div_html += "<a class='orangeButton' style='margin-bottom:20px;clear:both' id ='' href='/api/delete_friend/"+currentId+"/"+users[i].id+"'> Remove Friend </a></br></br>";
 					  }
 						
                                                   div_html += "</div>";
@@ -374,7 +374,7 @@ $(document).ready(function() {
                                                   div_html += "<input type='text' class='event_voting_deadline' id="+events[i].id+"_voting_deadline' value= '"+ vote_deadline +"'/>";
                                                   div_html +=  "</br>";
                                                   
-                                                  div_html += "<label class='fancyLabel textLabel' for='"+events[i].id+"_deadline_time'>Deadline Time: </label>";
+                                                  div_html += "<label class='fancyLabel textLabel' for='"+events[i].id+"_deadline_time'>Deadline</label>";
                                                   div_html += "<input type='text' class='event_voting_deadline_time' id="+events[i].id+"_deadline_time' value= '"+ deadline_time +"'/>";
                                                   div_html +=  "</br>";
 
@@ -384,9 +384,9 @@ $(document).ready(function() {
                                                   div_html += "<input type='hidden' class='itinerary' id="+events[i].id+"_itinerary' value= '"+ events[i].itinerary +"'/>";
                                                   div_html += "</div>";
                                                   div_html += "<br />";
-                                                  div_html += "<a class='event_edit_save' href='#'>Save Changes</a>";
+                                                  div_html += "<a class='event_edit_save orangeButton'  style='margin-bottom:20px;clear:both' href='#'>Save Changes</a></br></br>";
                                                   div_html += "<br />";
-                                                  div_html += "<a class='event_delete' href='#'>Delete</a>";
+                                                  div_html += "<a class='event_delete orangeButton' style='margin-bottom:20px;clear:both' href='#'>Delete</a></br></br>";
                                                   div_html += "<input type='hidden' class='datepicker' size='30' />";
                                                   div_html += "</div>";
                                           }
@@ -425,7 +425,7 @@ $(document).ready(function() {
                                           div_html += "<input type='text' class='event_voting_deadline' id='add_event_voting_deadline' />";
                                           div_html +=  "</br>";
 
-                                          div_html += "<label class='fancyLabel textLabel' for='add_event_deadline_time'>Deadline Time: </label>";
+                                          div_html += "<label class='fancyLabel textLabel' for='add_event_deadline_time'>Deadline :</label>";
                                           div_html += "<input type='text' class='event_voting_deadline_time' id='add_event_deadline_time' />";
                                           div_html +=  "</br>";
 
