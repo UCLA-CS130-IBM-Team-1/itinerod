@@ -238,7 +238,7 @@ $(document).ready(function() {
 
                                           var events = html.events;
 					  var users = html.users;
-						div_html += "<h2 style='background-color:#353535;color:#ffffff'>Remove your Friends below</h2>";
+						div_html += "<h2 style='background-color:#353535;color:#ffffff;font-size:25px;'>Remove your Friends</h2>";
                                                   div_html += "<div class='event_friends'>";
 				          for(var i = 0, len = users.length; i < len; ++i)
 					  {
@@ -258,7 +258,7 @@ $(document).ready(function() {
                                           }
 					  else*/
 						//itinerary_identifier = "/api/itinerod/itinerary/"+currentId+"/"; // this is a much better version. What if itinerary is empty of events?
-                                          div_html += "<h2 style='background-color:#353535;color:#ffffff'> Edit Your Events below </h2>" ;   
+                                          div_html += "<h2 style='background-color:#353535;color:#ffffff;font-size:25px;'> Edit Your Events</h2>" ;
                                           div_html += "Click Event to expand/contract edit details";
 
                                           div_html += getHTMLforEditButtonClick(events,itinerary_identifier)
@@ -391,7 +391,7 @@ $(document).ready(function() {
 
                                           //adding div to add itinerary
                                           div_html += "<div class='add_event'>";
-                                          div_html += "<h2 style='background-color:#353535;color:#ffffff'>Add an Event to the Itinerary</h2>";
+                                          div_html += "<h2 style='background-color:#353535;color:#ffffff;font-size:25px;'>Add an Event to the Itinerary</h2>";
                                           div_html += "<label class='fancyLabel textLabel' for='add_event_name'>Event: </label>";
                                           div_html += "<input id='add_event_name' type='text' /> <br />";
                                           div_html += "<label class='fancyLabel textLabel' for='add_event_location'>Location: </label>";
