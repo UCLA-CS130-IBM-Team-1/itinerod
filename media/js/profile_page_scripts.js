@@ -179,7 +179,6 @@ $(document).ready(function() {
           //                            alert("Event Added.");
                                       location.reload();
                       });
-
                    });
 
 	          $(".itinerary_friend_edit_button").live('click',function(){
@@ -259,7 +258,7 @@ $(document).ready(function() {
 					  else*/
 						//itinerary_identifier = "/api/itinerod/itinerary/"+currentId+"/"; // this is a much better version. What if itinerary is empty of events?
                                           div_html += "<h2 style='background-color:#353535;color:#ffffff;font-size:25px;'> Edit Your Events</h2>" ;
-                                          div_html += "Click Event to expand/contract edit details";
+                                          div_html += "Click Event name to view/edit event details";
 
                                           div_html += getHTMLforEditButtonClick(events,itinerary_identifier)
                                           
