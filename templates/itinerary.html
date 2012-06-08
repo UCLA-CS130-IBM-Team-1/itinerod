@@ -29,6 +29,27 @@
             
             $(document).ready(function() {
                               
+                              
+                              var saddr;
+                              
+                              navigator.geolocation.getCurrentPosition(function(position) {
+                                                                       
+                                                                       var lat = position.coords.latitude;
+                                                                       var lon = position.coords.longitude;
+                                                                       var saddr="";
+                                                                       var saddr = lat + ', ' + lon;
+                                                                       
+                                                                       $(".directionsLink").each(function(index) {
+                                                                                                 
+                                                                                                 var daddr = $(this).attr('href');
+                                                                                                 var dirURL = "https://maps.google.com/maps?saddr=" + saddr + "&daddr=" + daddr;
+                                                                                                 
+                                                                                                 $(this).attr('href', dirURL);
+                                                                                                 
+                                                                                                 });
+                                                                       });
+
+                              
                               var itinerary_id = {{ itinerary.id }};
                               var map;
                               var geocoder;
@@ -127,15 +148,17 @@
                               
                               
                               $(".directionsButton").live('click', function(){
-                                                          
+                                                        
                                                           var daddr = $(this).attr('destination');
                                                           navigator.geolocation.getCurrentPosition(function(position) {
+                                                                                                   
                                                                                                    var lat = position.coords.latitude;
                                                                                                    var lon = position.coords.longitude;
-                                                                                                   
+                                                                                                   var saddr="";
                                                                                                    var saddr = lat + ', ' + lon;
                                                                                                    var dirURL = "https://maps.google.com/maps?saddr=" + saddr + "&daddr=" + daddr;
-                                                                                                   window.open(encodeURI(dirURL));
+                                                                                                   
+                                                                                                   window.navigate(encodeURI(dirURL));
                                                                                                    });
                                                           
                                                           });
@@ -434,7 +457,8 @@
 	    {% for event in itinerary.event_set.all %}
 	    <div class="sixteen columns">
 	        <h3 class="event" eventname="{{ event.name }}" location="{{ event.location }}" >{{ event.name }}
-            <button class="orangeButton directionsButton" destination="{{ event.name }},{{event.location}}">Directions</button>
+                
+            <!-- <button class="orangeButton directionsButton" destination="{{ event.name }},{{event.location}}">Directions</button> -->
             </h3>
         <a href="/api/voted/{{itinerary.id}}/{{event.id}}/1" class="voteButton voteButtonYes">Yes</a>
 		<a href="/api/voted/{{itinerary.id}}/{{event.id}}/0" class="voteButton voteButtonNo">No</a>
@@ -446,6 +470,7 @@
 	            <img src="/media/images/gmap.png" class="map" eventname="{{ event.name }}" location="{{ event.location }}" alt="Map" />
 	            <img src="/media/images/yelp.png" class="food" eventname="{{ event.name }}" location="{{ event.location }}" alt="Food" />
 	            <img src="/media/images/eventful.png" class="events" eventname="{{ event.name }}" location="{{ event.location }}" alt="events_1" />
+                <a href="{{ event.name }},{{event.location}}" class="directionsLink" target="_blank">Click for Directions!</a>
 	        </div>
 	        
 	        <div id="{{ event.name }}_{{ event.location }}_event_details" class="event_details" style="margin:10px auto; height: 60ex; width: 100%; display: block; border-style: solid; border-width: thin;">Click something!
