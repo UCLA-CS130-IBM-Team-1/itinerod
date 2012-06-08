@@ -48,31 +48,31 @@ $(document).ready(function() {
                   }
                   //Save button clicks in edit event details tab
                   $(".event_edit_save").live('click',function(){
-                             var event_id = $(this).parent().attr("id");
-                             var event_name = $(this).parent().children(".event").html();
-                             var event_start_date = $(this).parent().children(".event_details").find(".event_start_date").val();
-                             var event_start_time = $(this).parent().children(".event_details").find(".event_start_time").val();
+                             var event_id = $(this).parent().parent().attr("id");
+                             var event_name = $(this).parent().parent().children(".event").html();
+                             var event_start_date = $(this).parent().find(".event_start_date").val();
+                             var event_start_time = $(this).parent().find(".event_start_time").val();
                              var start_day = event_start_date.substring(3,5);
                              var start_month = event_start_date.substring(0,2);
                              var start_year = event_start_date.substring(6,10);
                              var event_start_date_time = start_year+"-"+start_month+"-"+start_day+"T"+event_start_time+":00";
-                             var event_end_time = $(this).parent().children(".event_details").find(".event_end_time").val();
-                             var event_end_date = $(this).parent().children(".event_details").find(".event_end_date").val();
+                             var event_end_time = $(this).parent().find(".event_end_time").val();
+                             var event_end_date = $(this).parent().find(".event_end_date").val();
                              var end_day = event_end_date.substring(3,5);
                              var end_month = event_end_date.substring(0,2);
                              var end_year = event_end_date.substring(6,10);
                              var event_end_date_time = end_year+"-"+end_month+"-"+end_day+"T"+event_end_time+":00";
-                             var voting_status =  $(this).parent().children(".event_details").find(".event_voting_status").val();
-                             var voting_deadline = $(this).parent().children(".event_details").find(".event_voting_deadline").val();
-                             var voting_deadline_time = $(this).parent().children(".event_details").find(".event_voting_deadline_time").val();
+                             var voting_status =  $(this).parent().find(".event_voting_status").val();
+                             var voting_deadline = $(this).parent().find(".event_voting_deadline").val();
+                             var voting_deadline_time = $(this).parent().find(".event_voting_deadline_time").val();
                              var deadline_day = voting_deadline.substring(3,5);
                              var deadline_month = voting_deadline.substring(0,2);
                              var deadline_year = voting_deadline.substring(6,10);
                              var voting_deadline_date_time = deadline_year+"-"+deadline_month+"-"+deadline_day+"T"+voting_deadline_time+":00";
 
-                             var resource_uri = $(this).parent().children(".event_details").find(".resource_uri").val();
-                             var itinerary = $(this).parent().children(".event_details").find(".itinerary").val();
-                             var event_location = $(this).parent().children(".event_details").find(".event_location").val();
+                             var resource_uri = $(this).parent().find(".resource_uri").val();
+                             var itinerary = $(this).parent().find(".itinerary").val();
+                             var event_location = $(this).parent().find(".event_location").val();
 
                              //Create input for the AJAX call
                              
@@ -176,7 +176,7 @@ $(document).ready(function() {
                              dataType: 'application/json',
                              contentType: 'application/json',
                              }).done(function(html){
-                                      alert("Event Added.");
+          //                            alert("Event Added.");
                                       location.reload();
                       });
 
@@ -266,7 +266,6 @@ $(document).ready(function() {
                                           $("#editItinerary").html(div_html);
 					  $('.addItinerary').hide();
                                           $('#editItinerary').show();
-                                          
 
                                           hide_event_details();
                                           set_datepicker();
@@ -342,7 +341,7 @@ $(document).ready(function() {
                                                    var end_date = end_month + "/" + end_day + "/" + end_year;
                                                    var vote_deadline =  deadline_month + "/" + deadline_day + "/" + deadline_year;
 
-                                                  div_html += "<div id="+events[i].id+" style='border-bottom:solid;'>";
+                                                  div_html += "<div id="+events[i].id+">";
                                                   div_html += "<h3 class='event'>"+ events[i].name +"</h3>" ;
                                                   div_html += "<div class='event_details' style='display: block;'>";
 
@@ -382,12 +381,11 @@ $(document).ready(function() {
                                                   div_html +=  "</br>";
 
                                                   div_html += "<input type='hidden' class='itinerary' id="+events[i].id+"_itinerary' value= '"+ events[i].itinerary +"'/>";
-                                                  div_html += "</div>";
-                                                  div_html += "<br />";
                                                   div_html += "<a class='event_edit_save orangeButton'  style='margin-bottom:20px;clear:both' href='#'>Save Changes</a></br></br>";
-                                                  div_html += "<br />";
                                                   div_html += "<a class='event_delete orangeButton' style='margin-bottom:20px;clear:both' href='#'>Delete</a></br></br>";
-                                                  div_html += "<input type='hidden' class='datepicker' size='30' />";
+                                                  div_html += "</div>";
+
+
                                                   div_html += "</div>";
                                           }
 
@@ -440,9 +438,9 @@ $(document).ready(function() {
 
                   //code to remove events from the page
                   $(".event_delete").live('click', function(){
-                             var resource_uri = $(this).parent().children(".event_details").find(".resource_uri").val();
+                             var resource_uri = $(this).parent().find(".resource_uri").val();
 
-                             $(this).parent().remove();
+                             $(this).parent().parent().remove();
                              //add an ajax call to remove the itinerary
                              $.ajax({
                                type:'DELETE',
